@@ -1,0 +1,204 @@
+---
+// Two-column work/case-study block, shared between the homepage teaser grid
+// and the full case-study page body. CSS ported from
+// agl-reflections-website/assets/css/main.css lines 364-390 (`.work-item`/
+// `.work-ph`/`.work-txt`, including the `.flip` mirrored variant and the
+// 900px stacking override at line 544-548) plus the `.deploy` list style
+// at the same range — hex colors swapped for Task 2's CSS custom properties
+// (--panel->--deck, --sand-dim->--paper-dim, --sand->--paper,
+// --coral->--gel-coral, --hair->--hairline). `.deploy` doesn't appear on any
+// live page in the source site (it's defined in main.css but never used in
+// markup there) — it's a ready-made style for exactly this component, so
+// `full` mode is the first thing to actually render it.
+//
+// `teaser` (default false) = the compact homepage version (index.html
+// lines 424-454): event line, title, one-line subtitle, closing accent bar,
+// the whole photo wrapped in a link out to the case-study page.
+// `teaser={false}` (full mode, used embedding this component into the
+// case-study page body — Task 20) swaps the one-line subtitle for the full
+// prose `body` and appends the `.deploy` list built from `deployList`; the
+// photo is no longer a link, since the page itself *is* that destination.
+//
+// `title`/`body`/`deployList` entries may carry inline <b>/<i> markup
+// transcribed from the source, so they render with set:html — the nested
+// tags then need :global() to be reachable from this component's scoped
+// CSS, same pattern as ServiceBlock.astro/StatBar.astro.
+import { Image } from 'astro:assets';
+import BarMeter from './ui/BarMeter.astro';
+import type { WorkCase } from '../data/work';
+
+interface Props {
+  case: WorkCase;
+  flip?: boolean;
+  teaser?: boolean;
+}
+
+const { case: item, flip = false, teaser = false } = Astro.props;
+---
+
+<div class:list={['work-item', { flip }]}>
+  <div class="work-ph">
+    {teaser ? (
+      <a href={`/work/${item.slug}.html`} aria-label={item.title}>
+        <Image src={item.heroImage} alt={item.heroImageAlt} loading="lazy" />
+      </a>
+    ) : (
+      <Image src={item.heroImage} alt={item.heroImageAlt} loading="lazy" />
+    )}
+  </div>
+  <div class="work-txt">
+    <span class="ev-no">{item.eventMeta}</span>
+    <h3 set:html={item.title} />
+    {teaser ? (
+      <>
+        <p set:html={item.subtitle} />
+        <BarMeter />
+      </>
+    ) : (
+      <>
+        <div class="work-body" set:html={item.body} />
+        <ul class="deploy">
+          {item.deployList.map((entry) => <li set:html={entry} />)}
+        </ul>
+      </>
+    )}
+  </div>
+</div>
+
+<style>
+  .work-item {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 22px;
+    align-items: end;
+    margin-top: clamp(44px, 5vw, 72px);
+  }
+  .work-item:first-of-type {
+    margin-top: 0;
+  }
+  .work-ph {
+    grid-column: 1 / span 8;
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 16 / 9.4;
+    background: var(--deck);
+  }
+  .work-item.flip .work-ph {
+    grid-column: 5 / span 8;
+    order: 2;
+  }
+  .work-ph :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.1s cubic-bezier(0.2, 0.7, 0.2, 1);
+    filter: saturate(1.02);
+  }
+  .work-item:hover .work-ph :global(img) {
+    transform: scale(1.045);
+  }
+  .work-ph::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(to bottom, rgba(12, 20, 20, 0.5) 0 1px, transparent 1px 9px);
+    opacity: 0;
+    transition: opacity 0.5s;
+    pointer-events: none;
+  }
+  .work-item:hover .work-ph::after {
+    opacity: 0.55;
+  }
+  .work-txt {
+    grid-column: 9 / span 4;
+    padding-bottom: 8px;
+  }
+  .work-item.flip .work-txt {
+    grid-column: 1 / span 4;
+    order: 1;
+    text-align: right;
+  }
+  .work-item.flip .work-txt :global(.wl i) {
+    margin-left: auto;
+  }
+  .work-txt .ev-no {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    color: var(--glow-teal);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 14px;
+  }
+  .work-txt h3 {
+    font-size: clamp(26px, 2.6vw, 38px);
+    margin-bottom: 14px;
+  }
+  .work-txt h3 :global(em) {
+    font-style: normal;
+    color: var(--gel-coral);
+  }
+  .work-txt :global(p) {
+    font-size: 14.5px;
+    color: var(--paper-dim);
+  }
+  .work-body :global(p + p) {
+    margin-top: 12px;
+  }
+  .work-txt :global(b) {
+    color: var(--paper);
+    font-weight: 600;
+  }
+  .work-txt :global(.wl) {
+    margin-top: 20px;
+  }
+
+  .deploy {
+    list-style: none;
+    margin-top: 18px;
+    text-align: left;
+  }
+  .work-item.flip .deploy {
+    margin-left: auto;
+  }
+  .deploy li {
+    font-size: 13.5px;
+    color: var(--paper-dim);
+    padding: 7px 0;
+    border-top: 1px solid rgba(63, 167, 150, 0.12);
+    display: flex;
+    gap: 10px;
+  }
+  .deploy li::before {
+    content: '';
+    width: 14px;
+    height: 2px;
+    background: var(--gel-coral);
+    margin-top: 9px;
+    flex-shrink: 0;
+  }
+  .work-item.flip .deploy li {
+    flex-direction: row-reverse;
+  }
+
+  @media (max-width: 900px) {
+    .work-item .work-ph,
+    .work-item.flip .work-ph {
+      grid-column: 1 / -1;
+      order: 1;
+    }
+    .work-item .work-txt,
+    .work-item.flip .work-txt {
+      grid-column: 1 / -1;
+      order: 2;
+      text-align: left;
+      padding-top: 6px;
+    }
+    .work-item.flip .work-txt :global(.wl i) {
+      margin-left: 0;
+    }
+    .work-item.flip .deploy li {
+      flex-direction: row;
+    }
+  }
+</style>

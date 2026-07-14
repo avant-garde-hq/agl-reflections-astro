@@ -1,0 +1,89 @@
+---
+// Case-study photo grid. CSS ported from
+// agl-reflections-website/assets/css/main.css lines 392-399 (`.gallery`/
+// `.g-item`, including the `.wide` 2-span tile and the hover caption that
+// reads off a `data-cap` attribute), plus the 900px stacking override at
+// line 549 (`.gallery{grid-template-columns:1fr 1fr}`). Hex colors swapped
+// for Task 2's CSS custom properties (--panel->--deck, --sand->--paper).
+//
+// `image` is typed loosely (matches the plan's Gallery.astro sketch) because
+// it always holds an imported ImageMetadata module from src/data/work.ts,
+// not a bare path string — Astro's <Image> needs the module reference to
+// optimize local assets.
+import { Image } from 'astro:assets';
+
+interface Item {
+  image: any;
+  alt: string;
+  caption?: string;
+  wide?: boolean;
+}
+
+interface Props {
+  items: Item[];
+}
+
+const { items } = Astro.props;
+---
+
+<div class="gallery">
+  {items.map((it) => (
+    <div class:list={['g-item', { wide: it.wide }]} data-cap={it.caption}>
+      <Image src={it.image} alt={it.alt} loading="lazy" />
+    </div>
+  ))}
+</div>
+
+<style>
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+  .g-item {
+    position: relative;
+    overflow: hidden;
+    background: var(--deck);
+    aspect-ratio: 4 / 3;
+  }
+  .g-item.wide {
+    grid-column: span 2;
+    aspect-ratio: 8 / 3;
+  }
+  .g-item :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.96);
+    transition: transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1), filter 0.5s;
+  }
+  .g-item:hover :global(img) {
+    transform: scale(1.05);
+    filter: saturate(1.06);
+  }
+  .g-item::after {
+    content: attr(data-cap);
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 26px 14px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--paper);
+    background: linear-gradient(to top, rgba(12, 20, 20, 0.85), transparent);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .g-item:hover::after {
+    opacity: 1;
+  }
+
+  @media (max-width: 900px) {
+    .gallery {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>
