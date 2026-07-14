@@ -1,0 +1,189 @@
+---
+// Production service detail block — one of the six repeating sections on
+// the production page (audio/lighting/video/crowd-control/backline/crew).
+// Markup ported from agl-reflections-website/production/index.html's
+// `.svc-block` articles; CSS from assets/css/main.css lines 338-361 plus
+// the stacked mobile override at lines 551-552, hex colors swapped for the
+// Task 2 CSS custom properties (--hair->--hairline,
+// --panel->--deck, --teal->--glow-teal, --sand-dim->--paper-dim,
+// --sand->--paper, --coral->--gel-coral). `title` and `body` may contain
+// inline markup (source highlights part of the heading with an <em> and
+// bolds phrases in the body with <b>), so both render with set:html — the
+// nested em/b then need :global() to be reachable from scoped CSS, same
+// pattern as StatBar.astro. The decorative accent-bar span above the
+// heading reuses ui/BarMeter.astro (already ported for Kicker.astro), at
+// its default size rather than the source's per-context `.svc-copy .wl`
+// size override — consistent with Hero.astro/PageHero.astro, which made
+// the same simplification for their own `.wl` usage.
+//
+// The `.chip` pill style isn't ported globally yet (see FleetCard.astro),
+// so it's scoped here too.
+//
+// Note: `tagline` is accepted to match the prop signature named in the
+// plan, but the source's six `.svc-block` sections have no third text
+// field beyond title/body/gear, so it isn't rendered here.
+import { Image } from 'astro:assets';
+import BarMeter from './ui/BarMeter.astro';
+
+interface GearItem {
+  term: string;
+  def: string;
+}
+
+interface Props {
+  id: string;
+  title: string;
+  tagline: string;
+  body: string;
+  image: any;
+  imageAlt: string;
+  chip?: string;
+  flip?: boolean;
+  gear?: GearItem[];
+}
+
+const { id, title, tagline, body, image, imageAlt, chip, flip = false, gear = [] } = Astro.props;
+---
+
+<article id={id} class:list={['svc-block', { flip }]}>
+  <div class="svc-media">
+    <Image src={image} alt={imageAlt} loading="lazy" />
+    {chip && <span class="chip">{chip}</span>}
+  </div>
+  <div class="svc-copy">
+    <BarMeter />
+    <h2 set:html={title} />
+    <p set:html={body} />
+    {gear.length > 0 && (
+      <dl class="gear">
+        {gear.map((g) => (
+          <>
+            <dt>{g.term}</dt>
+            <dd>{g.def}</dd>
+          </>
+        ))}
+      </dl>
+    )}
+  </div>
+</article>
+
+<style>
+  .chip {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--glow-teal);
+    border: 1px solid rgba(63, 167, 150, 0.5);
+    background: rgba(12, 20, 20, 0.55);
+    padding: 6px 10px;
+  }
+
+  .svc-block {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 22px;
+    align-items: start;
+    padding: clamp(48px, 6vw, 80px) 0;
+    border-top: 1px solid var(--hairline);
+  }
+  .svc-block:first-of-type {
+    border-top: none;
+    padding-top: 0;
+  }
+  .svc-media {
+    grid-column: 1 / span 5;
+    position: relative;
+    overflow: hidden;
+    background: var(--deck);
+    aspect-ratio: 4 / 3;
+  }
+  .svc-media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.96);
+    transition: transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .svc-block:hover .svc-media :global(img) {
+    transform: scale(1.04);
+  }
+  .svc-media::before {
+    content: '';
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 40%;
+    background: linear-gradient(to top, rgba(12, 20, 20, 0.6), transparent);
+    z-index: 1;
+  }
+  .svc-media .chip {
+    position: absolute;
+    left: 16px;
+    bottom: 14px;
+    z-index: 2;
+  }
+  .svc-copy {
+    grid-column: 7 / span 6;
+  }
+  .svc-block.flip .svc-media {
+    grid-column: 8 / span 5;
+    order: 2;
+  }
+  .svc-block.flip .svc-copy {
+    grid-column: 1 / span 6;
+    order: 1;
+  }
+  .svc-copy :global(.wl) {
+    margin-bottom: 18px;
+  }
+  .svc-copy h2 {
+    font-size: clamp(28px, 3.2vw, 44px);
+    margin-bottom: 16px;
+  }
+  .svc-copy h2 :global(em) {
+    font-style: normal;
+    color: var(--gel-coral);
+  }
+  .svc-copy p {
+    font-size: 15px;
+    color: var(--paper-dim);
+    margin-bottom: 14px;
+    max-width: 56ch;
+  }
+  .svc-copy p :global(b) {
+    color: var(--paper);
+    font-weight: 600;
+  }
+  .gear {
+    margin-top: 18px;
+    border-top: 1px solid rgba(63, 167, 150, 0.2);
+  }
+  .gear dt {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--glow-teal);
+    padding-top: 16px;
+  }
+  .gear dd {
+    font-size: 14px;
+    color: var(--paper-dim);
+    padding: 6px 0 14px;
+    border-bottom: 1px solid rgba(63, 167, 150, 0.1);
+  }
+
+  @media (max-width: 900px) {
+    .svc-media,
+    .svc-block.flip .svc-media {
+      grid-column: 1 / -1;
+      order: 1;
+    }
+    .svc-copy,
+    .svc-block.flip .svc-copy {
+      grid-column: 1 / -1;
+      order: 2;
+    }
+  }
+</style>
