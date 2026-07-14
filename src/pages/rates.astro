@@ -1,0 +1,463 @@
+---
+// Rates page. Composes Layout/Header/PageHero/QuoteCta/Footer with the
+// published rate tables, in the exact section order of
+// agl-reflections-website/rates.html (337 lines):
+//   hero (short, no image) -> "How Pricing Works" intro band -> rate-jump
+//   quick-nav grid (01-05 anchor cards) -> five rate-sec sections (01 Event
+//   Production Labor / 02 Power & Site / 03 DJ & Party Systems / 04 Outdoor
+//   Movie Packages / 05 Stages & Full Productions), each a sec-head plus one
+//   spec-panel table -> rates-foot closing note -> quote CTA -> footer.
+//
+// The task brief's summary only names the five rate categories
+// (labor/power/dj/movies/stages). The source page has three more sections
+// around them that the brief doesn't mention and that ARE transcribed here:
+//   1. The "How Pricing Works" intro band (source lines 107-117): kicker
+//      "How Pricing Works" / h2 "One Quote, Whole Show" / explainer
+//      paragraph about crew+power+party systems riding at published rates
+//      while stages/full rigs are quoted per event.
+//   2. The "rate-jump" quick-nav grid (source lines 118-122): five cards
+//      linking to #labor/#power/#dj/#movies/#stages, each with a 2-digit
+//      number, title and one-line sub-copy (page-specific CSS from the
+//      source's inline <style> block, lines 23-34, ported into this page's
+//      scoped <style> as `.rate-jump`/`.rj-no`/`.rj-t`/`.rj-s`).
+//   3. The "rates-foot" closing note paragraph (source line 243): "Rates as
+//      published by Reflections Productions. Availability is first-come —
+//      July and December book out fastest. Every line above can ride on the
+//      same truck as your stage." CSS from main.css lines 605-609
+//      (`.rates-foot`), already ported once in production/index.astro.
+//
+// Every dollar figure is rendered through `.mono-spec` (var(--font-mono)),
+// the numeric-spec convention established in FleetCard.astro/SpecTable.astro
+// — not the Archivo Black `.price` treatment production/index.astro used
+// for its own (separately-briefed) rates section, per this task's brief.
+//
+// `.spec-panel`/`table.spec`/`.spec-cap`/`.spec-note` markup+CSS ported from
+// SpecTable.astro / main.css lines 303-310 (already scoped per-file
+// project-wide, not global). `.rate-sec`/`.rate-jump` CSS ported from
+// rates.html's own inline <style> block (lines 22-35), hex colors swapped
+// for Task 2 tokens (#FF6B4A -> --gel-coral, #F4EFE6 -> --paper, #3FA796 ->
+// --glow-teal). `.band`/`.sec-head`/`.ghost`/`.arrow-link` come from
+// base.css and are NOT redefined here.
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/house/Header.astro';
+import Footer from '../components/house/Footer.astro';
+import PageHero from '../components/PageHero.astro';
+import QuoteCta from '../components/QuoteCta.astro';
+import Kicker from '../components/ui/Kicker.astro';
+import BarMeter from '../components/ui/BarMeter.astro';
+
+const jump = [
+  { no: '01', href: '#labor', title: 'Event Production Labor', sub: 'Per hour · four-hour minimum per call' },
+  { no: '02', href: '#power', title: 'Power & Site', sub: 'Generators, control room, barricades · per day' },
+  { no: '03', href: '#dj', title: 'DJ & Party Systems', sub: 'Sound, karaoke, game shows · packages' },
+  { no: '04', href: '#movies', title: 'Outdoor Movie Packages', sub: 'Inflatable screens, projection & sound' },
+  { no: '05', href: '#stages', title: 'Stages & Full Productions', sub: 'From $1,995 — larger rigs quoted per event' },
+];
+
+interface Row {
+  label: string;
+  value: string;
+  money?: boolean;
+}
+
+const labor: Row[] = [
+  { label: 'Master Rigging Technician', value: '$75.00', money: true },
+  { label: 'Master Systems Engineer', value: '$75.00', money: true },
+  { label: 'Master Event Producer', value: '$75.00', money: true },
+  { label: 'Technical Director (TD)', value: '$75.00', money: true },
+  { label: 'A1 Master Sound Technician', value: '$65.00', money: true },
+  { label: 'LD1 Master Lighting Technician', value: '$65.00', money: true },
+  { label: 'AV1 Master AV Technician', value: '$65.00', money: true },
+  { label: 'Cam-1 Master Camera Operator', value: '$75.00', money: true },
+  { label: 'V1 Master Video Projectionist', value: '$75.00', money: true },
+  { label: 'Cam-2 Camera Operator', value: '$55.00', money: true },
+  { label: 'A2 Sound / LD2 Lighting / AV2 / V2', value: '$45.00', money: true },
+  { label: 'LD3 Follow Spot Operator', value: '$38.00', money: true },
+  { label: 'Stage Hands', value: '$38.00', money: true },
+  { label: 'Non-CDL Delivery Driver', value: '$40.00', money: true },
+  { label: 'CDL Delivery Driver', value: '$150.00', money: true },
+  { label: 'Trucking', value: 'T.B.D. by distance & load' },
+];
+
+const power: Row[] = [
+  { label: 'MultiQuip 25 kW diesel generator (8-hr day)', value: '$350.00', money: true },
+  { label: 'MultiQuip 45 kW diesel generator (8-hr day)', value: '$525.00', money: true },
+  { label: 'MultiQuip 125 kW diesel generator (8-hr day)', value: '$745.00', money: true },
+  { label: '"MyPad" secure control room', value: '$400.00', money: true },
+  { label: '5′ × 10′ black master tent (add-on)', value: '+$100.00', money: true },
+  { label: 'French-style barricades (per section)', value: '$32.00', money: true },
+  { label: 'Custom photo ID badges (min. 25)', value: '$8.50 ea', money: true },
+];
+
+const dj: Row[] = [
+  { label: 'Party sound system w/ operator · 4 hrs', value: 'from $400.00', money: true },
+  { label: 'Party sound system w/ M.C. · 4 hrs', value: 'from $550.00', money: true },
+  { label: 'Karaoke system w/ operator · 4 hrs', value: '$500.00', money: true },
+  { label: 'Game show system w/ sound & host · 2 hrs', value: '$400.00', money: true },
+  { label: 'Video VJ add-on · 4 hrs (incl. projection)', value: '$600.00', money: true },
+  { label: 'Single video projection w/ 10′ screen', value: '$500.00', money: true },
+  { label: 'Dual video projection screens', value: '$750.00', money: true },
+];
+
+const movies: Row[] = [
+  {
+    label:
+      'Movies in the Park / Block Party — 16′ × 24′ inflatable screen, 5,600+ lumen projector, JBL VRX array sound',
+    value: '$1,395.00',
+    money: true,
+  },
+  { label: 'Backyard package — 9′ × 12′ inflatable screen, projector, JBL EON sound', value: '$550.00', money: true },
+  { label: 'Executive presentation (indoor, single screen)', value: '$500.00', money: true },
+  { label: 'Campaign presentation (indoor, dual screens)', value: '$750.00', money: true },
+  { label: 'Surround sound add-on', value: '+$250.00', money: true },
+  { label: 'SubSonic sound add-on', value: '+$160.00', money: true },
+  { label: 'Honda EM5000 quiet generator add-on', value: '+$295.00', money: true },
+  { label: 'Popcorn machine w/ supplies', value: '$145.00', money: true },
+];
+
+const stages: Row[] = [
+  { label: 'APEX 2016 mobile stage', value: 'from $1,995', money: true },
+  { label: 'APEX 2420 – 5040 · VIP Deck 3724', value: 'Quoted per event' },
+  { label: 'Concert audio, lighting & LED video rigs', value: 'Quoted per event' },
+  { label: 'Full festival & broadcast production', value: 'Quoted per event' },
+];
+---
+
+<Layout
+  title="Rates & Packages — Published Pricing | Reflections Productions"
+  description="Published rates for event production labor, generators and power, DJ and party systems, outdoor movie packages and APEX mobile stages — straight numbers from Reflections Productions."
+  path="/rates.html"
+>
+  <Header currentPath="/rates.html" />
+
+  <PageHero
+    breadcrumb={[{ label: 'Home', href: '/' }, { label: 'Rates' }]}
+    eyebrow="Rates & Packages · No Mystery Pricing"
+    title={['Straight', 'Numbers']}
+    lede="Most production companies make you call to find out what anything costs. <b>We publish our rates.</b> Stages and full productions are quoted per event — everything else is right here."
+    short
+  />
+
+  <section class="band tight">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="left rv">
+          <Kicker text="How Pricing Works" />
+          <h2>One Quote,<br /><span class="ghost">Whole Show</span></h2>
+        </div>
+        <p class="right rv" data-d="1">
+          Crew, power, barricades and party systems ride at the published rates below. Your stage — and any audio,
+          lighting or LED rig on it — is priced per event around dates, distance and configuration, in a single
+          quote, usually the same day.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="rates">
+    <div class="wrap">
+      <div class="rate-jump rv">
+        {jump.map((j) => (
+          <a href={j.href}>
+            <span class="rj-no">{j.no}</span>
+            <span class="rj-t">{j.title}</span>
+            <span class="rj-s">{j.sub}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="band tight rate-sec" id="labor">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="left rv">
+          <Kicker text="01 · Event Production Labor" />
+        </div>
+        <p class="right rv" data-d="1">Per hour · four-hour minimum per call</p>
+      </div>
+      <div class="spec-panel rv">
+        <div class="spec-cap">
+          <h3>Event Production Labor · Per Hour</h3>
+          <BarMeter />
+        </div>
+        <table class="spec">
+          <tbody>
+            {labor.map((r) => (
+              <tr>
+                <th scope="row">{r.label}</th>
+                <td class:list={{ 'mono-spec': r.money }}>{r.value}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p class="spec-note">
+          Four-hour minimum per call. Calls over 8 hours run time-and-a-half with a paid break or hot meal on site.
+          Clients provide water for all techs.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band tight rate-sec" id="power">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="left rv">
+          <Kicker text="02 · Power & Site" />
+        </div>
+        <p class="right rv" data-d="1">Generators, control room, barricades · per day</p>
+      </div>
+      <div class="spec-panel rv">
+        <div class="spec-cap">
+          <h3>Power &amp; Site · Per Day</h3>
+          <BarMeter />
+        </div>
+        <table class="spec">
+          <tbody>
+            {power.map((r) => (
+              <tr>
+                <th scope="row">{r.label}</th>
+                <td class:list={{ 'mono-spec': r.money }}>{r.value}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p class="spec-note">
+          MOJO barricade, cable ramps, FOH trailers, motorhome and scaffolding at day rates — call for availability.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band tight rate-sec" id="dj">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="left rv">
+          <Kicker text="03 · DJ & Party Systems" />
+        </div>
+        <p class="right rv" data-d="1">Sound, karaoke, game shows · packages</p>
+      </div>
+      <div class="spec-panel rv">
+        <div class="spec-cap">
+          <h3>DJ &amp; Party Systems</h3>
+          <BarMeter />
+        </div>
+        <table class="spec">
+          <tbody>
+            {dj.map((r) => (
+              <tr>
+                <th scope="row">{r.label}</th>
+                <td class:list={{ 'mono-spec': r.money }}>{r.value}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="band tight rate-sec" id="movies">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="left rv">
+          <Kicker text="04 · Outdoor Movie Packages" />
+        </div>
+        <p class="right rv" data-d="1">Inflatable screens, projection &amp; sound</p>
+      </div>
+      <div class="spec-panel rv">
+        <div class="spec-cap">
+          <h3>Outdoor Movie Packages</h3>
+          <BarMeter />
+        </div>
+        <table class="spec">
+          <tbody>
+            {movies.map((r) => (
+              <tr>
+                <th scope="row">{r.label}</th>
+                <td class:list={{ 'mono-spec': r.money }}>{r.value}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="band tight rate-sec" id="stages">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="left rv">
+          <Kicker text="05 · Stages & Full Productions" />
+        </div>
+        <p class="right rv" data-d="1">From $1,995 — larger rigs quoted per event</p>
+      </div>
+      <div class="spec-panel rv">
+        <div class="spec-cap">
+          <h3>Stages &amp; Full Productions</h3>
+          <BarMeter />
+        </div>
+        <table class="spec">
+          <tbody>
+            {stages.map((r) => (
+              <tr>
+                <th scope="row">{r.label}</th>
+                <td class:list={{ 'mono-spec': r.money }}>{r.value}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p class="spec-note">
+          Stage pricing moves with dates, distance and configuration — tell us the show and we'll price the whole rig
+          in one quote. <a class="arrow-link" href="/quote.html" style="margin-top:8px">Get a quote</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band tight">
+    <div class="wrap">
+      <p class="rates-foot rv">
+        <b>Rates as published by Reflections Productions.</b> Availability is first-come — July and December book
+        out fastest. Every line above can ride on the same truck as your stage.
+      </p>
+    </div>
+  </section>
+
+  <QuoteCta compact />
+
+  <Footer />
+</Layout>
+
+<style>
+  .mono-spec {
+    font-family: var(--font-mono);
+  }
+
+  /* rate-jump quick-nav grid — page-specific CSS ported from
+     rates.html's own inline <style> block (lines 23-34). */
+  .rate-jump {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+    margin-top: 10px;
+  }
+  .rate-jump a {
+    display: block;
+    border: 1px solid rgba(63, 167, 150, 0.3);
+    padding: 20px 18px;
+    text-decoration: none;
+    transition: 0.2s;
+    background: rgba(19, 94, 84, 0.08);
+  }
+  .rate-jump a:hover {
+    border-color: var(--glow-teal);
+    transform: translateY(-3px);
+  }
+  .rate-jump .rj-no {
+    display: block;
+    font-family: var(--font-display);
+    color: var(--gel-coral);
+    font-size: 12px;
+    letter-spacing: 0.18em;
+  }
+  .rate-jump .rj-t {
+    display: block;
+    font-family: var(--font-display);
+    color: var(--paper);
+    font-size: 16.5px;
+    margin: 8px 0 6px;
+    line-height: 1.25;
+  }
+  .rate-jump .rj-s {
+    display: block;
+    font-size: 12.5px;
+    color: var(--paper-dim);
+    line-height: 1.5;
+  }
+  @media (max-width: 1000px) {
+    .rate-jump {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 520px) {
+    .rate-jump {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .rate-sec {
+    scroll-margin-top: 90px;
+  }
+  .rate-sec .spec-panel {
+    max-width: 960px;
+  }
+  .rate-sec .spec {
+    font-size: 16px;
+  }
+  .rate-sec .spec th,
+  .rate-sec .spec td {
+    padding: 15px 16px;
+  }
+
+  /* .spec-panel/table.spec/.spec-cap/.spec-note pattern — already scoped
+     per-file project-wide (SpecTable.astro), not global; ported here rather
+     than reused as a component since these panels carry the page's own
+     numeric-row data + mono-spec cells. CSS from main.css lines 303-310. */
+  .spec-panel {
+    background: var(--deck);
+    border: 1px solid var(--hairline);
+  }
+  .spec-panel .spec-cap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 18px 16px;
+    border-bottom: 1px solid rgba(63, 167, 150, 0.3);
+    background: var(--deck-2);
+  }
+  .spec-panel .spec-cap h3 {
+    font-size: 15px;
+    letter-spacing: 0.06em;
+  }
+  :global(table.spec) {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  :global(table.spec th),
+  :global(table.spec td) {
+    padding: 13px 16px;
+    font-size: 14.5px;
+    text-align: left;
+    border-bottom: 1px solid rgba(63, 167, 150, 0.12);
+    vertical-align: top;
+  }
+  :global(table.spec th) {
+    width: 46%;
+    font-weight: 600;
+    color: var(--paper-faint);
+    font-size: 12.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  :global(table.spec td) {
+    color: var(--paper);
+  }
+  .spec-note {
+    font-size: 13px;
+    color: var(--paper-faint);
+    padding: 14px 16px;
+  }
+
+  /* .rates-foot — CSS from main.css lines 605-609, already ported once in
+     production/index.astro (Task 16). */
+  .rates-foot {
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--paper-faint);
+    max-width: 76ch;
+  }
+  .rates-foot :global(b) {
+    color: var(--paper-dim);
+  }
+</style>
