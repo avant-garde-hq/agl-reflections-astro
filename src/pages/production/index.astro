@@ -394,39 +394,10 @@ const services = [
     border-color: var(--glow-teal);
   }
 
-  .svc-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0 clamp(28px, 3vw, 52px);
-  }
+  /* .svc/.svc-grid card pattern now lives globally in base.css; only the
+     3-column variant used by the Deep Bench section is page-specific. */
   .svc-grid[data-cols='3'] {
     grid-template-columns: repeat(3, 1fr);
-  }
-  .svc {
-    display: block;
-    padding: 30px 0 32px;
-    border-top: 1px solid var(--hairline);
-    position: relative;
-  }
-  .svc :global(.wl) {
-    margin-bottom: 16px;
-  }
-  .svc :global(.wl) i {
-    width: 30px;
-    height: 4px;
-    transition: background 0.3s;
-  }
-  .svc:hover :global(.wl) i {
-    background: var(--gel-coral);
-  }
-  .svc h3 {
-    font-size: 19px;
-    letter-spacing: 0.02em;
-    margin-bottom: 10px;
-  }
-  .svc p {
-    font-size: 14.5px;
-    color: var(--paper-dim);
   }
 
   .rates-grid {
@@ -503,9 +474,5 @@ const services = [
       grid-template-columns: 1fr;
     }
   }
-  @media (max-width: 620px) {
-    .svc-grid {
-      grid-template-columns: 1fr;
-    }
-  }
+  /* .svc-grid's base 620px 1-column collapse is already in base.css */
 </style>

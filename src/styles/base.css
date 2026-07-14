@@ -86,3 +86,20 @@ section.band.tight { padding: clamp(56px, 7vw, 96px) 0; }
 .divider .bars i:nth-child(1) { height: 2px; opacity: 0.34; margin-bottom: 6px; }
 .divider .bars i:nth-child(2) { height: 2px; opacity: 0.18; margin-bottom: 8px; width: 72%; }
 .divider .bars i:nth-child(3) { height: 1px; opacity: 0.1; width: 46%; }
+
+/* ---------- .svc / .svc-grid card pattern ----------
+   The individual "service card" (title + accent bar + body) used by the
+   homepage's services teaser (Task 14) and the production page's Deep
+   Bench grid (Task 16 fix) -- identical in both, promoted here rather than
+   duplicated per page. Page-specific wrappers (.svc-layout/.svc-sticky on
+   the homepage, [data-cols='3'] on the production page) stay page-scoped. */
+.svc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 clamp(28px, 3vw, 52px); }
+.svc { display: block; padding: 30px 0 32px; border-top: 1px solid var(--hairline); position: relative; }
+.svc .wl { margin-bottom: 16px; }
+.svc .wl i { width: 30px; height: 4px; transition: background 0.3s; }
+.svc:hover .wl i { background: var(--gel-coral); }
+.svc h3 { font-size: 19px; letter-spacing: 0.02em; margin-bottom: 10px; }
+.svc p { font-size: 14.5px; color: var(--paper-dim); }
+@media (max-width: 620px) {
+  .svc-grid { grid-template-columns: 1fr; }
+}
