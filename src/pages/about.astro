@@ -1,0 +1,374 @@
+---
+// About page. Composes Layout/Header/Footer (Tasks 1-14) with PageHero
+// (Task 14) and QuoteCta (compact variant, Task 14), plus this task's three
+// new components (Timeline, HireBand, MarkStrip), in the exact section
+// order of agl-reflections-website/about.html (318 lines):
+//   hero -> sand-band intro ("Built Show by Show") -> timeline (id=timeline)
+//   -> yard (id=yard, sand-band) -> crew (id=crew, HireBand) -> divider
+//   -> "How We Work" values grid -> "The Fleet Today" prose -> quote CTA
+//   -> footer.
+//
+// The sand-band intro, yard section, values grid and fleet-today prose
+// don't have dedicated components (brief only calls for Timeline/HireBand/
+// MarkStrip) -- their CSS (`.sand-band`/`.about-grid`/`.about-left`/
+// `.about-right`/`.years`/`.brand-row`/`.brand-cell`/`.values-grid`/
+// `.value`/`.prose`) is page-scoped here, ported from
+// agl-reflections-website/assets/css/main.css lines 401-422 + 228-234 plus
+// the 900px/620px responsive rules (lines 549, 554, 576), hex colors
+// swapped for the Task 2 CSS custom properties (--sand -> --paper,
+// --black -> --ink, --teal-deep -> --rig-teal, --sand-dim -> --paper-dim,
+// --sand-faint -> --paper-faint, --teal -> --glow-teal, --hair ->
+// --hairline). `.band`/`.tight`/`.sec-head`/`.ghost`/`.arrow-link`/
+// `.divider` come from base.css (Task 14) and are NOT redefined here.
+//
+// Per the homepage's documented reveal convention (motion.css / index.astro
+// Task 14 notes), `rv` is applied only to each section's kicker+heading
+// pair, not to repeated items (timeline entries, value cards, brand cells).
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/house/Header.astro';
+import Footer from '../components/house/Footer.astro';
+import PageHero from '../components/PageHero.astro';
+import Timeline from '../components/Timeline.astro';
+import HireBand from '../components/HireBand.astro';
+import MarkStrip from '../components/MarkStrip.astro';
+import QuoteCta from '../components/QuoteCta.astro';
+import Kicker from '../components/ui/Kicker.astro';
+import BarMeter from '../components/ui/BarMeter.astro';
+
+import aboutYard from '../assets/img/about-yard.webp';
+import about50Years from '../assets/img/about-50years.webp';
+import aboutHiring from '../assets/img/about-hiring.webp';
+import logoLegacy from '../assets/img/logo-legacy.webp';
+import logoCreativeSource from '../assets/img/logo-creative-source.webp';
+
+const timelineEntries = [
+  {
+    year: '1975',
+    title: 'The First Show',
+    body: 'Reflections Productions opens as a South Florida production shop — lighting, sound and staging for whoever has a show that needs doing right.',
+    coral: true,
+  },
+  {
+    year: "'80s–'90s",
+    title: 'The Working Years',
+    body: 'City celebrations, festivals, theaters and tours. The client roster grows to the City of Hialeah, City of Miami, Bayfront Park Trust, Miami New Times and dozens more.',
+  },
+  {
+    year: '2006',
+    title: 'Online',
+    body: 'reflectionsproductions.com goes live — and "South Florida\'s Creative Source" starts booking shows from the web.',
+  },
+  {
+    year: 'APEX Era',
+    title: 'The Fleet Arrives',
+    body: 'Stage rentals become their own operation under the Mobile Stages Miami banner, and the APEX hydraulic line turns a staging company into a fleet operator.',
+  },
+  {
+    year: '2023',
+    title: 'Mobile Stage Conference',
+    body: 'February 7–9 at Bahia Mar, Fort Lauderdale — the largest mobile-stage networking event of the year, with the APEX 5040 GEN3 turning heads.',
+  },
+  {
+    year: '2025',
+    title: 'APEX 2016 Joins',
+    body: 'The newest compact stage joins the fleet in January — and spends race weekend dressed as the Formula E Fan Village stage at the Miami E-Prix.',
+  },
+  {
+    year: '50 YRS',
+    title: 'The Golden Season',
+    body: '2025: fifty years of excellence in concert and stage services — honoring the artists, crews and clients who made the journey.',
+    coral: true,
+    image: about50Years,
+    imageAlt: 'Reflections Productions 50th anniversary brand graphic with beams of light',
+  },
+  {
+    year: '2026',
+    title: 'Next Chapter',
+    body: 'The Big Orange rises over Bayfront Park for its 40th-anniversary countdown with Reflections on production — and the APEX 4232 is announced for the 2026 season.',
+  },
+];
+
+const hireRoles = [
+  'Audio technicians',
+  'Lighting technicians',
+  'Sales & logistics',
+  'Warehouse operators',
+  'Stage hands',
+  'Stage operators',
+  'Forklift operators',
+  'Drivers & more',
+];
+
+const values = [
+  {
+    title: 'Safety First',
+    body: 'Certified rigging, engineered structures, code-compliant decks and barrier plans the fire marshal signs off on. The show is only good if everyone goes home.',
+  },
+  {
+    title: 'One Partner',
+    body: 'Stage, audio, lighting, video, barriers, backline, crew and trucking from one yard. One contract, one point of contact, no finger-pointing between vendors.',
+  },
+  {
+    title: 'Show-Ready Speed',
+    body: 'Hydraulic stages that deploy in hours, inventory that lives on trucks, and crews that have done the load-in a thousand times. Your schedule holds.',
+  },
+  {
+    title: "People Who've Done It",
+    body: "Master riggers, A1s, LDs and TDs with decades on the road. Experience is the one piece of gear you can't rent anywhere else.",
+  },
+];
+---
+
+<Layout
+  title="About — Fifty Years On Stage, Est. 1975 | Reflections Productions"
+  description="Reflections Productions is South Florida's Creative Source: a family-run concert production house in Princeton, FL since 1975, now home to Mobile Stages Miami and eight APEX hydraulic mobile stages."
+  path="/about.html"
+>
+  <Header currentPath="/about.html" />
+
+  <PageHero
+    breadcrumb={[{ label: 'Home', href: '/' }, { label: 'About' }]}
+    eyebrow="South Florida's Creative Source · Est. 1975"
+    title={['Half a Century', 'of Showtime']}
+    lede="Fifty years, one yard in Princeton, Florida, and a simple idea: <b>if the show matters, everything behind it should come from people who've done it before.</b>"
+    imageSrc={aboutYard}
+    imageAlt="APEX GEN3 stages being built at a waterfront site"
+  />
+
+  <section class="band tight sand-band">
+    <div class="wrap">
+      <div class="about-grid">
+        <div class="about-left rv">
+          <Kicker text="The Story" variant="dark" />
+          <h2>Built Show<br />by <span class="accent">Show</span></h2>
+          <div class="years"><span class="big">&rsquo;75</span><span class="cap">Princeton, Florida — then, now, always</span></div>
+        </div>
+        <div class="about-right">
+          <p>Reflections Productions started in <b>1975</b> as a South Florida production shop — lighting, sound and staging for whoever had a show that needed doing right. The company earned its tagline, <b>&ldquo;South Florida's Creative Source,&rdquo;</b> the slow way: one city celebration, one festival, one touring act at a time.</p>
+          <p>As the shows grew, so did the shop. Stage rentals became their own operation — <b>Mobile Stages Miami</b> — and the arrival of the APEX hydraulic stage line turned a staging company into a fleet operator. Today those names are a <b>family of brands consolidated under one roof</b>: same yard, same crew, same phone number.</p>
+          <p>Fifty years in, the company is still family-run from Princeton, Florida. Three generations of South Florida audiences have watched their favorite nights happen on our decks. <b>We plan on a fourth.</b></p>
+          <div class="brand-row">
+            <div class="brand-cell"><BarMeter variant="dark" /><span class="nm">Reflections Productions</span><span class="rl">Full-service production</span></div>
+            <div class="brand-cell"><BarMeter variant="dark" /><span class="nm">Mobile Stages Miami</span><span class="rl">Stage rentals</span></div>
+            <div class="brand-cell"><BarMeter variant="dark" /><span class="nm">APEX Stages</span><span class="rl">The hydraulic fleet</span></div>
+          </div>
+          <MarkStrip
+            image={logoLegacy}
+            imageAlt="The original Reflections Productions Inc. palm-tree logo with reflection lines"
+            caption="The original mark — palm tree over reflection lines. It carried the company from the analog years into the APEX era, and its ripples live on in the new identity."
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="timeline">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="left rv">
+          <Kicker text="Through the Years" />
+          <h2>1975 &rarr;<br /><span class="ghost">2026</span></h2>
+        </div>
+        <p class="right">Five decades compress badly into a page. Here are the mile markers — from a South Florida production shop to a fleet operator with a golden anniversary behind it.</p>
+      </div>
+      <Timeline entries={timelineEntries} />
+      <MarkStrip
+        onDark
+        image={logoCreativeSource}
+        imageAlt="Florida's Creative Source script wordmark"
+        caption="Fifty years, one promise: South Florida's Creative Source."
+      />
+    </div>
+  </section>
+
+  <section class="band sand-band" id="yard">
+    <div class="wrap">
+      <div class="about-grid">
+        <div class="about-left rv">
+          <Kicker text="The Yard" variant="dark" />
+          <h2>Princeton,<br /><span class="accent">Florida</span></h2>
+          <div class="years"><span class="big">23750</span><span class="cap">SW 132 Avenue &middot; Princeton, FL 33032</span></div>
+        </div>
+        <div class="about-right">
+          <p>Everything on this site lives in one place: a working yard in <b>Princeton, Florida</b>, south of Miami, where the stages, trucks and inventory stage out to shows across the state and up the coast.</p>
+          <p>The logistics operation is its own department — <b>CDL drivers and trucking</b>, MultiQuip diesel generators from <b>25 to 125 kW</b> with festival power distribution, the secure &ldquo;MyPad&rdquo; control-room motorhome, FOH trailers, Bil Jax event scaffolding, French barricades, cable ramps, and event credentialing down to custom photo ID badges, security shirts and uniforms.</p>
+          <p style="margin-bottom:0"><b>If the show needs it, it's probably already on a truck.</b> <a class="arrow-link" style="color:var(--rig-teal)" href="/production/index.html#rates">See published rates</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="crew">
+    <div class="wrap">
+      <HireBand image={aboutHiring} imageAlt="Reflections Productions Now Hiring flyer with a lit stage build" roles={hireRoles} />
+    </div>
+  </section>
+
+  <div class="divider wrap" aria-hidden="true"><span class="bars"><i></i><i></i><i></i></span></div>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="left rv">
+          <Kicker text="How We Work" />
+          <h2>What Fifty Years<br /><span class="ghost">Teaches You</span></h2>
+        </div>
+      </div>
+      <div class="values-grid">
+        {values.map((v) => (
+          <div class="value">
+            <BarMeter />
+            <h3>{v.title}</h3>
+            <p>{v.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="band" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="left rv">
+          <Kicker text="The Fleet Today" />
+          <h2>Eight Stages<br /><span class="ghost">Deep</span></h2>
+        </div>
+        <p class="right">From the 20-by-16 community deck to the 50-by-40 flagship — plus the patented Captain's VIP Deck and the APEX 4232 arriving for the 2026 season.</p>
+      </div>
+      <div class="prose">
+        <p>The Princeton yard runs <b>eight APEX hydraulic mobile stages</b> alongside the inventory that fills them: 48 boxes of JBL VTX V25-II line array, 204 panels of Absen X5 LED wall, an intelligent lighting rig with GrandMA2 control, MOJO barricade, generators from 25 to 125 kW and the trucks that move all of it.</p>
+        <p style="margin-bottom:0"><a class="arrow-link" href="/stages/index.html">Compare the full fleet</a></p>
+      </div>
+    </div>
+  </section>
+
+  <QuoteCta compact />
+
+  <Footer />
+</Layout>
+
+<style>
+  .sand-band {
+    background: var(--paper);
+    color: var(--ink);
+  }
+  .sand-band :global(.kicker) {
+    color: var(--rig-teal);
+  }
+  .sand-band h2 {
+    color: var(--ink);
+  }
+  .sand-band h2 .accent {
+    color: var(--rig-teal);
+  }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 5fr 7fr;
+    gap: clamp(40px, 6vw, 96px);
+  }
+  .about-left .years {
+    margin-top: 34px;
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+  }
+  .about-left .years .big {
+    font-family: var(--font-display);
+    font-size: clamp(64px, 7vw, 108px);
+    line-height: 0.85;
+    color: var(--rig-teal);
+  }
+  .about-left .years .cap {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(12, 20, 20, 0.55);
+    max-width: 120px;
+    line-height: 1.5;
+  }
+  .about-right p {
+    font-size: clamp(16px, 1.35vw, 18.5px);
+    color: rgba(12, 20, 20, 0.78);
+    margin-bottom: 22px;
+    font-weight: 500;
+    max-width: 56ch;
+  }
+  .about-right p b {
+    color: var(--ink);
+    font-weight: 700;
+  }
+  .brand-row {
+    margin-top: 38px;
+    padding-top: 30px;
+    border-top: 1px solid rgba(12, 20, 20, 0.14);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 24px;
+  }
+  .brand-cell :global(.wl) {
+    margin-bottom: 12px;
+  }
+  .brand-cell .nm {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 15px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+  .brand-cell .rl {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(12, 20, 20, 0.5);
+    margin-top: 5px;
+  }
+  .values-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: clamp(20px, 2.5vw, 36px);
+  }
+  .value {
+    padding: 26px 0 8px;
+    border-top: 1px solid rgba(63, 167, 150, 0.25);
+  }
+  .value :global(.wl) {
+    margin-bottom: 16px;
+  }
+  .value h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    letter-spacing: 0.02em;
+  }
+  .value p {
+    font-size: 14.5px;
+    color: var(--paper-dim);
+  }
+  .prose {
+    max-width: 68ch;
+  }
+  .prose p {
+    color: var(--paper-dim);
+    font-size: clamp(15px, 1.25vw, 17px);
+    margin-bottom: 20px;
+  }
+  .prose p b {
+    color: var(--paper);
+    font-weight: 600;
+  }
+  @media (max-width: 900px) {
+    .about-grid {
+      grid-template-columns: 1fr;
+    }
+    .values-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 620px) {
+    .values-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

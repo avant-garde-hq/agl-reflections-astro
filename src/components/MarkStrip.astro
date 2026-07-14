@@ -1,0 +1,59 @@
+---
+// The small "brand mark" strip that appears twice on the about page: once
+// under the intro copy (the original 1975-era palm-tree logo, on the sand
+// band) and once under the timeline (the "Florida's Creative Source" script
+// wordmark, on the dark band). Ported from
+// agl-reflections-website/about.html lines 110-113 and 138-141, CSS from
+// assets/css/main.css lines 588-593 (`.mark-strip`), hex colors swapped for
+// the Task 2 CSS custom properties (--sand-faint -> --paper-faint; the
+// rgba(12,20,20,*) values already match --ink's #0C1414 so they're kept
+// literal, matching the rest of the codebase's convention of only swapping
+// to var() when a token exists for that exact rgba stop).
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  image: ImageMetadata;
+  imageAlt: string;
+  caption: string;
+  onDark?: boolean;
+}
+
+const { image, imageAlt, caption, onDark = false } = Astro.props;
+---
+
+<div class:list={['mark-strip', { 'on-dark': onDark }]}>
+  <Image src={image} alt={imageAlt} loading="lazy" />
+  <span class="cap">{caption}</span>
+</div>
+
+<style>
+  .mark-strip {
+    margin-top: 38px;
+    padding-top: 26px;
+    border-top: 1px solid rgba(12, 20, 20, 0.14);
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    flex-wrap: wrap;
+  }
+  .mark-strip :global(img) {
+    height: 56px;
+    width: auto;
+  }
+  .mark-strip .cap {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(12, 20, 20, 0.5);
+    max-width: 320px;
+    line-height: 1.6;
+  }
+  .mark-strip.on-dark {
+    border-top-color: var(--hairline);
+  }
+  .mark-strip.on-dark .cap {
+    color: var(--paper-faint);
+  }
+</style>

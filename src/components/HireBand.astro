@@ -1,0 +1,123 @@
+---
+// The "Now Hiring" / crew section on the about page (`id="crew"` in the
+// source). Ported from agl-reflections-website/about.html lines 162-188
+// (`.hire-grid`) and assets/css/main.css lines 596-603 + the 900px/620px
+// responsive rules (lines 612-613), hex colors swapped for the Task 2 CSS
+// custom properties (--panel -> --deck, --hair -> --hairline,
+// --sand-dim -> --paper-dim, --coral -> --gel-coral,
+// --sand-faint -> --paper-faint). Unlike the other about-page sections this
+// one has no separate `.sec-head` above it in the source — the kicker and
+// heading live inside the grid's right column, so this component owns them
+// directly rather than the page.
+//
+// Phone/email/address reuse SITE (Task 3) rather than re-hardcoding them.
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Kicker from './ui/Kicker.astro';
+import Button from './ui/Button.astro';
+import { SITE } from '../config/site';
+
+interface Props {
+  image: ImageMetadata;
+  imageAlt: string;
+  roles: string[];
+}
+
+const { image, imageAlt, roles } = Astro.props;
+---
+
+<div class="hire-grid">
+  <div class="hire-ph">
+    <Image src={image} alt={imageAlt} loading="lazy" />
+  </div>
+  <div>
+    <Kicker text="Now Hiring" variant="coral" />
+    <h2 class="hire-h2">Join the<br /><span class="hire-accent">Crew</span></h2>
+    <p class="hire-lede">Fifty years in, the shows keep getting bigger &mdash; and the yard is hiring for all positions. If you want to build the nights this city remembers, come see us.</p>
+    <ul class="hire-roles">
+      {roles.map((role) => <li>{role}</li>)}
+    </ul>
+    <div class="hire-cta">
+      <Button href={`mailto:${SITE.email}?subject=Crew%20application%20—%20Reflections%20Productions`} variant="coral">Apply by Email</Button>
+      <Button href={SITE.phoneHref} variant="ghost">{SITE.phone}</Button>
+    </div>
+    <p class="hire-note">Or apply in person: {SITE.address}</p>
+  </div>
+</div>
+
+<style>
+  .hire-grid {
+    display: grid;
+    grid-template-columns: 5fr 7fr;
+    gap: clamp(36px, 5vw, 72px);
+    align-items: start;
+  }
+  .hire-ph {
+    position: relative;
+    overflow: hidden;
+    background: var(--deck);
+    border: 1px solid var(--hairline);
+  }
+  .hire-ph :global(img) {
+    width: 100%;
+    height: auto;
+  }
+  .hire-h2 {
+    font-size: clamp(34px, 4.2vw, 58px);
+  }
+  .hire-accent {
+    color: var(--gel-coral);
+  }
+  .hire-lede {
+    color: var(--paper-dim);
+    font-size: 15px;
+    margin-top: 20px;
+    max-width: 56ch;
+  }
+  .hire-roles {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px 28px;
+    margin: 22px 0 6px;
+  }
+  .hire-roles li {
+    font-size: 14.5px;
+    color: var(--paper-dim);
+    padding: 10px 0;
+    border-top: 1px solid rgba(63, 167, 150, 0.1);
+    display: flex;
+    gap: 12px;
+  }
+  .hire-roles li::before {
+    content: '';
+    width: 14px;
+    height: 2px;
+    background: var(--gel-coral);
+    margin-top: 9px;
+    flex-shrink: 0;
+  }
+  .hire-cta {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: 26px;
+  }
+  .hire-note {
+    font-size: 13px;
+    color: var(--paper-faint);
+    margin-top: 16px;
+    letter-spacing: 0.04em;
+  }
+  @media (max-width: 900px) {
+    .hire-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 620px) {
+    .hire-roles {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
