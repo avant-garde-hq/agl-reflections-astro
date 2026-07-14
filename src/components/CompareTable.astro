@@ -1,0 +1,109 @@
+---
+// Fleet comparison table. Markup ported from
+// agl-reflections-website/stages/index.html lines 102-107 (`.table-scroll`,
+// `table.compare`), CSS from agl-reflections-website/assets/css/main.css
+// lines 289-301, renamed to this project's tokens (see FleetCard.astro for
+// the full --panel/--hair/--teal/--sand/--coral -> --deck/--hairline/
+// --glow-teal/--paper/--gel-coral mapping). Rows are generated from STAGES
+// instead of hand-written <tr>s.
+//
+// The source table's columns are Model / Deck Size / Height / Best For, but
+// "Best For" isn't part of the Stage interface (it's not required by the
+// brief and inventing marketing copy per stage isn't real data), so this
+// table swaps it for the Trailer Weight column instead — the Stage
+// interface's own trimHeight/trailerWeight comments call out both fields as
+// "for CompareTable" specifically. Deck size, trim height and trailer weight
+// are the numeric specs, so they get the `.mono-spec` monospace treatment.
+import { STAGES } from '../data/stages';
+
+const FALLBACK = 'Spec sheet on request';
+---
+
+<div class="table-scroll">
+  <table class="compare">
+    <thead>
+      <tr>
+        <th scope="col">Model</th>
+        <th scope="col">Deck Size</th>
+        <th scope="col">Trim Height</th>
+        <th scope="col">Trailer Weight</th>
+      </tr>
+    </thead>
+    <tbody>
+      {STAGES.map((stage) => (
+        <tr class:list={{ 'soon-row': stage.soon }}>
+          <th scope="row">
+            <a href={`/stages/${stage.slug}.html`}>{stage.series === "Captain's VIP Deck" ? 'VIP Deck' : 'APEX'} {stage.model}</a>
+          </th>
+          <td><span class="deckno mono-spec">{stage.deck}</span></td>
+          <td class="mono-spec">{stage.trimHeight ?? FALLBACK}</td>
+          <td class="mono-spec">{stage.trailerWeight ?? FALLBACK}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+<style>
+  .mono-spec {
+    font-family: var(--font-mono);
+  }
+
+  .table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid var(--hairline);
+    background: var(--deck);
+  }
+  table.compare {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 760px;
+  }
+  table.compare th,
+  table.compare td {
+    padding: 16px 18px;
+    text-align: left;
+    font-size: 14.5px;
+    border-bottom: 1px solid rgba(63, 167, 150, 0.12);
+  }
+  table.compare thead th {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--glow-teal);
+    background: var(--deck-2);
+    border-bottom: 1px solid rgba(63, 167, 150, 0.3);
+  }
+  table.compare tbody th {
+    font-family: var(--font-display);
+    font-size: 17px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  table.compare tbody th a {
+    transition: color 0.25s;
+  }
+  table.compare tbody th a:hover {
+    color: var(--gel-coral);
+  }
+  table.compare td {
+    color: var(--paper-dim);
+  }
+  table.compare td .deckno {
+    color: var(--paper);
+    white-space: nowrap;
+  }
+  table.compare tbody tr:hover {
+    background: rgba(63, 167, 150, 0.05);
+  }
+  table.compare tr.soon-row td,
+  table.compare tr.soon-row th {
+    color: var(--paper-faint);
+  }
+  table.compare tr.soon-row th {
+    color: var(--paper-dim);
+  }
+</style>

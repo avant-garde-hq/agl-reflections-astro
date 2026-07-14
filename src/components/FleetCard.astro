@@ -1,0 +1,257 @@
+---
+// Single fleet-grid card. CSS ported from
+// agl-reflections-website/assets/css/main.css lines 236-287 (`.card`/`.ph`/
+// `.card-body`/`.card-top`/`.series`/`.model`/`.deck`/`.specs`/`.card-foot`/
+// `.spec-link`, plus the dashed "coming soon" treatment), renamed to this
+// project's CSS custom properties (Task 2 tokens: --panel->--deck,
+// --panel-2->--deck-2, --hair->--hairline, --teal->--glow-teal,
+// --teal-deep->--rig-teal, --sand->--paper, --sand-dim->--paper-dim,
+// --sand-faint->--paper-faint, --coral->--gel-coral). Numeric deck/spec
+// figures get the monospace treatment via `.mono-spec` (var(--font-mono)).
+//
+// The base `.chip` pill style (main.css lines 204-206) hasn't been ported
+// globally anywhere yet in this project, so it's scoped here too — this
+// component is the first to render a `.chip` element.
+import { Image } from 'astro:assets';
+import type { Stage } from '../data/stages';
+
+interface Props {
+  stage: Stage;
+}
+
+const { stage } = Astro.props;
+const gridClass = stage.featured
+  ? 'card feature'
+  : stage.coFeatured
+    ? 'card co-feature'
+    : stage.soon
+      ? 'card soon'
+      : 'card';
+---
+
+<article class={gridClass}>
+  <div class="ph">
+    <Image src={stage.image} alt={stage.imageAlt} loading="lazy" />
+    {stage.chip && <span class="chip">{stage.chip}</span>}
+  </div>
+  <div class="card-body">
+    <div class="card-top">
+      <div><span class="series">{stage.series}</span><span class="model">{stage.model}</span></div>
+      <span class="deck mono-spec">{stage.deck}</span>
+    </div>
+    <ul class="specs">
+      {stage.specs.map((s) => <li>{s}</li>)}
+    </ul>
+    <div class="card-foot"><span class="spec-link">View the {stage.model}</span></div>
+  </div>
+  <a class="card-cover" href={`/stages/${stage.slug}.html`} aria-label={`APEX ${stage.model} details`}></a>
+</article>
+
+<style>
+  .mono-spec {
+    font-family: var(--font-mono);
+  }
+
+  .chip {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--glow-teal);
+    border: 1px solid rgba(63, 167, 150, 0.5);
+    background: rgba(12, 20, 20, 0.55);
+    padding: 6px 10px;
+  }
+  .chip.coral {
+    color: var(--gel-coral);
+    border-color: rgba(255, 107, 74, 0.5);
+  }
+
+  .card {
+    grid-column: span 4;
+    background: var(--deck);
+    border: 1px solid var(--hairline);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1), border-color 0.4s;
+  }
+  .card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(63, 167, 150, 0.42);
+  }
+  .card.feature {
+    grid-column: span 7;
+  }
+  .card.co-feature {
+    grid-column: span 5;
+  }
+
+  .ph {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+    background: var(--deck-2);
+  }
+  .card.feature .ph {
+    aspect-ratio: 16 / 9;
+  }
+  .ph :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1), filter 0.6s;
+    filter: saturate(0.94);
+  }
+  .card:hover .ph :global(img) {
+    transform: scale(1.055);
+    filter: saturate(1.05);
+  }
+  .ph::before {
+    content: '';
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 46%;
+    background: linear-gradient(to top, rgba(12, 20, 20, 0.72), transparent);
+    z-index: 1;
+  }
+  .ph::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: repeating-linear-gradient(to bottom, rgba(63, 167, 150, 0.3) 0 2px, transparent 2px 11px);
+    opacity: 0;
+    transform: translateY(-14%);
+    transition: opacity 0.45s ease, transform 1s cubic-bezier(0.2, 0.7, 0.2, 1);
+    pointer-events: none;
+  }
+  .card:hover .ph::after {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .ph .chip {
+    position: absolute;
+    left: 16px;
+    bottom: 14px;
+    z-index: 3;
+  }
+
+  .card-body {
+    padding: 24px 24px 26px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .card-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .card .series {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    color: var(--glow-teal);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .card .model {
+    font-family: var(--font-display);
+    font-size: clamp(28px, 2.6vw, 40px);
+    line-height: 0.95;
+    letter-spacing: 0.005em;
+  }
+  .card.feature .model {
+    font-size: clamp(36px, 3.6vw, 54px);
+  }
+  .card .deck {
+    font-size: 14px;
+    color: var(--paper-faint);
+    white-space: nowrap;
+    letter-spacing: 0.04em;
+  }
+  .card .specs {
+    list-style: none;
+    margin-top: 6px;
+    flex: 1;
+  }
+  .card .specs li {
+    font-size: 13.5px;
+    color: var(--paper-dim);
+    padding: 7px 0;
+    border-top: 1px solid rgba(63, 167, 150, 0.1);
+    display: flex;
+    gap: 10px;
+  }
+  .card .specs li::before {
+    content: '';
+    width: 14px;
+    height: 2px;
+    background: var(--rig-teal);
+    margin-top: 9px;
+    flex-shrink: 0;
+  }
+  .card .card-foot {
+    margin-top: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .card .spec-link {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--paper-dim);
+    transition: color 0.25s;
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .card .spec-link::after {
+    content: '→';
+    transition: transform 0.3s;
+    color: var(--gel-coral);
+  }
+  .card:hover .spec-link {
+    color: var(--paper);
+  }
+  .card:hover .spec-link::after {
+    transform: translateX(4px);
+  }
+  .card a.card-cover {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+  }
+  .card a.card-cover:focus-visible {
+    outline: 2px solid var(--gel-coral);
+    outline-offset: -2px;
+  }
+
+  /* coming soon card */
+  .card.soon {
+    border-style: dashed;
+    border-color: rgba(63, 167, 150, 0.35);
+    background: linear-gradient(180deg, rgba(19, 94, 84, 0.14), rgba(16, 27, 26, 0.6));
+  }
+  .card.soon .ph {
+    background: #dde5e2;
+  }
+  .card.soon .ph :global(img) {
+    mix-blend-mode: multiply;
+    filter: grayscale(1) contrast(1.05);
+    opacity: 0.9;
+  }
+  .card.soon .ph::before {
+    background: linear-gradient(to top, rgba(19, 94, 84, 0.5), transparent);
+  }
+  .card.soon:hover .ph :global(img) {
+    filter: grayscale(0.6) contrast(1.05);
+  }
+</style>
