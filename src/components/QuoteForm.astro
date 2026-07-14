@@ -1,0 +1,249 @@
+---
+// The quote-request form, ported from agl-reflections-website/quote.html
+// lines 100-181 (all fields, byte-identical name/id/type/required/placeholder
+// attributes and option text). Used only by quote.astro (Task 18).
+//
+// Removed vs. the source (per client decision — this project deploys to
+// Cloudflare Pages, which has no Netlify Forms equivalent):
+//   - data-netlify="true" / netlify-honeypot="bot-field" on the <form>
+//   - data-note="Wire to Netlify Forms or Formspree at deploy" (redundant
+//     with the TODO comment below, and itself Netlify-specific)
+//   - the hidden <input type="hidden" name="form-name" value="quote">
+//   - the honeypot <p style="display:none"><label>...bot-field...</label></p>
+//   - the "rv"/data-d scroll-reveal markers used by the source's JS reveal
+//     system, which hasn't been ported into this rebuild (no other already
+//     built component uses them either)
+//
+// method="POST" action="" is kept as-is: the form is fully built/styled but
+// deliberately not wired to a backend yet (see TODO below).
+//
+// .field / .check / fieldset.svc-set styling isn't defined by base.css or
+// any other component, so it's ported here from the source's main.css
+// (lines ~427-452), with hex colors swapped for the Task 2 tokens:
+//   --black -> --ink, --panel -> --deck, --panel-2 -> --deck-2,
+//   --teal -> --glow-teal, --sand -> --paper, --sand-dim -> --paper-dim,
+//   --sand-faint -> --paper-faint, --coral -> --gel-coral.
+// rgba(63,167,150, X) hairline/border tints are kept literal, matching the
+// convention already used in DateCheckForm.astro.
+---
+
+<form class="quote-form" method="POST" name="quote" action="">
+  <!--
+    TODO(deploy): this form is static markup with no backend wired up yet —
+    submissions currently go nowhere. Wire it to a real backend before launch,
+    e.g.:
+      - Formspree: create a free endpoint at formspree.io, set this form's
+        action to it (https://formspree.io/f/XXXXXXX), done — no code needed.
+      - Cloudflare Pages Function: add a function under `functions/quote.ts`
+        that receives the POST and sends email via an API (Resend, Postmark,
+        etc.) once an API key is available.
+    See README.md "Quote form" section for the same note.
+  -->
+  <div class="field">
+    <label for="q-name">Name <span class="req">*</span></label>
+    <input id="q-name" name="name" type="text" autocomplete="name" required placeholder="Your name" />
+  </div>
+  <div class="field">
+    <label for="q-org">Organization</label>
+    <input id="q-org" name="organization" type="text" autocomplete="organization" placeholder="City, company or promoter" />
+  </div>
+  <div class="field">
+    <label for="q-email">Email <span class="req">*</span></label>
+    <input id="q-email" name="email" type="email" autocomplete="email" required placeholder="you@example.com" />
+  </div>
+  <div class="field">
+    <label for="q-phone">Phone</label>
+    <input id="q-phone" name="phone" type="tel" autocomplete="tel" placeholder="(305) 555-0100" />
+  </div>
+  <div class="field">
+    <label for="q-type">Event Type <span class="req">*</span></label>
+    <select id="q-type" name="event_type" required>
+      <option value="">Select one</option>
+      <option>Concert</option>
+      <option>Festival</option>
+      <option>City / municipal event</option>
+      <option>Corporate event</option>
+      <option>School / university</option>
+      <option>Private event</option>
+      <option>Touring production</option>
+      <option>Other</option>
+    </select>
+  </div>
+  <div class="field">
+    <label for="q-date">Event Date</label>
+    <input id="q-date" name="event_date" type="date" />
+  </div>
+  <div class="field">
+    <label for="q-loc">Location <span class="req">*</span></label>
+    <input id="q-loc" name="location" type="text" required placeholder="Venue or city, state" />
+  </div>
+  <div class="field">
+    <label for="q-att">Expected Attendance</label>
+    <select id="q-att" name="attendance">
+      <option value="">Select a range</option>
+      <option>Under 500</option>
+      <option>500 &ndash; 2,000</option>
+      <option>2,000 &ndash; 5,000</option>
+      <option>5,000 &ndash; 10,000</option>
+      <option>10,000 &ndash; 20,000</option>
+      <option>20,000+</option>
+    </select>
+  </div>
+  <div class="field full">
+    <label for="q-stage">Stage</label>
+    <select id="q-stage" name="stage_model"><option value="">Not sure yet — recommend one</option><option>APEX 5040 (50' x 40')</option><option>APEX 4240 (42' x 40')</option><option>APEX 3224 (32' x 24')</option><option>APEX 2424 (24' x 24')</option><option>APEX 2420 (24' x 20')</option><option>APEX 2016 (20' x 16')</option><option>Captain's VIP Deck 3724</option><option>APEX 4232 (2026 season)</option><option>No stage — production services only</option></select>
+  </div>
+
+  <fieldset class="svc-set">
+    <legend>Production Services Needed</legend>
+    <div class="check-grid">
+      <label class="check"><input type="checkbox" name="services[]" value="Concert audio (JBL)" /> Concert audio (JBL)</label>
+      <label class="check"><input type="checkbox" name="services[]" value="Lighting design" /> Lighting design</label>
+      <label class="check"><input type="checkbox" name="services[]" value="LED video walls" /> LED video walls</label>
+      <label class="check"><input type="checkbox" name="services[]" value="Crowd control / MOJO barriers" /> Crowd control / MOJO barriers</label>
+      <label class="check"><input type="checkbox" name="services[]" value="Backline" /> Backline</label>
+      <label class="check"><input type="checkbox" name="services[]" value="Event crew &amp; logistics" /> Event crew &amp; logistics</label>
+      <label class="check"><input type="checkbox" name="services[]" value="Generators &amp; power" /> Generators &amp; power</label>
+      <label class="check"><input type="checkbox" name="services[]" value="VIP deck / hospitality" /> VIP deck / hospitality</label>
+    </div>
+  </fieldset>
+
+  <div class="field full">
+    <label for="q-msg">Tell Us About the Show</label>
+    <textarea id="q-msg" name="message" placeholder="Artists or acts, site details, load-in constraints, budget range — whatever you've got."></textarea>
+  </div>
+
+  <p class="form-note">Required fields marked <span style="color: var(--gel-coral)">*</span>. We typically respond the same business day.</p>
+  <button class="btn btn-coral q-submit" type="submit">Send Quote Request</button>
+</form>
+
+<style>
+  .quote-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+  }
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .field.full {
+    grid-column: 1 / -1;
+  }
+  .field label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--glow-teal);
+  }
+  .field label .req {
+    color: var(--gel-coral);
+  }
+  .field input,
+  .field select,
+  .field textarea {
+    background: var(--deck);
+    border: 1px solid rgba(63, 167, 150, .28);
+    color: var(--paper);
+    font-family: var(--font-body);
+    font-size: 16px; /* 16px stops iOS zoom */
+    padding: 14px 15px;
+    width: 100%;
+    transition: border-color .25s, background .25s;
+    border-radius: 0;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .field select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%233FA796' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    padding-right: 38px;
+  }
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    outline: none;
+    border-color: var(--glow-teal);
+    background: var(--deck-2);
+  }
+  .field input::placeholder,
+  .field textarea::placeholder {
+    color: var(--paper-faint);
+  }
+  .field textarea {
+    min-height: 130px;
+    resize: vertical;
+  }
+  .field input[type="date"] {
+    color-scheme: dark;
+  }
+  fieldset.svc-set {
+    grid-column: 1 / -1;
+    border: 1px solid rgba(63, 167, 150, .28);
+    padding: 20px 20px 16px;
+    background: var(--deck);
+  }
+  fieldset.svc-set legend {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--glow-teal);
+    padding: 0 8px;
+  }
+  .check-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 22px;
+  }
+  .check {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    font-size: 14.5px;
+    color: var(--paper-dim);
+    padding: 7px 0;
+    cursor: pointer;
+  }
+  .check input {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 1px solid rgba(63, 167, 150, .45);
+    background: var(--deck-2);
+    cursor: pointer;
+    flex-shrink: 0;
+    position: relative;
+    transition: background .2s, border-color .2s;
+  }
+  .check input:checked {
+    background: var(--gel-coral);
+    border-color: var(--gel-coral);
+  }
+  .check input:checked::after {
+    content: "";
+    position: absolute;
+    inset: 4px;
+    background: var(--ink);
+    clip-path: polygon(14% 44%, 0 60%, 40% 100%, 100% 16%, 84% 4%, 38% 70%);
+  }
+  .check input:focus-visible {
+    outline: 2px solid var(--glow-teal);
+    outline-offset: 2px;
+  }
+  .form-note {
+    grid-column: 1 / -1;
+    font-size: 13px;
+    color: var(--paper-faint);
+  }
+  .quote-form .q-submit {
+    grid-column: 1 / -1;
+    justify-self: start;
+    padding: 18px 44px;
+    font-size: 14px;
+  }
+</style>
