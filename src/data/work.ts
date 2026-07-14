@@ -114,14 +114,14 @@ export const WORK: WorkCase[] = [
       "Miami's answer to the Times Square ball: a glowing, 35-foot, 2,000-pound LED Orange climbing 400 feet up the InterContinental at midnight — <b>with the party built on Reflections stages below.</b>",
     eventMeta: 'Bayfront Park · December 31',
     heroImage: heroBigorange,
-    heroImageAlt: 'The Big Orange New Year’s Eve stage in Miami with LED video walls',
+    heroImageAlt: "The Big Orange New Year's Eve stage in Miami with LED video walls",
     body: `<p>Every December 31, downtown Miami pours into <b>Bayfront Park</b> on Biscayne Bay for the Big Orange — the citrus-themed midnight icon that ascends the side of the InterContinental Miami as the year turns. The most recent edition marked the tradition's <b>40th anniversary</b>, making it one of the longest-running public New Year's spectacles in Florida.</p><p>Beneath the ascent is a full night of live entertainment — and that's where Reflections works. Stages, LED video walls and event production carrying performances from early evening through the midnight fireworks over the bay.</p><p>A five-hour live show, a hard midnight cue watched by thousands in the park and cameras across the country. You don't improvise that — you produce it.</p>`,
     deployList: [
       '<b>Mobile staging</b> — APEX hydraulic stage at Bayfront Park',
       '<b>LED video walls</b> — live feeds and countdown graphics',
       '<b>Concert audio</b> — full-park coverage through midnight',
       '<b>Show production</b> — five hours of live acts to a hard midnight cue',
-      '<b>40th anniversary edition</b> — Miami’s longest-running NYE spectacle',
+      "<b>40th anniversary edition</b> — Miami's longest-running NYE spectacle",
     ],
     gallery: [
       { image: bigorange01, alt: 'Big Orange NYE — stage and LED walls at Bayfront Park' },
