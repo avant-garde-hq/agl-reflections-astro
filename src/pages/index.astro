@@ -1,17 +1,734 @@
 ---
+// Homepage. Composes every homepage-only component (Tasks 5-11) with real
+// copy transcribed from agl-reflections-website/index.html (672 lines),
+// in the exact section order of the source: hero -> stats -> trust band ->
+// date-check -> path cards -> fleet grid (4 cards) -> video reel ->
+// services teaser -> work (2 teasers) -> testimonials -> how-it-works ->
+// about teaser -> rates teaser -> Instagram grid -> quote CTA -> footer.
+//
+// The video reel, compact services teaser, about teaser and rates teaser
+// sections were never built as standalone components (Task 9's note: the
+// homepage services layout is visually distinct from ServiceBlock, which
+// belongs to the full production-services page, Task 16) -- they're written
+// directly here, reusing Kicker/Button/BarMeter and the project's CSS custom
+// properties, with page-scoped <style> covering the layout primitives
+// (.band/.sec-head/.ghost/.arrow-link/.divider) that source's main.css
+// defines globally but that no earlier task ported anywhere yet.
+//
+// Per motion.css's elevation decision ("reveal only fires on section-level
+// kickers/headings ... opted-in per element via .rv"), each section's
+// kicker+heading pair carries the `rv` class so scripts/reveal.js's
+// IntersectionObserver fades it in; repeated items (cards, stats, testimonials,
+// steps, IG tiles) intentionally do not, matching that documented decision.
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/house/Header.astro';
+import Footer from '../components/house/Footer.astro';
+import Hero from '../components/Hero.astro';
+import StatBar from '../components/StatBar.astro';
+import TrustBand from '../components/TrustBand.astro';
+import DateCheckForm from '../components/DateCheckForm.astro';
+import PathCards from '../components/PathCards.astro';
+import FleetCard from '../components/FleetCard.astro';
+import WorkItem from '../components/WorkItem.astro';
+import TestimonialGrid from '../components/TestimonialGrid.astro';
+import StepsRow from '../components/StepsRow.astro';
+import InstagramGrid from '../components/InstagramGrid.astro';
+import QuoteCta from '../components/QuoteCta.astro';
+import Kicker from '../components/ui/Kicker.astro';
+import Button from '../components/ui/Button.astro';
+import BarMeter from '../components/ui/BarMeter.astro';
+import { STAGES } from '../data/stages';
+import { WORK } from '../data/work';
+import { SITE } from '../config/site';
 
+import igHialeah05 from '../assets/img/work-cs/hialeah-05.jpg';
+import igHialeah09 from '../assets/img/work-cs/hialeah-09.jpg';
+import igHialeah02 from '../assets/img/work-cs/hialeah-02.jpg';
+import igMsc03 from '../assets/img/work-cs/msc-03.jpg';
+import igFloydfest01 from '../assets/img/work-cs/floydfest-01.jpg';
+import igHialeah11 from '../assets/img/work-cs/hialeah-11.jpg';
+import igBigorange01 from '../assets/img/work-cs/bigorange-01.jpg';
+
+const fleetStages = STAGES.slice(0, 4); // 5040 (featured), 4240 (co-featured), 3224, 4232 (soon)
+const [hialeahCase, bigOrangeCase] = WORK;
+
+const igTiles = [
+  { image: igHialeah05, alt: 'Stage build under the lights at Milander Park', href: SITE.socials[0].href },
+  { image: igHialeah09, alt: 'Rigging going up at night', href: SITE.socials[0].href },
+  { image: igHialeah02, alt: 'Crowd at the Hialeah 4th of July', href: SITE.socials[0].href },
+  { image: igMsc03, alt: 'APEX 5040 GEN3 on the conference floor', href: SITE.socials[0].href },
+  { image: igFloydfest01, alt: 'Dual-stage festival deployment', href: SITE.socials[0].href },
+  { image: igHialeah11, alt: 'Lift work on the fly bays', href: SITE.socials[0].href },
+  { image: igBigorange01, alt: 'New Year’s Eve stage at Bayfront Park', href: SITE.socials[0].href },
+];
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout
+  title="Reflections Productions — Mobile Stages & Concert Production, South Florida"
+  description="Fifty years on stage. APEX hydraulic mobile stages, JBL concert audio, lighting, video and crew for South Florida's biggest events. Est. 1975, Princeton FL."
+  path="/"
+>
+  <Header currentPath="/" />
+
+  <Hero
+    videoSrc="/assets/video/hialeah-drone-15s.mp4"
+    posterSrc="/assets/video/hialeah-poster.jpg"
+    eyebrow="The Stage Behind South Florida’s Biggest Nights · Est. 1975"
+    lines={['Fifty Years', 'On Stage']}
+    subtitle="Eight APEX hydraulic mobile stages, JBL concert audio, lighting, video and crew — <b>one call, and the show is handled.</b>"
+    ctaPrimary={{ label: 'Get a Quote', href: '/quote.html' }}
+    ctaSecondary={{ label: 'See the Fleet', href: '#fleet' }}
+  />
+
+  <StatBar
+    stats={[
+      { value: '50 <em>Years</em>', label: 'On stage since 1975' },
+      { value: '8 <em>Stages</em>', label: 'APEX hydraulic mobile fleet' },
+      { value: 'JBL <em>Audio</em>', label: 'Concert-grade sound systems' },
+      { value: 'Same-Day <em>Quotes</em>', label: 'Tell us the date & crowd' },
+    ]}
+  />
+
+  <TrustBand
+    lead="Trusted on South Florida’s biggest nights"
+    names="City of Hialeah • Big Orange NYE Miami • FloydFest • Formula E Fan Village • Network Broadcast Sets"
+  />
+
+  <DateCheckForm />
+
+  <section class="band tight" id="start" aria-label="Choose your path">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="left rv">
+          <Kicker text="Start Here" />
+          <h2>What Do You<br /><span class="ghost">Need?</span></h2>
+        </div>
+        <p class="right">
+          Three ways in. Pick the one that sounds like you — or just call{' '}
+          <a href={SITE.phoneHref} style="color: var(--glow-teal); font-weight: 600">{SITE.phone}</a> and describe the show.
+        </p>
+      </div>
+      <PathCards
+        cards={[
+          {
+            title: 'I need a stage',
+            body: 'Eight APEX hydraulic stages from a 20-foot community deck to the 50×40 flagship. Compare decks, specs and photos.',
+            href: '/stages/index.html',
+            cta: 'Browse the fleet',
+          },
+          {
+            title: 'I need the whole show',
+            body: 'Stage plus audio, lighting, LED video, barricades, backline and crew — one partner, one truck line, one quote.',
+            href: '/production/index.html',
+            cta: 'See production services',
+          },
+          {
+            title: 'Not sure yet',
+            body: 'Tell us the date, place and expected crowd. We’ll recommend the right stage and rig — usually the same day.',
+            href: '/quote.html',
+            cta: 'Get a recommendation',
+          },
+        ]}
+      />
+    </div>
+  </section>
+
+  <section class="band" id="fleet">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="left rv">
+          <Kicker text="Stage Fleet" />
+          <h2>The APEX<br /><span class="ghost">Fleet</span></h2>
+        </div>
+        <p class="right">Hydraulic mobile stages that roll in on a trailer and stand up show-ready in hours — from a 20-foot community deck to the 50-by-40 flagship.</p>
+      </div>
+      <div class="fleet-grid">
+        {fleetStages.map((stage) => <FleetCard stage={stage} />)}
+      </div>
+      <p class="fleet-all"><a class="arrow-link" href="/stages/index.html">Compare all 8 stages — decks, heights & tow specs</a></p>
+    </div>
+  </section>
+
+  <section class="band" id="reel" aria-label="Watch the reel">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="left rv">
+          <Kicker text="Thirty Seconds Over the 4th of July" />
+          <h2>Watch the<br /><span class="ghost">Reel</span></h2>
+        </div>
+        <p class="right">You just scrolled the fleet — now watch it work. Their own drone over the Hialeah build as the fireworks go, <b>sound on.</b></p>
+      </div>
+      <div class="reel-frame">
+        <video id="reel-video" poster="/assets/video/hialeah-poster.jpg" preload="none" playsinline>
+          <source src="/assets/video/hialeah-drone-full-audio.mp4" type="video/mp4" />
+        </video>
+        <button class="reel-play" id="reel-play" type="button" aria-label="Play the reel with sound">
+          <span class="rp-btn">&#9654;&#xFE0E;</span><span class="rp-txt">PLAY &middot; SOUND ON</span>
+        </button>
+        <div class="reel-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider wrap" aria-hidden="true"><span class="bars"><i></i><i></i><i></i></span></div>
+
+  <section class="band" id="production-home">
+    <div class="wrap">
+      <div class="svc-layout">
+        <div class="svc-sticky rv">
+          <Kicker text="Production Services" />
+          <h2>The Whole<br />Show, <span style="color: var(--gel-coral)">Handled</span></h2>
+          <p>The stage is just the start. Reflections Productions carries the audio, lights, video, barriers, backline and crew — so your event has one production partner, not six vendors.</p>
+          <a class="svc-cta" href="/production/index.html">Build your production</a>
+        </div>
+        <div class="svc-grid">
+          <a class="svc" href="/production/index.html#audio">
+            <BarMeter />
+            <h3>Concert Audio</h3>
+            <p>JBL line arrays with front-of-house and monitor mixes, tuned and run by our audio engineers.</p>
+          </a>
+          <a class="svc" href="/production/index.html#lighting">
+            <BarMeter />
+            <h3>Lighting Design</h3>
+            <p>Intelligent rigs, effects and programming — designed, hung and operated for broadcast-ready looks.</p>
+          </a>
+          <a class="svc" href="/production/index.html#video">
+            <BarMeter />
+            <h3>LED Video Walls</h3>
+            <p>Outdoor-rated LED screens with live camera feeds, switching and playback for crowds of any size.</p>
+          </a>
+          <a class="svc" href="/production/index.html#crowd-control">
+            <BarMeter />
+            <h3>Crowd Control</h3>
+            <p>MOJO stage barriers and crowd-management layouts that keep the front row safe and the fire marshal happy.</p>
+          </a>
+          <a class="svc" href="/production/index.html#backline">
+            <BarMeter />
+            <h3>Backline</h3>
+            <p>Drums, amps, keys and instruments — professional backline rentals ready on deck at soundcheck.</p>
+          </a>
+          <a class="svc" href="/production/index.html#crew">
+            <BarMeter />
+            <h3>Event Crew & Logistics</h3>
+            <p>Riggers, sound engineers, lighting techs and stagehands, plus the trucking and planning behind them.</p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="work">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="left rv">
+          <Kicker text="Our Work" />
+          <h2>Nights the City<br /><span class="ghost">Remembers</span></h2>
+        </div>
+        <p class="right">From Independence Day fireworks to the New Year’s countdown, Reflections stages carry South Florida’s signature celebrations.</p>
+      </div>
+      <WorkItem case={hialeahCase} teaser />
+      <WorkItem case={bigOrangeCase} teaser flip />
+    </div>
+  </section>
+
+  <section class="band tight" id="testimonials" aria-label="Testimonials">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="left rv">
+          <Kicker text="Word Backstage" />
+          <h2>What Clients<br /><span class="ghost">Say</span></h2>
+        </div>
+        <p class="right">Fifty years of shows leaves a trail of happy promoters. Real quotes are being collected now — these slots show where they’ll live.</p>
+      </div>
+      <TestimonialGrid
+        items={[
+          {
+            quote: '“The stage was up before lunch and the fire marshal didn’t have a single question left. That’s what fifty years of doing this looks like.”',
+            attribution: 'Events Coordinator · Municipal 4th of July Celebration',
+          },
+          {
+            quote: '“One call covered the stage, sound, lights and crew. Our New Year’s broadcast hit its midnight cue to the second — in front of thousands.”',
+            attribution: 'Show Producer · Downtown Miami NYE Celebration',
+          },
+          {
+            quote: '“They rolled a 50-foot stage a thousand miles, stood it up in hours, and our headliners played it that same night. Unreal operation.”',
+            attribution: 'Operations Director · Multi-Day Music Festival',
+          },
+        ]}
+      />
+      <p style="margin-top: 22px; font-size: 13.5px; color: var(--paper-faint)">
+        Have a review on Google or Yelp?{' '}
+        <a href="https://www.yelp.com/biz/reflections-productions-princeton" target="_blank" rel="noopener" style="color: var(--glow-teal)">We'd love to feature it.</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="band tight" id="how" aria-label="How it works">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="left rv">
+          <Kicker text="How It Works" />
+          <h2>Three Steps to<br /><span class="ghost">Showtime</span></h2>
+        </div>
+      </div>
+      <StepsRow
+        steps={[
+          { number: 1, title: 'Tell us the show', body: 'Date, place, expected crowd, and what’s happening on deck. Two minutes on the <a href="/quote.html">quote form</a> or one phone call.' },
+          { number: 2, title: 'Get your quote', body: 'One number for the whole rig — stage, audio, lights, crew, trucking. Usually back to you the same day.' },
+          { number: 3, title: 'The stage stands up', body: 'The trailer rolls in, hydraulics go up, and your stage is show-ready in hours — with our crew running it.' },
+        ]}
+      />
+    </div>
+  </section>
+
+  <section class="band sand-band" id="about">
+    <div class="wrap">
+      <div class="about-grid">
+        <div class="about-left rv">
+          <Kicker text="About" variant="dark" />
+          <h2>Half a Century of <span class="accent">Showtime</span></h2>
+          <div class="years"><span class="big">&rsquo;75</span><span class="cap">Princeton, Florida — then, now, always</span></div>
+        </div>
+        <div class="about-right">
+          <p>Reflections Productions started in <b>1975</b> as a South Florida production shop with a simple idea: if the show matters, everything behind it should come from people who’ve done it before. Fifty years later, that idea has grown into a <b>family of brands</b> — Reflections Productions, Mobile Stages Miami and the APEX stage line.</p>
+          <p>Today the company runs <b>eight APEX hydraulic mobile stages</b> from its Princeton, Florida yard, backed by concert audio, lighting, video and a crew that has built shows for cities, festivals, broadcasters and touring acts across the region.</p>
+          <p>Three generations of South Florida audiences have watched their favorite nights happen on our decks. <b>We plan on a fourth.</b></p>
+          <div class="brand-row">
+            <div class="brand-cell"><BarMeter variant="dark" /><span class="nm">Reflections Productions</span><span class="rl">Full-service production</span></div>
+            <div class="brand-cell"><BarMeter variant="dark" /><span class="nm">Mobile Stages Miami</span><span class="rl">Stage rentals</span></div>
+            <div class="brand-cell"><BarMeter variant="dark" /><span class="nm">APEX Stages</span><span class="rl">The hydraulic fleet</span></div>
+          </div>
+          <p style="margin-top: 30px; margin-bottom: 0"><a class="arrow-link" style="color: var(--rig-teal)" href="/about.html">Read the full story</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band tight" id="rates-tease" aria-label="Published rates">
+    <div class="wrap">
+      <div class="rates-tease rv">
+        <div>
+          <Kicker text="No Mystery Pricing" />
+          <h2 style="margin: 0 0 10px">We publish<br />our <span style="color: var(--gel-coral)">rates</span>.</h2>
+          <p style="max-width: 52ch">Crew calls, generators, barricades, DJ systems, movie nights — the numbers are on the site, not behind a phone call. Stages are quoted per event.</p>
+        </div>
+        <Button href="/rates.html" variant="coral">See the Rates</Button>
+      </div>
+    </div>
+  </section>
+
+  <section class="band tight" id="follow" aria-label="Follow Reflections Productions">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="left rv">
+          <Kicker text="Backstage Pass" />
+          <h2>Follow the<br /><span class="ghost">Shows</span></h2>
+        </div>
+        <p class="right">Load-ins, drone flights and full builds — the crew posts the shows as they happen. <b>@reflectionsproductions</b></p>
+      </div>
+      <InstagramGrid
+        tiles={igTiles}
+        reelHref="https://www.instagram.com/reel/DMyeRAZCZo1/"
+        reelLabel="Watch the<br />latest reel"
+        handle="@reflectionsproductions"
+        followHref={SITE.socials[0].href}
+      />
+    </div>
+  </section>
+
+  <QuoteCta />
+
+  <Footer />
+</Layout>
+
+<script>
+  const video = document.getElementById('reel-video') as HTMLVideoElement | null;
+  const playBtn = document.getElementById('reel-play');
+  if (video && playBtn) {
+    playBtn.addEventListener('click', () => {
+      playBtn.classList.add('off');
+      video.setAttribute('controls', '');
+      video.muted = false;
+      video.play();
+    });
+    video.addEventListener('ended', () => {
+      playBtn.classList.remove('off');
+      video.removeAttribute('controls');
+    });
+  }
+</script>
+
+<style>
+  /* Section-band layout primitives (source: main.css lines 220-226, 237,
+     270-276, 79-84) -- generic across every "band" section on this page.
+     Not ported into base.css since Task 14's file scope is this page only;
+     later page-assembly tasks may promote these to base.css if they need
+     them too. */
+  :global(section.band) {
+    padding: clamp(84px, 10vw, 140px) 0;
+  }
+  :global(section.band.tight) {
+    padding: clamp(56px, 7vw, 96px) 0;
+  }
+  .sec-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 32px;
+    margin-bottom: clamp(40px, 5vw, 64px);
+    flex-wrap: wrap;
+  }
+  .sec-head h2 {
+    font-size: clamp(38px, 5.4vw, 76px);
+    letter-spacing: -0.005em;
+  }
+  .sec-head .right,
+  :global(.right) {
+    max-width: 380px;
+    color: var(--paper-dim);
+    font-size: 15px;
+    padding-bottom: 8px;
+  }
+  :global(.ghost) {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(63, 167, 150, 0.75);
+  }
+  :global(.arrow-link) {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--paper-dim);
+    transition: color 0.25s;
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+  }
+  :global(.arrow-link)::after {
+    content: '→';
+    transition: transform 0.3s;
+    color: var(--gel-coral);
+  }
+  :global(.arrow-link:hover) {
+    color: var(--paper);
+  }
+  :global(.arrow-link:hover)::after {
+    transform: translateX(4px);
+  }
+  .divider {
+    padding: 0;
+  }
+  .divider .bars {
+    display: block;
+  }
+  .divider .bars i {
+    display: block;
+    background: var(--glow-teal);
+  }
+  .divider .bars i:nth-child(1) {
+    height: 2px;
+    opacity: 0.34;
+    margin-bottom: 6px;
+  }
+  .divider .bars i:nth-child(2) {
+    height: 2px;
+    opacity: 0.18;
+    margin-bottom: 8px;
+    width: 72%;
+  }
+  .divider .bars i:nth-child(3) {
+    height: 1px;
+    opacity: 0.1;
+    width: 46%;
+  }
+
+  /* Fleet grid wrapper (source: main.css line 237) -- FleetCard.astro
+     (Task 8) owns each card's own grid-column span. */
+  .fleet-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 22px;
+  }
+  .fleet-all {
+    margin: 34px 0 0;
+    text-align: center;
+  }
+
+  /* Video reel (source: index.html embedded <style> lines 136-147) */
+  .reel-frame {
+    position: relative;
+    border: 1px solid rgba(63, 167, 150, 0.35);
+    background: #000;
+  }
+  .reel-frame video {
+    width: 100%;
+    display: block;
+    aspect-ratio: 2 / 1;
+    object-fit: cover;
+    background: #000;
+  }
+  .reel-play {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    background: linear-gradient(to top, rgba(12, 20, 20, 0.55), rgba(12, 20, 20, 0.1));
+    border: 0;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    transition: 0.25s;
+  }
+  .reel-play:hover .rp-btn {
+    transform: scale(1.08);
+  }
+  .rp-btn {
+    width: 86px;
+    height: 86px;
+    border-radius: 50%;
+    background: var(--gel-coral);
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    transition: 0.2s;
+    box-shadow: 0 18px 50px rgba(255, 107, 74, 0.35);
+  }
+  .rp-txt {
+    font: 600 12px/1 var(--font-body);
+    letter-spacing: 0.22em;
+    color: var(--paper);
+  }
+  .reel-play.off {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .reel-bars {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -14px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .reel-bars i {
+    height: 3px;
+    background: var(--glow-teal);
+  }
+  .reel-bars i:nth-child(1) {
+    width: 60%;
+  }
+  .reel-bars i:nth-child(2) {
+    width: 42%;
+    opacity: 0.6;
+  }
+  .reel-bars i:nth-child(3) {
+    width: 27%;
+    opacity: 0.35;
+  }
+  .reel-bars i:nth-child(4) {
+    width: 14%;
+    opacity: 0.18;
+  }
+
+  /* Compact homepage services teaser (source: main.css lines 511-520, 533-534,
+     566; "homepage services teaser (ported from demo)" comment) -- visually
+     distinct from ServiceBlock.astro (Task 9), which is for the full
+     production-services page (Task 16). */
+  #production-home {
+    background: var(--deck-2);
+  }
+  .svc-layout {
+    display: grid;
+    grid-template-columns: minmax(280px, 4fr) 8fr;
+    gap: clamp(36px, 5vw, 80px);
+  }
+  .svc-sticky {
+    position: sticky;
+    top: calc(var(--nav-h) + 40px);
+    align-self: start;
+  }
+  .svc-sticky :global(.kicker) {
+    margin-bottom: 18px;
+  }
+  .svc-sticky h2 {
+    font-size: clamp(38px, 4.6vw, 64px);
+  }
+  .svc-sticky p {
+    color: var(--paper-dim);
+    font-size: 15px;
+    margin-top: 22px;
+    max-width: 340px;
+  }
+  .svc-sticky .svc-cta {
+    margin-top: 28px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gel-coral);
+  }
+  .svc-sticky .svc-cta::after {
+    content: '→';
+    transition: transform 0.3s;
+  }
+  .svc-sticky .svc-cta:hover::after {
+    transform: translateX(5px);
+  }
+  .svc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 clamp(28px, 3vw, 52px);
+  }
+  .svc {
+    display: block;
+    padding: 30px 0 32px;
+    border-top: 1px solid var(--hairline);
+    position: relative;
+  }
+  .svc :global(.wl) {
+    margin-bottom: 16px;
+  }
+  .svc :global(.wl) i {
+    width: 30px;
+    height: 4px;
+    transition: background 0.3s;
+  }
+  .svc:hover :global(.wl) i {
+    background: var(--gel-coral);
+  }
+  .svc h3 {
+    font-size: 19px;
+    letter-spacing: 0.02em;
+    margin-bottom: 10px;
+  }
+  .svc p {
+    font-size: 14.5px;
+    color: var(--paper-dim);
+  }
+  @media (max-width: 1080px) {
+    .svc-layout {
+      grid-template-columns: 1fr;
+    }
+    .svc-sticky {
+      position: static;
+    }
+  }
+  @media (max-width: 620px) {
+    .svc-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* About teaser (source: main.css lines 402-417) */
+  .sand-band {
+    background: var(--paper);
+    color: var(--ink);
+  }
+  .sand-band :global(.kicker) {
+    color: var(--rig-teal);
+  }
+  .sand-band h2 {
+    color: var(--ink);
+  }
+  .sand-band h2 .accent {
+    color: var(--rig-teal);
+  }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 5fr 7fr;
+    gap: clamp(40px, 6vw, 96px);
+  }
+  .about-left .years {
+    margin-top: 34px;
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+  }
+  .about-left .years .big {
+    font-family: var(--font-display);
+    font-size: clamp(64px, 7vw, 108px);
+    line-height: 0.85;
+    color: var(--rig-teal);
+  }
+  .about-left .years .cap {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(12, 20, 20, 0.55);
+    max-width: 120px;
+    line-height: 1.5;
+  }
+  .about-right p {
+    font-size: clamp(16px, 1.35vw, 18.5px);
+    color: rgba(12, 20, 20, 0.78);
+    margin-bottom: 22px;
+    font-weight: 500;
+    max-width: 56ch;
+  }
+  .about-right p :global(b) {
+    color: var(--ink);
+    font-weight: 700;
+  }
+  .brand-row {
+    margin-top: 38px;
+    padding-top: 30px;
+    border-top: 1px solid rgba(12, 20, 20, 0.14);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 24px;
+  }
+  .brand-cell :global(.wl) {
+    margin-bottom: 12px;
+  }
+  .brand-cell :global(.wl) i {
+    width: 28px;
+    height: 4px;
+  }
+  .brand-cell .nm {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 15px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+  .brand-cell .rl {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(12, 20, 20, 0.5);
+    margin-top: 5px;
+  }
+  @media (max-width: 900px) {
+    .about-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Rates teaser (source: index.html embedded <style> lines 71, 78) */
+  .rates-tease {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 34px;
+    border: 1px solid rgba(255, 107, 74, 0.35);
+    padding: 44px 46px;
+    flex-wrap: wrap;
+    background: rgba(255, 107, 74, 0.05);
+  }
+  @media (max-width: 900px) {
+    .rates-tease {
+      padding: 34px 26px;
+    }
+  }
+</style>
