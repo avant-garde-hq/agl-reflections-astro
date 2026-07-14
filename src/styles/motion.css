@@ -1,0 +1,15 @@
+/* Elevation decision: reveal only fires on section-level kickers/headings
+   and hero content (opted-in per element via .rv), not on every card/stat.
+   Faster and subtler than the source site's 700ms/26px version. */
+html.js .rv {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .22s ease, transform .24s cubic-bezier(.2,.7,.2,1);
+}
+html.js .rv.on { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .rv { opacity: 1; transform: none; }
+}

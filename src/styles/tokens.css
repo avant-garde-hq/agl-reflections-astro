@@ -1,0 +1,17 @@
+:root {
+  --ink: #0C1414;
+  --deck: #101B1A;
+  --deck-2: #0E1817;
+  --rig-teal: #135E54;
+  --glow-teal: #3FA796;
+  --paper: #F4EFE6;
+  --gel-coral: #FF6B4A;
+  --hairline: rgba(63, 167, 150, .16);
+  --paper-dim: rgba(244, 239, 230, .62);
+  --paper-faint: rgba(244, 239, 230, .55);
+  --max: 1280px;
+  --nav-h: 76px;
+  --font-display: 'Archivo Black', Arial, sans-serif;
+  --font-body: 'Archivo', system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'Roboto Mono', monospace;
+}
