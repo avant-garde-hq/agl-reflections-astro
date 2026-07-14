@@ -1,0 +1,51 @@
+---
+// Homepage-only client-trust strip beneath the stat bar. Ported from
+// agl-reflections-website/index.html lines 223-228 (markup) and the
+// homepage-only <style> block at lines 111-113 (CSS), hex colors swapped
+// for the Task 2 CSS custom properties.
+interface Props {
+  lead: string;
+  names: string;
+}
+const { lead, names } = Astro.props;
+---
+
+<section class="trustband" aria-label="Clients">
+  <div class="wrap">
+    <p class="tb-lead">{lead}</p>
+    <p class="tb-names">{names}</p>
+  </div>
+</section>
+
+<style>
+  .trustband {
+    padding: 34px 0 8px;
+    text-align: center;
+  }
+  .tb-lead {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 11px;
+    line-height: 1;
+    letter-spacing: .24em;
+    text-transform: uppercase;
+    color: var(--gel-coral);
+    margin: 0 0 12px;
+  }
+  .tb-names {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 1.9;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--paper-dim);
+    margin: 0;
+  }
+  @media (max-width: 900px) {
+    .tb-names {
+      font-size: 12px;
+      letter-spacing: .06em;
+    }
+  }
+</style>

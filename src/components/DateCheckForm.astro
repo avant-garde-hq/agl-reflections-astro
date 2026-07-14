@@ -1,0 +1,185 @@
+---
+// Homepage-only "check your date" section: kicker, mirrored headline, lede,
+// and the static GET form that "submits" by redirecting to the quote page
+// with querystring params. Ported from agl-reflections-website/index.html
+// lines 230-249 (markup) and the homepage-only <style> block at lines
+// 110-126 (the .datefeature/.date-check family of rules), hex colors
+// swapped for the Task 2 CSS custom properties.
+//
+// The headline's mirror/face/waterrule/refl structure is written out by
+// hand here (matching MirrorText.astro's own markup/CSS) instead of using
+// the shared <MirrorText> component: the source nests a coral-colored
+// <span> around just the word "Open?" inside the face line
+// (`Still <span style="color:var(--coral)">Open?</span>`), and MirrorText's
+// props only accept plain strings per line, so it can't express that nested
+// span. Duplicating the small mirror-effect CSS here keeps this component
+// self-contained and preserves the exact source markup/behavior.
+//
+// Field names/options and the form action are byte-identical to the source
+// (only the action gets a leading slash): quote.astro's prefill script
+// (Task 18) reads these exact querystring param names.
+import Kicker from './ui/Kicker.astro';
+---
+
+<section class="datefeature" id="check-date" aria-label="Check your date">
+  <div class="wrap">
+    <Kicker text="The Calendar Fills Front to Back" />
+    <h2 class="mirror df-h">
+      <span class="face">Is Your Date<br />Still <span style="color: var(--gel-coral)">Open?</span></span>
+      <span class="waterrule" aria-hidden="true"></span>
+      <span class="refl" aria-hidden="true">Still Open?</span>
+    </h2>
+    <p class="df-sub">
+      The 4th of July books by spring. New Year&rsquo;s Eve goes by Labor Day. Fifty years of South Florida shows taught us one thing: <b>the good dates never wait.</b>
+    </p>
+    <form class="date-check" action="/quote.html" method="GET">
+      <div class="dc-fields">
+        <label>Event date<input type="date" name="date" required /></label>
+        <label>City / venue<input type="text" name="location" placeholder="e.g. Bayfront Park, Miami" required /></label>
+        <label>Expected crowd
+          <select name="attendance">
+            <option>Under 1,000</option>
+            <option>1,000&ndash;2,500</option>
+            <option>2,500&ndash;8,000</option>
+            <option>8,000&ndash;20,000</option>
+            <option>20,000+</option>
+          </select>
+        </label>
+        <button class="btn btn-coral dc-btn" type="submit">Check My Date &rarr;</button>
+      </div>
+      <p class="dc-foot">Same-day answer &middot; no obligation &middot; or just call <a href="tel:+17865042369">786-504-2369</a></p>
+    </form>
+  </div>
+</section>
+
+<style>
+  .datefeature {
+    background: radial-gradient(ellipse 80% 120% at 50% 0%, rgba(19, 94, 84, .35), transparent 65%);
+    text-align: center;
+    padding: 54px 0 clamp(84px, 10vw, 140px);
+  }
+
+  /* Mirror headline (ported from MirrorText.astro; see comment above). */
+  .mirror {
+    position: relative;
+    display: block;
+  }
+  .mirror .face {
+    display: block;
+  }
+  .mirror .waterrule {
+    display: block;
+    height: 1px;
+    margin: .14em 0 .1em;
+    background: linear-gradient(to right, rgba(63, 167, 150, .75), rgba(63, 167, 150, .12) 62%, transparent);
+  }
+  .mirror .refl {
+    display: block;
+    transform: scaleY(-1);
+    color: var(--glow-teal);
+    opacity: .6;
+    pointer-events: none;
+    user-select: none;
+    -webkit-mask-image:
+      repeating-linear-gradient(to bottom, #000 0 .050em, transparent .050em .094em),
+      linear-gradient(to bottom, transparent 4%, rgba(0, 0, 0, .9) 96%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+      repeating-linear-gradient(to bottom, #000 0 .050em, transparent .050em .094em),
+      linear-gradient(to bottom, transparent 4%, rgba(0, 0, 0, .9) 96%);
+    mask-composite: intersect;
+  }
+  .df-h .face {
+    font-size: clamp(40px, 5.2vw, 72px);
+  }
+
+  .df-sub {
+    max-width: 60ch;
+    margin: 22px auto 34px;
+    font-size: 17px;
+    line-height: 1.7;
+    color: rgba(244, 239, 230, .78);
+  }
+  .date-check {
+    border: 1px solid rgba(63, 167, 150, .4);
+    background: rgba(12, 20, 20, .55);
+    padding: 38px 40px 26px;
+    max-width: 1080px;
+    margin: 0 auto;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, .35);
+  }
+  .dc-fields {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr 1fr auto;
+    gap: 18px;
+    align-items: end;
+    text-align: left;
+  }
+  .dc-fields label {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 1;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--glow-teal);
+  }
+  .dc-fields input,
+  .dc-fields select {
+    background: var(--ink);
+    border: 1px solid rgba(63, 167, 150, .45);
+    color: var(--paper);
+    padding: 17px 16px;
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 1;
+    color-scheme: dark;
+  }
+  .dc-fields input:focus,
+  .dc-fields select:focus {
+    outline: 2px solid var(--glow-teal);
+    outline-offset: 0;
+  }
+  .dc-btn {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    background: var(--gel-coral);
+    color: var(--ink);
+    border: none;
+    cursor: pointer;
+    transition: transform .25s, box-shadow .25s;
+    padding: 19px 30px;
+    font-size: 15px;
+    white-space: nowrap;
+  }
+  .dc-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(255, 107, 74, .28);
+  }
+  .dc-foot {
+    margin: 20px 0 0;
+    font-size: 13px;
+    letter-spacing: .04em;
+    color: var(--paper-faint);
+  }
+  .dc-foot a {
+    color: var(--glow-teal);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  @media (max-width: 900px) {
+    .dc-fields {
+      grid-template-columns: 1fr;
+    }
+    .date-check {
+      padding: 26px 22px 20px;
+    }
+  }
+</style>

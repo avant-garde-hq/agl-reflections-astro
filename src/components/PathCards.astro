@@ -1,0 +1,31 @@
+---
+// Homepage-only 3-card "choose your path" grid. Ported from
+// agl-reflections-website/index.html lines 260-279, with the `01`/`02`/`03`
+// numbered markers (`<span class="pc-no">`) removed per the numbering rule
+// for parallel options — the heading alone is sufficient.
+interface Card { title: string; body: string; href: string; cta: string }
+interface Props { cards: Card[] }
+const { cards } = Astro.props;
+---
+<div class="path-grid">
+  {cards.map((c) => (
+    <a class="path-card" href={c.href}>
+      <h3>{c.title}</h3>
+      <p>{c.body}</p>
+      <span class="pc-go">{c.cta} &rarr;</span>
+    </a>
+  ))}
+</div>
+<style>
+  .path-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 8px; }
+  .path-card {
+    display: block; border: 1px solid rgba(63,167,150,.28); padding: 30px 28px 26px;
+    text-decoration: none; color: inherit; position: relative; transition: .2s;
+    background: rgba(19,94,84,.08);
+  }
+  .path-card:hover { border-color: var(--glow-teal); transform: translateY(-3px); }
+  .path-card h3 { font-family: var(--font-display); font-size: 21px; margin: 0 0 10px; color: var(--paper); }
+  .path-card p { font-size: 14.5px; line-height: 1.65; color: rgba(244,239,230,.72); margin: 0 0 18px; }
+  .path-card .pc-go { color: var(--glow-teal); font-weight: 600; font-size: 13.5px; letter-spacing: .06em; }
+  @media (max-width: 900px) { .path-grid { grid-template-columns: 1fr; } }
+</style>
