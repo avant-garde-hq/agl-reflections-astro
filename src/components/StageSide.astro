@@ -1,0 +1,135 @@
+---
+// Sticky booking column for stage detail pages. Markup ported from
+// agl-reflections-website/stages/apex-5040.html lines 138-152
+// (`.stage-side`/`.side-links`/`.side-contact`, inside an `aside` that sits
+// next to the main copy column in `.stage-cols`). CSS ported from
+// assets/css/main.css lines 313 (`.stage-side`) and 316-325
+// (`.side-links`/`.side-contact`), hex colors swapped for the Task 2 tokens
+// (--hair -> --hairline, --coral -> --gel-coral, --sand-dim -> --paper-dim,
+// --sand -> --paper, --teal -> --glow-teal). `.stage-cols` itself (the
+// two-column grid this aside lives inside) belongs to whatever stage detail
+// page layout uses this component (Task 19), not to this component.
+//
+// The source aside also carries a "Download spec sheet" button row pointing
+// at an external PDF host that no longer resolves — this whole project is
+// explicitly removing those dead links per the client's request, so none of
+// that markup is ported here. `pdfRemoved` lets a page that used to link a
+// PDF show a short, honest note explaining there's no download instead of
+// silently dropping the row.
+//
+// The 5040-only "View Full Specs" / "View in 3D" buttons from the source
+// aren't part of this component's interface (caption/rows-style props
+// only: model, pdfRemoved, jumpLinks) — those extra per-stage CTAs are a
+// page-level concern for whichever stage detail page needs them (Task 19).
+import { SITE } from '../config/site';
+import Button from './ui/Button.astro';
+
+interface JumpLink {
+  label: string;
+  href: string;
+}
+
+interface Props {
+  model: string;
+  pdfRemoved?: boolean;
+  jumpLinks: JumpLink[];
+}
+
+const { model, pdfRemoved = false, jumpLinks } = Astro.props;
+---
+
+<aside class="stage-side" aria-label={`Book the ${model}`}>
+  <p class="kicker">Book This Stage</p>
+  <Button href={SITE.cta.href} variant="coral">Get a Quote</Button>
+  {pdfRemoved && <p class="pdf-note">Spec sheet PDF retired — see full specs below.</p>}
+
+  <div class="side-links">
+    {jumpLinks.map((link) => (
+      <a href={link.href}>{link.label}</a>
+    ))}
+  </div>
+  <div class="side-contact">
+    <a class="p" href={SITE.phoneHref}>{SITE.phone}</a>
+    <a class="m" href={`mailto:${SITE.email}`}>{SITE.email}</a>
+  </div>
+</aside>
+
+<style>
+  .stage-side {
+    position: sticky;
+    top: calc(var(--nav-h) + 32px);
+  }
+  .stage-side .kicker {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--glow-teal);
+    margin-bottom: 16px;
+  }
+  .stage-side :global(.btn) {
+    display: block;
+    margin-bottom: 12px;
+  }
+  .pdf-note {
+    font-size: 13px;
+    color: var(--paper-faint);
+    margin-top: 4px;
+  }
+
+  .side-links {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .side-links a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 2px;
+    border-top: 1px solid rgba(63, 167, 150, 0.12);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--paper-dim);
+    transition: color 0.25s;
+  }
+  .side-links a::after {
+    content: '↓';
+    color: var(--gel-coral);
+    transition: transform 0.3s;
+  }
+  .side-links a:hover {
+    color: var(--paper);
+  }
+  .side-links a:hover::after {
+    transform: translateY(3px);
+  }
+
+  .side-contact {
+    margin-top: 28px;
+    padding-top: 22px;
+    border-top: 1px solid rgba(63, 167, 150, 0.2);
+  }
+  .side-contact .p {
+    font-family: var(--font-display);
+    font-size: clamp(20px, 2vw, 26px);
+    display: block;
+    letter-spacing: 0.02em;
+  }
+  .side-contact .p:hover {
+    color: var(--gel-coral);
+  }
+  .side-contact .m {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--glow-teal);
+    word-break: break-all;
+  }
+  .side-contact .m:hover {
+    color: var(--paper);
+  }
+</style>

@@ -1,0 +1,98 @@
+---
+// Generic spec table — the `.spec-panel`/`table.spec` pattern used on every
+// stage detail page (Task 19, later) and reused twice side-by-side for the
+// "Trailer & Transport" / "Deck & Structure" panels on the apex-5040-specs
+// equivalent page. Markup ported from
+// agl-reflections-website/stages/apex-5040.html lines 113-119 (single
+// panel) and stages/apex-5040-specs.html lines 138-159 (`.mspec-grid` of
+// two panels — this component renders one panel per instance; a page
+// wanting the two-column layout renders two <SpecTable> side by side inside
+// its own grid wrapper, same as the source's `.mspec-grid`).
+//
+// CSS ported from agl-reflections-website/assets/css/main.css lines
+// 303-310 (`table.spec`/`.spec-panel`), hex colors swapped for the Task 2
+// tokens: --panel -> --deck, --panel-2 -> --deck-2, --hair -> --hairline,
+// --sand-faint -> --paper-faint, --sand -> --paper.
+//
+// Rows are {label, value} pairs. A value gets the `.mono-spec` monospace
+// treatment (the convention already established in FleetCard.astro and
+// CompareTable.astro) when it starts with a digit — every dimension,
+// weight, pressure and volume figure in the source spec tables (50′ × 38′,
+// 55,165 lb, 3.0 GPM, 40 gal · Hydra 1000 R&O A/AW, ISO #32...) leads with
+// a number, while purely descriptive values don't.
+interface SpecRow {
+  label: string;
+  value: string;
+}
+
+interface Props {
+  caption: string;
+  rows: SpecRow[];
+}
+
+const { caption, rows } = Astro.props;
+const isNumeric = (value: string) => /^\d/.test(value.trim());
+---
+
+<div class="spec-panel">
+  <div class="spec-cap">
+    <h3>{caption}</h3>
+  </div>
+  <table class="spec">
+    <tbody>
+      {rows.map((row) => (
+        <tr>
+          <th scope="row">{row.label}</th>
+          <td class:list={{ 'mono-spec': isNumeric(row.value) }}>{row.value}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+<style>
+  .mono-spec {
+    font-family: var(--font-mono);
+  }
+
+  .spec-panel {
+    background: var(--deck);
+    border: 1px solid var(--hairline);
+  }
+  .spec-panel .spec-cap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 18px 16px;
+    border-bottom: 1px solid rgba(63, 167, 150, 0.3);
+    background: var(--deck-2);
+  }
+  .spec-panel .spec-cap h3 {
+    font-size: 15px;
+    letter-spacing: 0.06em;
+  }
+  table.spec {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  table.spec th,
+  table.spec td {
+    padding: 13px 16px;
+    font-size: 14.5px;
+    text-align: left;
+    border-bottom: 1px solid rgba(63, 167, 150, 0.12);
+    vertical-align: top;
+  }
+  table.spec th {
+    width: 46%;
+    font-weight: 600;
+    color: var(--paper-faint);
+    font-size: 12.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  table.spec td {
+    color: var(--paper);
+  }
+</style>
