@@ -1,0 +1,396 @@
+---
+// Production services page. Composes Layout/Header/Footer with PageHero and
+// six ServiceBlocks (Task 9) plus QuoteCta (compact), in the exact section
+// order of agl-reflections-website/production/index.html (385 lines):
+//   hero (w/ anchor-row jump-nav) -> six svc-blocks (audio/lighting/video/
+//   crowd-control/backline/crew, alternating flip) -> rates (id=rates) ->
+//   quote CTA -> footer.
+//
+// Per this task's brief, only the six service sections + rates + quote CTA
+// are in scope here -- the source page also has a 7th svc-block
+// (id="graphics") and a "Deep Bench" cross-sell grid (id="more") between
+// the six services and rates, but neither is called for by the brief and
+// neither has a matching component yet. Since those two sections aren't
+// built on this page, the source's anchor-row links to #graphics and #more
+// are dropped here (they'd be dead jumps) -- the row otherwise matches
+// main.css lines 339-341 (`.anchor-row`, ported below) and source order:
+// Audio / Lighting / LED Video / Crowd Control / Backline / Crew / Rates.
+//
+// ServiceBlock pre-existing gaps (flagged in Task 9's review, worked around
+// here rather than touched there):
+//   1. `tagline` is a dead prop (declared, never rendered) -- passed as an
+//      empty string for all six since there's nothing in the source's
+//      six `.svc-block` sections to put there and it wouldn't render
+//      regardless.
+//   2. `body` renders as a single `<p set:html={body} />`, but the source
+//      gives each service two separate `<p>` tags. Passing raw `</p><p>`
+//      would nest a stray `<p>` inside ServiceBlock's own wrapper, so each
+//      service's two source sentences-groups are joined here with a single
+//      space into one flowing paragraph instead -- no sentences dropped,
+//      just no hard paragraph break.
+//
+// Rates section markup/CSS ported from source lines 195-290 plus
+// assets/css/main.css lines 303-310 (`table.spec`/`.spec-panel`/
+// `.spec-note`) and 606-609 (`.rates-grid`/`.rates-foot`), hex colors
+// swapped for the Task 2 CSS custom properties (--panel->--deck,
+// --hair->--hairline, --sand-faint->--paper-faint, --sand-dim->--paper-dim,
+// --sand->--paper). `.band`/`.sec-head`/`.ghost`/`.arrow-link` come from
+// base.css (Task 14) and are NOT redefined here.
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/house/Header.astro';
+import Footer from '../../components/house/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import ServiceBlock from '../../components/ServiceBlock.astro';
+import QuoteCta from '../../components/QuoteCta.astro';
+import Kicker from '../../components/ui/Kicker.astro';
+import BarMeter from '../../components/ui/BarMeter.astro';
+
+import svcAudio from '../../assets/img/svc-audio.webp';
+import svcLighting from '../../assets/img/svc-lighting.webp';
+import svcVideo from '../../assets/img/svc-video.webp';
+import svcBarrier from '../../assets/img/svc-barrier.webp';
+import svcBackline from '../../assets/img/svc-backline.webp';
+import svcCrew from '../../assets/img/svc-crew.webp';
+
+const anchors = [
+  { href: '#audio', label: 'Audio' },
+  { href: '#lighting', label: 'Lighting' },
+  { href: '#video', label: 'LED Video' },
+  { href: '#crowd-control', label: 'Crowd Control' },
+  { href: '#backline', label: 'Backline' },
+  { href: '#crew', label: 'Crew' },
+  { href: '#rates', label: 'Rates' },
+];
+
+const services = [
+  {
+    id: 'audio',
+    flip: false,
+    image: svcAudio,
+    imageAlt: 'JBL SRX900 series line array family',
+    chip: 'JBL Line Arrays',
+    title: 'Concert <em>Audio</em>',
+    body: "Concert-quality sound leaves no room for compromise. We run <b>JBL professional line arrays</b> — VTX A12, VTX V25-II, SRX900 and powered VRX systems — scaled from a city block party to a 20,000-person festival field. Front-of-house and monitor worlds are mixed on <b>Yamaha and Allen &amp; Heath digital consoles, up to RIVAGE PM</b>, with high-powered subwoofers underneath and our audio engineers on-site from soundcheck to strike.",
+    gear: [
+      { term: 'Line arrays', def: 'JBL VTX A12 · VTX V25-II · SRX900 Series · powered VRX' },
+      { term: 'Consoles', def: 'Yamaha CL/QL & RIVAGE PM · Allen & Heath' },
+      { term: 'Coverage', def: 'FOH + monitor mixing · engineers on-site · any venue size' },
+    ],
+  },
+  {
+    id: 'lighting',
+    flip: true,
+    image: svcLighting,
+    imageAlt: 'Concert lighting rig throwing beams over a live crowd',
+    chip: 'Intelligent Rigs',
+    title: 'Lighting <em>Design</em>',
+    body: 'An industry-leading intelligent lighting inventory for concerts, festivals, theater, sporting events, corporate shows, television and film. Designed, hung, programmed and operated by our LDs — <b>broadcast-ready looks, not just lights on a truss</b>. Our networking ties the lighting rig to our LED video walls so the whole stage moves as one picture, and we carry the trussing, stands, lifts, motors and dimming to hang all of it safely.',
+    gear: [
+      { term: 'Fixtures', def: 'Elation Proton 3K & Fuse 3502 · Robe 1200 Wash & Pointe · Chauvet Nexus & Ovation' },
+      { term: 'Consoles', def: 'GrandMA2 · ChamSys · Martin M1 · HOG' },
+      { term: 'Rigging', def: '20″ & 12″ box truss · CM motors · Genie ST-24 lifts · crank stands' },
+      { term: 'Effects', def: 'Strobes · lasers · fog & haze · CO2 cryo jets · confetti cannons' },
+    ],
+  },
+  {
+    id: 'video',
+    flip: false,
+    image: svcVideo,
+    imageAlt: 'LED video columns glowing at a night event build',
+    chip: 'Absen X5 · 204 Panels',
+    title: 'LED Video <em>Walls</em>',
+    body: 'We stock <b>204 panels of Absen X5</b> driven by a NovaStar Pro HD processor, plus <b>36 panels of Martin EC-20</b> — a 4,000-nit outdoor screen that stays bright in full Florida daylight. Behind the wall: Sony HD three-chip camera packages, TriCaster 860 switching with virtual sets, IMAG for big crowds, projection packages, a green-screen sound stage, and editing and post-production when the show needs to live on after the night.',
+    gear: [
+      { term: 'LED inventory', def: 'Absen X5 × 204 panels + NovaStar Pro HD · Martin EC-20 × 36 panels + T3-100' },
+      { term: 'Cameras & switching', def: 'Sony HD 3-chip multi-cam · NewTek TriCaster 860 · live IMAG' },
+      { term: 'Also', def: 'Projection packages · green-screen stage · editing & post' },
+    ],
+  },
+  {
+    id: 'crowd-control',
+    flip: true,
+    image: svcBarrier,
+    imageAlt: 'AEO Mojo aluminum stage barrier section with step platform',
+    chip: 'AEO Mojo · Front-of-Stage',
+    title: 'Crowd Control &amp; <em>MOJO Barriers</em>',
+    body: 'Concert crowds generate serious forward pressure. <b>AEO Mojo barriers</b> — 6063-T6 aluminum, ISO 9001 and CE certified — absorb and distribute that force while giving security a stable, anti-slip platform to monitor the front row and reach anyone who needs help. Gates, corners and cable pass-through sections configure into camera pits, VIP zones and restricted areas. We plan the barrier layout with your security team so the front row stays safe and the fire marshal stays happy — and we carry French barricades and cable ramps for the rest of the site.',
+    gear: [
+      { term: 'System', def: 'AEO Mojo barrier (model AEO-K-P1) · 6063-T6 aluminum · step platforms' },
+      { term: 'Sections', def: 'Straights · gates · corners · cable pass-throughs' },
+      { term: 'Site kit', def: 'French barricades · cable ramps · custom photo ID credentials' },
+    ],
+  },
+  {
+    id: 'backline',
+    flip: false,
+    image: svcBackline,
+    imageAlt: 'Backline gear staged under moody stage lighting',
+    chip: 'Ready at Soundcheck',
+    title: '<em>Backline</em>',
+    body: "Drums, amps, keys and everything an artist rider can ask for — delivered, set and teched before soundcheck. <b>Ludwig and Yamaha kits, LP percussion, vintage-voiced guitar and bass amps</b>, and 88-key boards from Roland, Yamaha and Korg. Wireless is covered too: Shure ULXD and Audio-Technica handhelds, bodypacks, PSM in-ear monitors and JBL Eon powered wedges — with drum risers and StageRight decking to put it all in place.",
+    gear: [
+      { term: 'Drums & percussion', def: 'Ludwig & Yamaha kits · LP congas, timbales & hand percussion' },
+      { term: 'Amps & keys', def: "Fender '65 Twin Reverb · Gallien-Krueger & Hartke bass rigs · Roland, Yamaha Motif, Korg" },
+      { term: 'Mics & monitors', def: 'Shure ULXD · Audio-Technica UHF · PSM in-ears · JBL Eon wedges' },
+      { term: 'Also', def: 'Horns, acoustic instruments & more on request' },
+    ],
+  },
+  {
+    id: 'crew',
+    flip: true,
+    image: svcCrew,
+    imageAlt: 'Reflections Productions semi trucks lined up at the Princeton yard',
+    chip: 'Load-In to Strike',
+    title: 'Event Crew &amp; <em>Logistics</em>',
+    body: 'The people and the plan behind every show: <b>master riggers, A1/A2 sound techs, lighting designers, video and camera operators, technical directors and stagehands</b> — scheduled, credentialed and run by producers who have done this for decades. Logistics rides with them: CDL trucking, MultiQuip diesel generators from 25 to 125 kW with full power distribution, FOH trailers, Bil Jax event scaffolding, a secure control-room motorhome, and event credentialing down to custom photo ID badges.',
+    gear: [
+      { term: 'Crew', def: 'Riggers · A1/A2 audio · LDs & follow-spot ops · video & camera ops · TDs · stagehands' },
+      { term: 'Power', def: 'MultiQuip 25 / 45 / 125 kW diesel generators · 600 A distro · feeder & cam-locks' },
+      { term: 'Support', def: 'CDL trucking · FOH trailers · Bil Jax scaffolding · control-room motorhome · ID badging' },
+    ],
+  },
+];
+---
+
+<Layout
+  title="Concert Production Services — Audio, Lighting, Video & Crew | Reflections Productions"
+  description="JBL concert audio, intelligent lighting design, Absen LED video walls, MOJO crowd barriers, backline and full event crew — one production partner for South Florida events since 1975."
+  path="/production/index.html"
+>
+  <Header currentPath="/production/index.html" />
+
+  <PageHero
+    breadcrumb={[{ label: 'Home', href: '/' }, { label: 'Production' }]}
+    eyebrow="Production Services · One Partner, Not Six Vendors"
+    title={['The Whole', 'Show, Handled']}
+    lede="The stage is just the start. Audio, lights, video, barriers, backline and crew all live in our Princeton yard — <b>one call covers the whole rider.</b>"
+    imageSrc={svcLighting}
+    imageAlt="Concert lighting rig over a live audience"
+  />
+
+  <nav class="anchor-row" aria-label="Jump to a service">
+    {anchors.map((a) => <a href={a.href}>{a.label}</a>)}
+  </nav>
+
+  <section class="band tight">
+    <div class="wrap">
+      {services.map((s) => (
+        <ServiceBlock
+          id={s.id}
+          flip={s.flip}
+          image={s.image}
+          imageAlt={s.imageAlt}
+          chip={s.chip}
+          title={s.title}
+          tagline=""
+          body={s.body}
+          gear={s.gear}
+        />
+      ))}
+    </div>
+  </section>
+
+  <section class="band" id="rates">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="left rv">
+          <Kicker text="Published Rates" />
+          <h2>Straight<br /><span class="ghost">Numbers</span></h2>
+        </div>
+        <p class="right">We publish our rates — the same ones on our current price sheets. Stage and full-production packages are quoted per event, because no two shows are the same.</p>
+      </div>
+
+      <div class="rates-grid">
+        <div class="spec-panel">
+          <div class="spec-cap"><h3>Event Production Labor · Per Hour</h3><BarMeter /></div>
+          <table class="spec">
+            <tbody>
+              <tr><th scope="row">Master Rigging Technician</th><td class="price">$75.00</td></tr>
+              <tr><th scope="row">Master Systems Engineer</th><td class="price">$75.00</td></tr>
+              <tr><th scope="row">Master Event Producer</th><td class="price">$75.00</td></tr>
+              <tr><th scope="row">Technical Director (TD)</th><td class="price">$75.00</td></tr>
+              <tr><th scope="row">A1 Master Sound Technician</th><td class="price">$65.00</td></tr>
+              <tr><th scope="row">LD1 Master Lighting Technician</th><td class="price">$65.00</td></tr>
+              <tr><th scope="row">AV1 Master AV Technician</th><td class="price">$65.00</td></tr>
+              <tr><th scope="row">Cam-1 Master Camera Operator</th><td class="price">$75.00</td></tr>
+              <tr><th scope="row">V1 Master Video Projectionist</th><td class="price">$75.00</td></tr>
+              <tr><th scope="row">Cam-2 Camera Operator</th><td class="price">$55.00</td></tr>
+              <tr><th scope="row">A2 Sound / LD2 Lighting / AV2 / V2</th><td class="price">$45.00</td></tr>
+              <tr><th scope="row">LD3 Follow Spot Operator</th><td class="price">$38.00</td></tr>
+              <tr><th scope="row">Stage Hands</th><td class="price">$38.00</td></tr>
+              <tr><th scope="row">Non-CDL Delivery Driver</th><td class="price">$40.00</td></tr>
+              <tr><th scope="row">CDL Delivery Driver</th><td class="price">$150.00</td></tr>
+              <tr><th scope="row">Trucking</th><td>T.B.D. by distance &amp; load</td></tr>
+            </tbody>
+          </table>
+          <p class="spec-note">Four-hour minimum per call. Calls over 8 hours run time-and-a-half with a paid break or hot meal on site. Clients provide water for all techs.</p>
+        </div>
+
+        <div>
+          <div class="spec-panel">
+            <div class="spec-cap"><h3>Power &amp; Site · Per Day</h3><BarMeter /></div>
+            <table class="spec">
+              <tbody>
+                <tr><th scope="row">MultiQuip 25 kW diesel generator (8-hr day)</th><td class="price">$350.00</td></tr>
+                <tr><th scope="row">MultiQuip 45 kW diesel generator (8-hr day)</th><td class="price">$525.00</td></tr>
+                <tr><th scope="row">MultiQuip 125 kW diesel generator (8-hr day)</th><td class="price">$745.00</td></tr>
+                <tr><th scope="row">&ldquo;MyPad&rdquo; secure control room</th><td class="price">$400.00</td></tr>
+                <tr><th scope="row">5&prime; &times; 10&prime; black master tent (add-on)</th><td class="price">+$100.00</td></tr>
+                <tr><th scope="row">French-style barricades (per section)</th><td class="price">$32.00</td></tr>
+                <tr><th scope="row">Custom photo ID badges (min. 25)</th><td class="price">$8.50 ea</td></tr>
+              </tbody>
+            </table>
+            <p class="spec-note">MOJO barricade, cable ramps, FOH trailers, motorhome and scaffolding at day rates — call for availability.</p>
+          </div>
+          <div class="spec-panel" style="margin-top:22px">
+            <div class="spec-cap"><h3>DJ &amp; Party Systems</h3><BarMeter /></div>
+            <table class="spec">
+              <tbody>
+                <tr><th scope="row">Party sound system w/ operator · 4 hrs</th><td class="price">from $400.00</td></tr>
+                <tr><th scope="row">Party sound system w/ M.C. · 4 hrs</th><td class="price">from $550.00</td></tr>
+                <tr><th scope="row">Karaoke system w/ operator · 4 hrs</th><td class="price">$500.00</td></tr>
+                <tr><th scope="row">Game show system w/ sound &amp; host · 2 hrs</th><td class="price">$400.00</td></tr>
+                <tr><th scope="row">Video VJ add-on · 4 hrs (incl. projection)</th><td class="price">$600.00</td></tr>
+                <tr><th scope="row">Single video projection w/ 10&prime; screen</th><td class="price">$500.00</td></tr>
+                <tr><th scope="row">Dual video projection screens</th><td class="price">$750.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="spec-panel">
+          <div class="spec-cap"><h3>Outdoor Movie Packages</h3><BarMeter /></div>
+          <table class="spec">
+            <tbody>
+              <tr><th scope="row">Movies in the Park / Block Party — 16&prime; &times; 24&prime; inflatable screen, 5,600+ lumen projector, JBL VRX array sound</th><td class="price">$1,395.00</td></tr>
+              <tr><th scope="row">Backyard package — 9&prime; &times; 12&prime; inflatable screen, projector, JBL EON sound</th><td class="price">$550.00</td></tr>
+              <tr><th scope="row">Executive presentation (indoor, single screen)</th><td class="price">$500.00</td></tr>
+              <tr><th scope="row">Campaign presentation (indoor, dual screens)</th><td class="price">$750.00</td></tr>
+              <tr><th scope="row">Surround sound add-on</th><td class="price">+$250.00</td></tr>
+              <tr><th scope="row">SubSonic sound add-on</th><td class="price">+$160.00</td></tr>
+              <tr><th scope="row">Honda EM5000 quiet generator add-on</th><td class="price">+$295.00</td></tr>
+              <tr><th scope="row">Popcorn machine w/ supplies</th><td class="price">$145.00</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="spec-panel">
+          <div class="spec-cap"><h3>Stages &amp; Full Productions</h3><BarMeter /></div>
+          <table class="spec">
+            <tbody>
+              <tr><th scope="row">APEX 2016 mobile stage</th><td class="price">from $1,995</td></tr>
+              <tr><th scope="row">APEX 2420 &ndash; 5040 · VIP Deck 3724</th><td>Quoted per event</td></tr>
+              <tr><th scope="row">Concert audio, lighting &amp; LED video rigs</th><td>Quoted per event</td></tr>
+              <tr><th scope="row">Full festival &amp; broadcast production</th><td>Quoted per event</td></tr>
+            </tbody>
+          </table>
+          <p class="spec-note">Stage pricing moves with dates, distance and configuration — tell us the show and we'll price the whole rig in one quote. <a class="arrow-link" href="/quote.html" style="margin-top:8px">Get a quote</a></p>
+        </div>
+      </div>
+
+      <p class="rates-foot"><b>Rates as published by Reflections Productions.</b> Availability is first-come — July and December book out fastest. Every line above can ride on the same truck as your stage.</p>
+    </div>
+  </section>
+
+  <QuoteCta compact />
+
+  <Footer />
+</Layout>
+
+<style>
+  .anchor-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 0 clamp(20px, 4vw, 56px) clamp(36px, 5vh, 60px);
+  }
+  .anchor-row a {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border: 1px solid rgba(63, 167, 150, 0.35);
+    color: var(--paper-dim);
+    padding: 10px 16px;
+    transition: color 0.25s, border-color 0.25s, background 0.25s;
+  }
+  .anchor-row a:hover {
+    color: var(--ink);
+    background: var(--glow-teal);
+    border-color: var(--glow-teal);
+  }
+
+  .rates-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+    align-items: start;
+  }
+  .spec-panel {
+    background: var(--deck);
+    border: 1px solid var(--hairline);
+  }
+  .spec-panel .spec-cap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 18px 16px;
+    border-bottom: 1px solid rgba(63, 167, 150, 0.3);
+    background: var(--deck-2);
+  }
+  .spec-panel .spec-cap h3 {
+    font-size: 15px;
+    letter-spacing: 0.06em;
+  }
+  .spec-note {
+    font-size: 13px;
+    color: var(--paper-faint);
+    padding: 14px 16px;
+  }
+  :global(table.spec) {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  :global(table.spec th),
+  :global(table.spec td) {
+    padding: 13px 16px;
+    font-size: 14.5px;
+    text-align: left;
+    border-bottom: 1px solid rgba(63, 167, 150, 0.12);
+    vertical-align: top;
+  }
+  :global(table.spec th) {
+    width: 46%;
+    font-weight: 600;
+    color: var(--paper-faint);
+    font-size: 12.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  :global(table.spec td) {
+    color: var(--paper);
+  }
+  :global(.rates-grid table.spec .price) {
+    font-family: 'Archivo Black', sans-serif;
+    color: var(--paper);
+    white-space: nowrap;
+  }
+  .rates-foot {
+    margin-top: 22px;
+    font-size: 13px;
+    color: var(--paper-faint);
+    max-width: 76ch;
+  }
+  .rates-foot :global(b) {
+    color: var(--paper-dim);
+  }
+
+  @media (max-width: 900px) {
+    .rates-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
