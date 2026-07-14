@@ -1,0 +1,12 @@
+---
+import BarMeter from './BarMeter.astro';
+
+interface Props {
+  text: string;
+  variant?: 'teal' | 'coral' | 'dark';
+}
+
+const { text, variant = 'teal' } = Astro.props;
+---
+
+<p class="kicker"><BarMeter variant={variant} />{text}</p>

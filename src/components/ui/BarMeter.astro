@@ -1,0 +1,48 @@
+---
+interface Props {
+  variant?: 'teal' | 'coral' | 'dark';
+}
+
+const { variant = 'teal' } = Astro.props;
+const cls = variant === 'teal' ? 'wl' : `wl ${variant}`;
+---
+
+<span class={cls} aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+
+<style>
+  .wl {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .wl i {
+    display: block;
+    background: var(--glow-teal);
+    height: 5px;
+    width: 64px;
+  }
+
+  .wl i:nth-child(2) {
+    opacity: 0.62;
+    height: 4px;
+  }
+
+  .wl i:nth-child(3) {
+    opacity: 0.38;
+    height: 3px;
+  }
+
+  .wl i:nth-child(4) {
+    opacity: 0.18;
+    height: 2px;
+  }
+
+  .wl.coral i {
+    background: var(--gel-coral);
+  }
+
+  .wl.dark i {
+    background: var(--rig-teal);
+  }
+</style>
