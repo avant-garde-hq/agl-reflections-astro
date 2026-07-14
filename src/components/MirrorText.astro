@@ -1,0 +1,49 @@
+---
+// The site's signature headline treatment: a face line of text sitting over
+// its own upside-down, faded "water reflection". Purely presentational —
+// used as-is by every page. The homepage (Hero.astro) is the only place
+// that animates it in, and it does that with GSAP from the outside; this
+// component itself has no animation state.
+interface Props {
+  lines: string[];
+}
+const { lines } = Astro.props;
+---
+
+<span class="mirror">
+  <span class="face">{lines.map((l, i) => <>{l}{i < lines.length - 1 && <br />}</>)}</span>
+  <span class="waterrule" aria-hidden="true"></span>
+  <span class="refl" aria-hidden="true">{lines[lines.length - 1]}</span>
+</span>
+
+<style>
+  .mirror {
+    position: relative;
+    display: block;
+  }
+  .mirror .face {
+    display: block;
+  }
+  .mirror .waterrule {
+    display: block;
+    height: 1px;
+    margin: .14em 0 .1em;
+    background: linear-gradient(to right, rgba(63, 167, 150, .75), rgba(63, 167, 150, .12) 62%, transparent);
+  }
+  .mirror .refl {
+    display: block;
+    transform: scaleY(-1);
+    color: var(--glow-teal);
+    opacity: .6;
+    pointer-events: none;
+    user-select: none;
+    -webkit-mask-image:
+      repeating-linear-gradient(to bottom, #000 0 .050em, transparent .050em .094em),
+      linear-gradient(to bottom, transparent 4%, rgba(0, 0, 0, .9) 96%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+      repeating-linear-gradient(to bottom, #000 0 .050em, transparent .050em .094em),
+      linear-gradient(to bottom, transparent 4%, rgba(0, 0, 0, .9) 96%);
+    mask-composite: intersect;
+  }
+</style>

@@ -1,0 +1,164 @@
+---
+// Interior-page hero band: breadcrumb, eyebrow, mirrored title, lede — no
+// animation, no script, ever (only Hero.astro on the homepage gets the
+// GSAP entrance). CSS ported from agl-reflections-website/assets/css/main.css
+// lines 176-206, hex colors swapped for Task 2's CSS custom properties.
+// Markup modeled on the source's interior-page headers (e.g. about.html
+// lines 79-91): breadcrumb nav + eyebrow + mirror h1 + lede, with an
+// optional background image (the "short" variant — see rates.html/quote.html
+// — has no image, just the teal glow from the .short ::after rule).
+import type { ImageMetadata } from 'astro';
+import MirrorText from './MirrorText.astro';
+import Kicker from './ui/Kicker.astro';
+import GradedImage from './ui/GradedImage.astro';
+
+interface Crumb {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  title: string | string[];
+  breadcrumb: Crumb[];
+  eyebrow: string;
+  lede: string;
+  imageSrc?: ImageMetadata;
+  imageAlt?: string;
+  tall?: boolean;
+  short?: boolean;
+}
+
+const { title, breadcrumb, eyebrow, lede, imageSrc, imageAlt = '', tall = false, short = false } = Astro.props;
+const titleLines = Array.isArray(title) ? title : [title];
+---
+
+<header class:list={['page-hero', { tall, short }]}>
+  <div class="ph-bg">
+    {imageSrc && <GradedImage src={imageSrc} alt={imageAlt} loading="eager" />}
+  </div>
+  <div class="ph-in" id="main">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      {breadcrumb.map((item, i) => (
+        <>
+          {item.href ? <a href={item.href}>{item.label}</a> : <span>{item.label}</span>}
+          {i < breadcrumb.length - 1 && <span class="sep">/</span>}
+        </>
+      ))}
+    </nav>
+    <div class="eyebrow">
+      <Kicker text={eyebrow} />
+    </div>
+    <h1><MirrorText lines={titleLines} /></h1>
+    <p class="lede" set:html={lede} />
+  </div>
+</header>
+
+<style>
+  .page-hero {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    min-height: 56vh;
+    overflow: hidden;
+    padding-top: var(--nav-h);
+  }
+  .page-hero.tall {
+    min-height: 66vh;
+  }
+  .page-hero.short {
+    min-height: 0;
+  }
+  .page-hero .ph-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .page-hero .ph-bg :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 40%;
+    filter: saturate(1.02);
+  }
+  .page-hero .ph-bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to bottom, rgba(12, 20, 20, .66) 0%, rgba(12, 20, 20, .38) 40%, rgba(12, 20, 20, .78) 74%, var(--ink) 98%),
+      linear-gradient(105deg, rgba(12, 20, 20, .6) 0%, rgba(12, 20, 20, .1) 62%);
+  }
+  .page-hero.short .ph-bg::after {
+    background: radial-gradient(ellipse 70% 70% at 50% 0%, rgba(19, 94, 84, .30), transparent 72%);
+  }
+  .page-hero .ph-in {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: calc(var(--nav-h) + 20px) clamp(20px, 4vw, 56px) clamp(36px, 5vh, 60px);
+  }
+  .crumbs {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--paper-faint);
+    margin-bottom: 22px;
+  }
+  .crumbs a {
+    color: var(--paper-dim);
+    transition: color .25s;
+  }
+  .crumbs a:hover {
+    color: var(--glow-teal);
+  }
+  .crumbs .sep {
+    color: var(--glow-teal);
+    opacity: .6;
+  }
+  .page-hero .eyebrow {
+    margin-bottom: 20px;
+    text-shadow: 0 1px 14px rgba(12, 20, 20, .9);
+  }
+  .page-hero .eyebrow :global(.kicker) {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .34em;
+    text-transform: uppercase;
+    color: var(--glow-teal);
+    margin: 0;
+  }
+  .page-hero h1 {
+    font-size: clamp(44px, 7.6vw, 110px);
+    letter-spacing: -.005em;
+  }
+  .page-hero h1 :global(.face) {
+    text-shadow: 0 2px 34px rgba(12, 20, 20, .5);
+  }
+  .page-hero h1 :global(.refl) {
+    font-size: .6em;
+  }
+  .page-hero h1 :global(.ghost) {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(63, 167, 150, .75);
+  }
+  .page-hero .lede {
+    max-width: 560px;
+    font-size: clamp(15px, 1.35vw, 18px);
+    color: var(--paper-dim);
+    margin-top: 24px;
+    font-weight: 500;
+  }
+  .page-hero .lede :global(b) {
+    color: var(--paper);
+    font-weight: 600;
+  }
+</style>

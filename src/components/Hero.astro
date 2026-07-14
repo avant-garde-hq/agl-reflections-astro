@@ -1,0 +1,173 @@
+---
+// Homepage-only hero: full-bleed video, the mirrored headline, and a
+// one-time GSAP entrance. Ported from agl-reflections-website/index.html
+// lines 189-212 (markup) and assets/css/main.css lines 148-174 (CSS),
+// with hex colors swapped for the Task 2 CSS custom properties.
+import MirrorText from './MirrorText.astro';
+import Kicker from './ui/Kicker.astro';
+import Button from './ui/Button.astro';
+
+interface Props {
+  videoSrc: string;
+  posterSrc: string;
+  eyebrow: string;
+  lines: string[];
+  subtitle: string;
+  ctaPrimary: { label: string; href: string };
+  ctaSecondary: { label: string; href: string };
+}
+
+const { videoSrc, posterSrc, eyebrow, lines, subtitle, ctaPrimary, ctaSecondary } = Astro.props;
+---
+
+<header class="hero hero-signature" id="top">
+  <div class="hero-bg" style={`background:url('${posterSrc}') center 38%/cover no-repeat`}>
+    <video
+      class="hero-video"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="auto"
+      poster={posterSrc}
+      aria-label="Drone flight over the APEX 5040 GEN3 stage as fireworks burst above the Hialeah 4th of July crowd"
+    >
+      <source src={videoSrc} type="video/mp4" />
+      <img src={posterSrc} alt="APEX 5040 GEN3 mobile stage under fireworks at the Hialeah 4th of July celebration" />
+    </video>
+  </div>
+  <div class="hero-in" id="main">
+    <div class="eyebrow">
+      <Kicker text={eyebrow} />
+    </div>
+    <h1><MirrorText lines={lines} /></h1>
+    <p class="sub" set:html={subtitle} />
+    <div class="ctas">
+      <Button href={ctaPrimary.href} variant="coral">{ctaPrimary.label}</Button>
+      <Button href={ctaSecondary.href} variant="ghost">{ctaSecondary.label}</Button>
+    </div>
+    <div class="est" aria-hidden="true"><span class="n">PRINCETON&nbsp;&middot;&nbsp;FLORIDA&nbsp;&middot;&nbsp;SINCE&nbsp;1975</span></div>
+  </div>
+</header>
+
+<script>
+  import { gsap } from 'gsap';
+
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduced) {
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    tl.from('.hero-signature .eyebrow', { opacity: 0, y: 10, duration: 0.5 })
+      .from('.hero-signature .mirror .face', { opacity: 0, y: 14, duration: 0.6 }, '-=0.2')
+      .from('.hero-signature .mirror .refl', { opacity: 0, scaleY: -0.9, duration: 0.7 }, '-=0.3')
+      .from('.hero-signature .sub', { opacity: 0, y: 10, duration: 0.5 }, '-=0.3')
+      .from('.hero-signature .ctas > *', { opacity: 0, y: 10, duration: 0.4, stagger: 0.08 }, '-=0.3');
+  }
+</script>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .hero-bg img,
+  .hero-bg video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 38%;
+    animation: heroZoom 3.2s ease-out both;
+    filter: saturate(1.04);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-bg video { display: none; }
+  }
+  @keyframes heroZoom {
+    from { transform: scale(1.07); }
+    to { transform: none; }
+  }
+  .hero-bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to bottom, rgba(12, 20, 20, .62) 0%, rgba(12, 20, 20, .34) 34%, rgba(12, 20, 20, .72) 68%, var(--ink) 97%),
+      linear-gradient(105deg, rgba(12, 20, 20, .66) 0%, rgba(12, 20, 20, .12) 60%);
+  }
+  .hero-in {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: calc(var(--nav-h) + 44px) clamp(20px, 4vw, 56px) clamp(40px, 6vh, 72px);
+  }
+  .hero .eyebrow {
+    text-shadow: 0 1px 14px rgba(12, 20, 20, .9);
+    margin-bottom: 26px;
+  }
+  .hero .eyebrow :global(.kicker) {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .34em;
+    text-transform: uppercase;
+    color: var(--glow-teal);
+    margin: 0;
+  }
+  .hero h1 {
+    font-size: clamp(52px, 9.6vw, 148px);
+    letter-spacing: -.005em;
+  }
+  .hero h1 :global(.face) {
+    text-shadow: 0 2px 34px rgba(12, 20, 20, .45);
+  }
+  .hero h1 :global(.refl) {
+    font-size: .62em;
+  }
+  .hero .sub {
+    max-width: 520px;
+    font-size: clamp(15px, 1.35vw, 18px);
+    color: var(--paper-dim);
+    margin: 30px 0 34px;
+    font-weight: 500;
+  }
+  .hero .sub :global(b) {
+    color: var(--paper);
+    font-weight: 600;
+  }
+  .hero .ctas {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .hero .est {
+    position: absolute;
+    right: clamp(20px, 4vw, 56px);
+    bottom: clamp(40px, 6vh, 72px);
+    text-align: right;
+    display: none;
+  }
+  @media (min-width: 1100px) {
+    .hero .est { display: block; }
+  }
+  .hero .est .n {
+    font-family: var(--font-display);
+    font-size: 15px;
+    letter-spacing: .2em;
+    color: var(--paper-faint);
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+  }
+</style>
