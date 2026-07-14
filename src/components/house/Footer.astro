@@ -1,0 +1,69 @@
+---
+import { SITE } from '../../config/site';
+const stageLinks = [
+  { label: 'APEX 5040', href: '/stages/apex-5040.html' },
+  { label: 'APEX 4240', href: '/stages/apex-4240.html' },
+  { label: 'APEX 3224', href: '/stages/apex-3224.html' },
+  { label: 'APEX 2424', href: '/stages/apex-2424.html' },
+  { label: 'APEX 2420', href: '/stages/apex-2420.html' },
+  { label: 'APEX 2016', href: '/stages/apex-2016.html' },
+  { label: 'VIP Deck 3724', href: '/stages/vip-deck-3724.html' },
+  { label: 'APEX 4232 · 2026', href: '/stages/apex-4232.html' },
+];
+---
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <svg viewBox="30 28 180 180" role="img" aria-label={`${SITE.name} mark`}>
+          <defs><clipPath id="logo-footer-clip"><circle cx="120" cy="118" r="84" /></clipPath></defs>
+          <g clip-path="url(#logo-footer-clip)">
+            <rect x="36" y="34" width="168" height="96" fill="var(--gel-coral)" />
+            <rect x="36" y="138" width="168" height="11" fill="var(--glow-teal)" />
+            <rect x="36" y="157" width="168" height="9" fill="var(--glow-teal)" opacity="0.68" />
+            <rect x="36" y="174" width="168" height="8" fill="var(--glow-teal)" opacity="0.44" />
+            <rect x="36" y="190" width="168" height="6" fill="var(--glow-teal)" opacity="0.24" />
+            <g fill="var(--ink)">
+              <path d="M112 132 C112 106 114 88 122 68 L132 72 C124 90 122 108 123 132 Z" />
+              <path d="M127 70 C107 58 86 58 70 70 C88 66 108 68 127 78 Z" />
+              <path d="M127 70 C115 51 97 43 78 45 C96 50 112 58 124 74 Z" />
+              <path d="M127 70 C128 50 137 36 153 28 C141 42 134 56 133 72 Z" />
+              <path d="M127 70 C145 56 165 54 181 62 C163 62 145 68 131 78 Z" />
+              <path d="M127 70 C143 68 159 76 169 90 C155 80 141 78 129 82 Z" />
+              <circle cx="127" cy="74" r="5" />
+            </g>
+          </g>
+        </svg>
+        <span class="bt"><b>{SITE.shortName}</b><span>{SITE.tagline}</span></span>
+        <p>The stage behind South Florida's biggest nights — mobile stages, concert audio, lighting, video and crew since {SITE.foundingYear}.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Site</h4>
+        <ul>
+          {SITE.nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+          <li><a href={SITE.cta.href}>{SITE.cta.label}</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>The Fleet</h4>
+        <ul>{stageLinks.map((s) => <li><a href={s.href}>{s.label}</a></li>)}</ul>
+      </div>
+      <div class="foot-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href={SITE.phoneHref}>{SITE.phone}</a></li>
+          <li><a href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
+          <li><span>{SITE.address}</span></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Follow</h4>
+        <ul>{SITE.socials.map((s) => <li><a href={s.href} rel="noopener">{s.label}</a></li>)}</ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>&copy; 2026 {SITE.name} Inc.</span>
+      <span class="tag">Fifty Years On Stage · Est. {SITE.foundingYear}</span>
+    </div>
+  </div>
+</footer>
