@@ -1,20 +1,26 @@
 ---
 // Production services page. Composes Layout/Header/Footer with PageHero and
-// six ServiceBlocks (Task 9) plus QuoteCta (compact), in the exact section
+// seven ServiceBlocks (Task 9) plus QuoteCta (compact), in the exact section
 // order of agl-reflections-website/production/index.html (385 lines):
-//   hero (w/ anchor-row jump-nav) -> six svc-blocks (audio/lighting/video/
-//   crowd-control/backline/crew, alternating flip) -> rates (id=rates) ->
-//   quote CTA -> footer.
+//   hero (w/ anchor-row jump-nav) -> seven svc-blocks (audio/lighting/video/
+//   crowd-control/backline/crew/graphics, alternating flip) -> Deep Bench
+//   cross-sell grid (id=more) -> rates (id=rates) -> quote CTA -> footer.
 //
-// Per this task's brief, only the six service sections + rates + quote CTA
-// are in scope here -- the source page also has a 7th svc-block
-// (id="graphics") and a "Deep Bench" cross-sell grid (id="more") between
-// the six services and rates, but neither is called for by the brief and
-// neither has a matching component yet. Since those two sections aren't
-// built on this page, the source's anchor-row links to #graphics and #more
-// are dropped here (they'd be dead jumps) -- the row otherwise matches
-// main.css lines 339-341 (`.anchor-row`, ported below) and source order:
-// Audio / Lighting / LED Video / Crowd Control / Backline / Crew / Rates.
+// Task 16 fix: the original brief only accounted for the six services shown
+// in the homepage's teaser and missed the page's 7th svc-block
+// (id="graphics") and the "Deep Bench" cross-sell grid (id="more"). Both
+// are now transcribed from source lines 145-193, and the anchor-row is
+// restored to all 9 source links (line 91): Audio / Lighting / LED Video /
+// Crowd Control / Backline / Crew / Graphics / More / Rates -- matching
+// main.css lines 339-341 (`.anchor-row`, ported below).
+//
+// The Deep Bench grid reuses the `.svc-grid`/`.svc` card pattern from the
+// homepage's services teaser (Task 14, src/pages/index.astro) rather than
+// that page's sticky-sidebar `.svc-layout` wrapper -- source markup here is
+// a plain `.sec-head` band with a 3-column grid (source's inline
+// `<style>.svc-grid[data-cols="3"]...` at line 22), ported below as a
+// scoped `[data-cols='3']` override rather than a homepage link-per-card
+// (these six cards have no individual href in source).
 //
 // ServiceBlock pre-existing gaps (flagged in Task 9's review, worked around
 // here rather than touched there):
@@ -51,6 +57,7 @@ import svcVideo from '../../assets/img/svc-video.webp';
 import svcBarrier from '../../assets/img/svc-barrier.webp';
 import svcBackline from '../../assets/img/svc-backline.webp';
 import svcCrew from '../../assets/img/svc-crew.webp';
+import svcGraphics from '../../assets/img/svc-graphics.webp';
 
 const anchors = [
   { href: '#audio', label: 'Audio' },
@@ -59,7 +66,36 @@ const anchors = [
   { href: '#crowd-control', label: 'Crowd Control' },
   { href: '#backline', label: 'Backline' },
   { href: '#crew', label: 'Crew' },
+  { href: '#graphics', label: 'Graphics' },
+  { href: '#more', label: 'More' },
   { href: '#rates', label: 'Rates' },
+];
+
+const deepBench = [
+  {
+    title: 'DJ / Master of Ceremonies',
+    body: 'Party sound systems with operator or full M.C. service — 150,000+ songs, karaoke with a 25,000-song library, game shows and video VJ nights with projection.',
+  },
+  {
+    title: 'Outdoor Movies',
+    body: 'Movies in the park under the stars: a 16-by-24-foot inflatable screen, 5,600-lumen projection and JBL array sound — down to backyard and boardroom packages.',
+  },
+  {
+    title: 'Broadcasting &amp; Streaming',
+    body: 'TriCaster 860 switching, Streambox bonded-cellular transmission, HD/SDI camera packages, robotic cams, jibs and a green-screen sound stage — streaming to full HD broadcast.',
+  },
+  {
+    title: 'Recording Studio',
+    body: 'State-of-the-art analog and digital recording in Kendall under the Miami Beat Wave™ name — six engineers, Pro Tools certified, from voice-overs to full production.',
+  },
+  {
+    title: 'Cross Rentals',
+    body: 'Production companies and venues: expand your inventory for a single show. Cross-rent stages, audio, lighting and video from our yard at trade rates.',
+  },
+  {
+    title: '&ldquo;MyPad&rdquo; Remote Studio',
+    body: 'A secure control-room motorhome equipped for audio, video and lighting: 9 TVs, 4 computers, surveillance, 250′ of snake to remote HD cameras — a command center in comfort.',
+  },
 ];
 
 const services = [
@@ -149,6 +185,20 @@ const services = [
       { term: 'Support', def: 'CDL trucking · FOH trailers · Bil Jax scaffolding · control-room motorhome · ID badging' },
     ],
   },
+  {
+    id: 'graphics',
+    flip: false,
+    image: svcGraphics,
+    imageAlt: 'What When Where event graphic designed by the Reflections creative department',
+    chip: 'Done In-House',
+    title: 'Graphic Arts &amp; <em>Creative</em>',
+    body: "Let our creative department work for you. From <b>custom art, logos, murals and branding</b> to video editing and presentation production — plus flyers, full-color brochures, instructional manuals and custom event credentials — <b>all done in-house</b>. It's the same team that wraps our stages in sponsor banners and builds the show graphics that run on our LED walls, so your event's look stays consistent from the flyer to the screen.",
+    gear: [
+      { term: 'Design', def: 'Custom art · logos · murals · branding · stage & banner wraps' },
+      { term: 'Print', def: 'Flyers · full-color brochures · manuals · custom photo IDs' },
+      { term: 'Motion', def: 'Video editing · presentation production · LED screen content' },
+    ],
+  },
 ];
 ---
 
@@ -187,6 +237,28 @@ const services = [
           gear={s.gear}
         />
       ))}
+    </div>
+  </section>
+
+  <section class="band tight" id="more" style="background:var(--deck-2)">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="left rv">
+          <Kicker text="Also From the Shop" />
+          <h2>The Deep<br /><span class="ghost">Bench</span></h2>
+        </div>
+        <p class="right">Fifty years accumulates capabilities. These live in the same yard and book through the same phone number.</p>
+      </div>
+
+      <div class="svc-grid" data-cols="3">
+        {deepBench.map((d) => (
+          <div class="svc">
+            <BarMeter />
+            <h3 set:html={d.title} />
+            <p set:html={d.body} />
+          </div>
+        ))}
+      </div>
     </div>
   </section>
 
@@ -322,6 +394,41 @@ const services = [
     border-color: var(--glow-teal);
   }
 
+  .svc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 clamp(28px, 3vw, 52px);
+  }
+  .svc-grid[data-cols='3'] {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .svc {
+    display: block;
+    padding: 30px 0 32px;
+    border-top: 1px solid var(--hairline);
+    position: relative;
+  }
+  .svc :global(.wl) {
+    margin-bottom: 16px;
+  }
+  .svc :global(.wl) i {
+    width: 30px;
+    height: 4px;
+    transition: background 0.3s;
+  }
+  .svc:hover :global(.wl) i {
+    background: var(--gel-coral);
+  }
+  .svc h3 {
+    font-size: 19px;
+    letter-spacing: 0.02em;
+    margin-bottom: 10px;
+  }
+  .svc p {
+    font-size: 14.5px;
+    color: var(--paper-dim);
+  }
+
   .rates-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -390,6 +497,14 @@ const services = [
 
   @media (max-width: 900px) {
     .rates-grid {
+      grid-template-columns: 1fr;
+    }
+    .svc-grid[data-cols='3'] {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 620px) {
+    .svc-grid {
       grid-template-columns: 1fr;
     }
   }
