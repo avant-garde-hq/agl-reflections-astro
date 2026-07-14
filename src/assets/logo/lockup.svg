@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 240" role="img" aria-label="Reflections Productions concept 2 horizontal lockup, dark version">
+  <rect width="760" height="240" fill="#0C1414"/>
+  <defs>
+    <clipPath id="c2d-clip"><circle cx="120" cy="118" r="84"/></clipPath>
+  </defs>
+  <g transform="translate(28,24) scale(0.8)">
+    <g clip-path="url(#c2d-clip)">
+      <rect x="36" y="34" width="168" height="96" fill="#FF6B4A"/>
+      <rect x="36" y="138" width="168" height="11" fill="#3FA796"/>
+      <rect x="36" y="157" width="168" height="9" fill="#3FA796" opacity="0.68"/>
+      <rect x="36" y="174" width="168" height="8" fill="#3FA796" opacity="0.44"/>
+      <rect x="36" y="190" width="168" height="6" fill="#3FA796" opacity="0.24"/>
+      <g fill="#0C1414">
+        <path d="M112 132 C112 106 114 88 122 68 L132 72 C124 90 122 108 123 132 Z"/>
+        <path d="M127 70 C107 58 86 58 70 70 C88 66 108 68 127 78 Z"/>
+        <path d="M127 70 C115 51 97 43 78 45 C96 50 112 58 124 74 Z"/>
+        <path d="M127 70 C128 50 137 36 153 28 C141 42 134 56 133 72 Z"/>
+        <path d="M127 70 C145 56 165 54 181 62 C163 62 145 68 131 78 Z"/>
+        <path d="M127 70 C143 68 159 76 169 90 C155 80 141 78 129 82 Z"/>
+        <circle cx="127" cy="74" r="5"/>
+      </g>
+    </g>
+  </g>
+  <text x="248" y="114" font-family="Archivo Black, 'Arial Black', sans-serif" font-size="52" fill="#F4EFE6" letter-spacing="1">REFLECTIONS</text>
+  <text x="251" y="154" font-family="Archivo, Arial, sans-serif" font-size="20" font-weight="500" fill="#3FA796" letter-spacing="10.5">PRODUCTIONS</text>
+</svg>
