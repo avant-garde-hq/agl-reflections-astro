@@ -30,8 +30,13 @@ doesn't need one), Wrangler (Cloudflare Pages CLI, already authenticated).
 - **Preserve every page's content.** All copy, image references, video
   references, and the `.glb` 3D model must appear in the new site. Cutting
   content to "simplify" is not in scope anywhere in this plan.
-- **URLs stay `.html`-suffixed** and match the current `sitemap.xml` exactly
-  (e.g. `/stages/apex-5040.html`, not `/stages/apex-5040/`).
+- **URLs match the current `sitemap.xml` exactly.** Every content/leaf page
+  stays `.html`-suffixed (e.g. `/stages/apex-5040.html`, not
+  `/stages/apex-5040/`) — EXCEPT the three directory-index pages
+  (`/stages/`, `/production/`, `/work/`), which the live sitemap itself lists
+  as trailing-slash directory URLs, not `.html` files. `astro.config.mjs`
+  uses `build: { format: 'preserve' }` (not `'file'` — see Task 1's
+  correction note) specifically so both shapes come out right at once.
 - **Canonical domain:** `https://reflectionsproductions.com` (used in
   `astro.config.mjs` `site`, and in every page's canonical tag / OG tags /
   sitemap, even though DNS is not cut over yet — this matches the current
@@ -185,7 +190,14 @@ agl-reflections-astro/
 **Interfaces:**
 - Produces: a runnable Astro project (`npm run dev`, `npm run build`) that
   every later task builds on. `astro.config.mjs` exports `site:
-  'https://reflectionsproductions.com'` and `build: { format: 'file' }`.
+  'https://reflectionsproductions.com'` and `build: { format: 'preserve' }`
+  (CORRECTED post-Task-1: `'file'` collapses nested `index.astro` routes like
+  `stages/index.astro` to a flat sibling `stages.html`, which does not match
+  the live sitemap's directory-style URLs for `/stages/`, `/production/`, and
+  `/work/`. `'preserve'` keeps the output path structure identical to the
+  source file structure — flat files stay flat `.html`, and `dir/index.astro`
+  stays `dir/index.html` — which is what both URL shapes on the live site
+  actually need. Verified empirically against a real build.).
 
 - [ ] **Step 1: Scaffold Astro**
 
@@ -211,7 +223,7 @@ import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://reflectionsproductions.com',
-  build: { format: 'file' },
+  build: { format: 'preserve' },
   integrations: [
     sitemap({
       filter: (page) =>
@@ -1410,12 +1422,18 @@ git commit -m "Assemble homepage from ported components and content"
 - Create: `src/components/MarkStrip.astro`
 - Create: `src/pages/about.astro`
 
-Note on the `.html` suffix: Astro's file-based routing maps
-`src/pages/about.astro` → output `about.html` automatically when
-`build.format: 'file'` is set (Task 1). No special `about.html.astro`
-filename is needed — remove that alternate name from the File Structure
-diagram's parenthetical once this task confirms it. The same applies to
-every other page in this plan.
+Note on the `.html` suffix and directory-index pages: Astro's file-based
+routing maps `src/pages/about.astro` → output `about.html` automatically when
+`build.format: 'preserve'` is set (Task 1, corrected during Task 8 — see that
+task's implementer/review notes). No special `about.html.astro` filename is
+needed. For the three directory-index pages specifically —
+`src/pages/stages/index.astro`, `src/pages/production/index.astro`,
+`src/pages/work/index.astro` — `'preserve'` outputs `stages/index.html`,
+`production/index.html`, `work/index.html` (served at `/stages/`,
+`/production/`, `/work/`), matching the live sitemap's directory-style URLs
+for exactly those three pages, while every other page in the plan still gets
+a flat `.html` file. Remove the alternate `about.html.astro` naming from the
+File Structure diagram's parenthetical once this task confirms it.
 
 **Interfaces:**
 - `Timeline` (keeps year markers — genuine sequence), `HireBand`, `MarkStrip`

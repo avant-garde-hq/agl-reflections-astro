@@ -5,7 +5,7 @@ import sitemap from '@astrojs/sitemap';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://reflectionsproductions.com',
-  build: { format: 'file' },
+  build: { format: 'preserve' },
   integrations: [
     sitemap({
       filter: (page) =>
