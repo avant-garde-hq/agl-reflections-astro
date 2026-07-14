@@ -1,0 +1,80 @@
+---
+// Homepage-only 3-step "how it works" row. Ported from
+// agl-reflections-website/index.html lines 482-496 (`.steps-row`/`.step`),
+// CSS from the embedded <style> block at index.html lines 64-69 plus the
+// mobile stacking override at line 78, hex colors swapped for the Task 2
+// CSS custom properties (--teal->--glow-teal, --coral->--gel-coral,
+// --sand->--paper).
+//
+// Unlike PathCards (Task 7), which dropped its 01/02/03 markers because
+// those labeled parallel, unordered options, these numbers describe a
+// genuine sequence — tell us the show, then get a quote, then the stage
+// stands up — so the numbered `.st-no` markers are kept, per the Global
+// Constraints numbering rule.
+//
+// `body` may contain inline markup (step 1 links out to the quote form), so
+// it renders with set:html — the nested <a> then needs :global() to be
+// reachable from this component's scoped CSS, same pattern as
+// ServiceBlock.astro.
+//
+// Renders only the `.steps-row` itself; the surrounding <section>/sec-head
+// wrapper is assembled at the homepage call site (Task 14).
+interface Step {
+  number: number;
+  title: string;
+  body: string;
+}
+
+interface Props {
+  steps: Step[];
+}
+
+const { steps } = Astro.props;
+---
+
+<div class="steps-row">
+  {steps.map((s) => (
+    <div class="step">
+      <span class="st-no">{s.number}</span>
+      <h3>{s.title}</h3>
+      <p set:html={s.body} />
+    </div>
+  ))}
+</div>
+
+<style>
+  .steps-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  .step {
+    border-top: 2px solid var(--glow-teal);
+    padding-top: 20px;
+  }
+  .step .st-no {
+    font-family: var(--font-display);
+    font-size: 34px;
+    color: var(--gel-coral);
+  }
+  .step h3 {
+    font-family: var(--font-display);
+    font-size: 19px;
+    margin: 10px 0 8px;
+    color: var(--paper);
+  }
+  .step p {
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: rgba(244, 239, 230, 0.72);
+    margin: 0;
+  }
+  .step p :global(a) {
+    color: var(--glow-teal);
+  }
+  @media (max-width: 900px) {
+    .steps-row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

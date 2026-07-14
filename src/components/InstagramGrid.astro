@@ -1,0 +1,185 @@
+---
+// Homepage-only Instagram feed teaser: an 8-tile grid (7 photos + 1 "watch
+// the reel" tile) plus a follow CTA row. Ported from
+// agl-reflections-website/index.html lines 535-564
+// (`.ig-grid`/`.ig-tile`/`.ig-reel`/`.ig-ctarow`), CSS from the embedded
+// <style> block at index.html lines 93-107 plus the mobile override at
+// line 108, hex colors swapped for the Task 2 CSS custom properties
+// (--teal->--glow-teal, --coral/#FF6B4A->--gel-coral, #F4EFE6->--paper,
+// #0C1414->--ink). The source's `.ig-cta` rule isn't ported — nothing in
+// this section's markup ever wears that class (only `.ig-ctarow` is used).
+//
+// The reel tile sits 4th of 8 in the source's 4-column grid (after the
+// first 3 photo tiles, before the remaining 4) — that fixed position is
+// reproduced here by splicing `tiles.slice(0, 3)` / `.slice(3)` around the
+// hardcoded reel tile, so callers just pass the 7 photo tiles in source
+// order plus the reel's own href/label/handle.
+//
+// The per-tile Instagram glyph overlay is decorative and identical on every
+// tile, so it's inlined once and reused rather than made a prop.
+//
+// `reelLabel` may contain a line break (source: "Watch the<br>latest
+// reel"), so it renders with set:html, same pattern used elsewhere for
+// inline markup (ServiceBlock.astro, StepsRow.astro).
+//
+// The "Follow on Instagram" button uses the `followHref` prop; the
+// Facebook/YouTube/X links below it are site-wide constants already defined
+// in src/config/site.ts (SITE.socials, Task 3), reused here rather than
+// re-hardcoded, with Instagram filtered out since it's already the primary
+// button.
+import { Image } from 'astro:assets';
+import Button from './ui/Button.astro';
+import { SITE } from '../config/site';
+
+interface Tile {
+  image: ImageMetadata;
+  alt: string;
+  href: string;
+}
+
+interface Props {
+  tiles: Tile[];
+  reelHref: string;
+  reelLabel: string;
+  handle: string;
+  followHref: string;
+}
+
+const { tiles, reelHref, reelLabel, handle, followHref } = Astro.props;
+const otherSocials = SITE.socials.filter((s) => s.label !== 'Instagram');
+---
+
+<div class="ig-grid">
+  {tiles.slice(0, 3).map((tile) => (
+    <a class="ig-tile" href={tile.href} target="_blank" rel="noopener">
+      <Image src={tile.image} alt={tile.alt} loading="lazy" />
+      <span class="ig-ol" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor">
+          <path d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2.1 1.9.2 2.3.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1.1.4 2.3.1 1.3.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 1.2-.2 1.9-.4 2.3-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1.1.4-2.3.4-1.3.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2-.1-1.9-.2-2.3-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1.1-.4-2.3-.1-1.3-.1-1.6-.1-4.8s0-3.6.1-4.8c.1-1.2.2-1.9.4-2.3.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1.1-.4 2.3-.4 1.2-.1 1.6-.1 4.8-.1zm0 3.1a4.9 4.9 0 1 1 0 9.8 4.9 4.9 0 0 1 0-9.8zm0 1.8a3.1 3.1 0 1 0 0 6.2 3.1 3.1 0 0 0 0-6.2zm5.1-2.9a1.1 1.1 0 1 1 0 2.3 1.1 1.1 0 0 1 0-2.3z" />
+        </svg>
+      </span>
+    </a>
+  ))}
+  <a class="ig-tile ig-reel" href={reelHref} target="_blank" rel="noopener" aria-label={`Watch the latest reel on Instagram — ${handle}`}>
+    <span class="igr-in">
+      <span class="igr-play">&#9654;&#xFE0E;</span>
+      <span class="igr-t" set:html={reelLabel} />
+      <span class="igr-s">{handle}</span>
+    </span>
+  </a>
+  {tiles.slice(3).map((tile) => (
+    <a class="ig-tile" href={tile.href} target="_blank" rel="noopener">
+      <Image src={tile.image} alt={tile.alt} loading="lazy" />
+      <span class="ig-ol" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor">
+          <path d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2.1 1.9.2 2.3.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1.1.4 2.3.1 1.3.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 1.2-.2 1.9-.4 2.3-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1.1.4-2.3.4-1.3.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2-.1-1.9-.2-2.3-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1.1-.4-2.3-.1-1.3-.1-1.6-.1-4.8s0-3.6.1-4.8c.1-1.2.2-1.9.4-2.3.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1.1-.4 2.3-.4 1.2-.1 1.6-.1 4.8-.1zm0 3.1a4.9 4.9 0 1 1 0 9.8 4.9 4.9 0 0 1 0-9.8zm0 1.8a3.1 3.1 0 1 0 0 6.2 3.1 3.1 0 0 0 0-6.2zm5.1-2.9a1.1 1.1 0 1 1 0 2.3 1.1 1.1 0 0 1 0-2.3z" />
+        </svg>
+      </span>
+    </a>
+  ))}
+</div>
+<div class="ig-ctarow">
+  <Button href={followHref} variant="coral">Follow on Instagram</Button>
+  <span class="ig-others">
+    {otherSocials.map((s, i) => (
+      <>
+        <a href={s.href} target="_blank" rel="noopener">{s.label}</a>
+        {i < otherSocials.length - 1 && ' · '}
+      </>
+    ))}
+  </span>
+</div>
+
+<style>
+  .ig-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+  .ig-tile {
+    display: block;
+    aspect-ratio: 1;
+    overflow: hidden;
+    position: relative;
+  }
+  .ig-tile :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: 0.35s;
+    filter: saturate(0.95);
+  }
+  .ig-tile:hover :global(img) {
+    transform: scale(1.05);
+  }
+  .ig-ol {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--paper);
+    background: rgba(12, 20, 20, 0.45);
+    opacity: 0;
+    transition: 0.25s;
+  }
+  .ig-tile:hover .ig-ol {
+    opacity: 1;
+  }
+  .ig-reel {
+    background: linear-gradient(145deg, #135e54, #0c1414);
+    border: 1px solid rgba(63, 167, 150, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+  }
+  .igr-in {
+    text-align: center;
+  }
+  .igr-play {
+    display: inline-flex;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--gel-coral);
+    color: var(--ink);
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+  .igr-t {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 18px;
+    line-height: 1.25;
+    color: var(--paper);
+  }
+  .igr-s {
+    display: block;
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    color: rgba(244, 239, 230, 0.55);
+    margin-top: 8px;
+  }
+  .ig-ctarow {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    margin-top: 22px;
+    flex-wrap: wrap;
+  }
+  .ig-others {
+    font-size: 13px;
+  }
+  .ig-others a {
+    color: var(--glow-teal);
+    text-decoration: none;
+  }
+  @media (max-width: 900px) {
+    .ig-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

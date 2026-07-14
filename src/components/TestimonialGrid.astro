@@ -1,0 +1,72 @@
+---
+// Homepage-only 3-up client testimonial grid. Ported from
+// agl-reflections-website/index.html lines 457-480 (`.testi-grid`/`.testi`),
+// CSS from the embedded <style> block at index.html lines 88-92, hex colors
+// swapped for the Task 2 CSS custom properties (--teal->--glow-teal,
+// --coral->--gel-coral). The source's unused `.testi .t-tag` rule isn't
+// ported — nothing in the markup ever wears that class.
+//
+// The three quotes are placeholder pitch copy — real client quotes haven't
+// been collected yet. The source flags this with an HTML comment sitting
+// directly above the testimonials; that comment is reproduced verbatim
+// below, hardcoded rather than tied to the `items` prop, so it renders
+// no matter what content is eventually passed in at the homepage call site
+// (Task 14) — it must stay visible in the page source until real quotes
+// replace the sample copy.
+//
+// Renders only the `.testi-grid` itself; the surrounding <section>/sec-head
+// wrapper (kicker, heading, the "have a review?" line) is assembled at the
+// homepage call site, same division of labor as PathCards.astro (Task 7).
+interface Testimonial {
+  quote: string;
+  attribution: string;
+}
+
+interface Props {
+  items: Testimonial[];
+}
+
+const { items } = Astro.props;
+---
+
+<div class="testi-grid">
+  <!-- SAMPLE COPY for pitch purposes — replace with real client quotes before launch -->
+  {items.map((t) => (
+    <figure class="testi">
+      <blockquote>{t.quote}</blockquote>
+      <figcaption>{t.attribution}</figcaption>
+    </figure>
+  ))}
+</div>
+
+<style>
+  .testi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .testi {
+    margin: 0;
+    border: 1px solid rgba(63, 167, 150, 0.28);
+    padding: 26px 24px;
+    background: rgba(19, 94, 84, 0.07);
+    position: relative;
+  }
+  .testi blockquote {
+    margin: 0 0 14px;
+    font-size: 15px;
+    line-height: 1.65;
+    color: rgba(244, 239, 230, 0.85);
+  }
+  .testi figcaption {
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    color: rgba(244, 239, 230, 0.5);
+    text-transform: uppercase;
+  }
+  @media (max-width: 900px) {
+    .testi-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

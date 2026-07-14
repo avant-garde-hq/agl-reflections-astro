@@ -1,0 +1,120 @@
+---
+// The "Let's Put On A Show" closing CTA band that appears near the end of
+// every page, right before the footer. Ported from
+// agl-reflections-website/index.html lines 567-583 (`.quote` section), CSS
+// from assets/css/main.css lines 467-482, hex colors swapped for the Task 2
+// CSS custom properties (--teal->--glow-teal, --coral->--gel-coral,
+// --sand->--paper, --sand-dim->--paper-dim).
+//
+// All copy (kicker, heading, subtitle, contact details) is identical on
+// every page in the source, so it's hardcoded here rather than passed as
+// props — the only thing that varies page to page is size: interior pages
+// (starting Task 14) use the smaller `compact` variant seen throughout the
+// source's interior pages, the homepage uses the full-size default.
+//
+// Contact details (phone/email/address) and the quote-form link reuse
+// src/config/site.ts's SITE constants (Task 3) rather than re-hardcoding
+// them a second time.
+import MirrorText from './MirrorText.astro';
+import Button from './ui/Button.astro';
+import { SITE } from '../config/site';
+
+interface Props {
+  compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+---
+
+<section class:list={['quote', { compact }]}>
+  <div class="wrap">
+    <span class="kicker">Dates go fast &mdash; especially July &amp; December</span>
+    <h2><MirrorText lines={["Let's Put On", 'A Show']} /></h2>
+    <p class="q-sub">Tell us the date, the crowd and the vision. We'll bring the stage &mdash; and everything on it.</p>
+    <div><Button href={SITE.cta.href} variant="coral">Get a Quote</Button></div>
+    <div class="q-contact">
+      <a class="q-phone" href={SITE.phoneHref}>{SITE.phone}</a>
+      <a class="q-mail" href={`mailto:${SITE.email}`}>{SITE.email}</a>
+      <span class="q-addr">{SITE.address}</span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .quote {
+    position: relative;
+    text-align: center;
+    padding: clamp(100px, 13vw, 180px) 0 clamp(90px, 11vw, 150px);
+    overflow: hidden;
+  }
+  .quote.compact {
+    padding: clamp(70px, 9vw, 120px) 0;
+  }
+  .quote::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 55% at 50% 8%, rgba(19, 94, 84, 0.34), transparent 70%);
+  }
+  .quote .wrap {
+    position: relative;
+  }
+  .quote .kicker {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: var(--glow-teal);
+    margin-bottom: 26px;
+    display: block;
+  }
+  .quote h2 {
+    font-size: clamp(44px, 7.4vw, 110px);
+  }
+  .quote.compact h2 {
+    font-size: clamp(38px, 5.6vw, 84px);
+  }
+  .quote h2 :global(.refl) {
+    font-size: 0.6em;
+  }
+  .quote .q-sub {
+    color: var(--paper-dim);
+    max-width: 460px;
+    margin: 28px auto 38px;
+    font-size: 16px;
+  }
+  .quote :global(.btn-coral) {
+    font-size: 15px;
+    padding: 20px 46px;
+  }
+  .quote .q-contact {
+    margin-top: 44px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+  }
+  .quote .q-phone {
+    font-family: var(--font-display);
+    font-size: clamp(26px, 3.4vw, 44px);
+    letter-spacing: 0.02em;
+    color: var(--paper);
+    transition: color 0.3s;
+  }
+  .quote .q-phone:hover {
+    color: var(--gel-coral);
+  }
+  .quote .q-mail {
+    font-size: clamp(14px, 1.4vw, 17px);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--glow-teal);
+    transition: color 0.3s;
+  }
+  .quote .q-mail:hover {
+    color: var(--paper);
+  }
+  .quote .q-addr {
+    margin-top: 10px;
+  }
+</style>
