@@ -42,3 +42,47 @@ h1, h2, h3, .display {
 .skip-link:focus { left: 0; }
 
 @view-transition { navigation: auto; }
+
+/* ---------- section-band layout primitives ----------
+   Generic scaffolding used by every "band" section across every page
+   (source: main.css lines 220-226, 270-276, 79-84). Promoted here from
+   index.astro (Task 14) so pages 15-21 don't each need their own copy. */
+section.band { padding: clamp(84px, 10vw, 140px) 0; }
+section.band.tight { padding: clamp(56px, 7vw, 96px) 0; }
+.sec-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+  margin-bottom: clamp(40px, 5vw, 64px);
+  flex-wrap: wrap;
+}
+.sec-head h2 { font-size: clamp(38px, 5.4vw, 76px); letter-spacing: -0.005em; }
+.sec-head .right,
+.right {
+  max-width: 380px;
+  color: var(--paper-dim);
+  font-size: 15px;
+  padding-bottom: 8px;
+}
+.ghost { color: transparent; -webkit-text-stroke: 1px rgba(63, 167, 150, 0.75); }
+.arrow-link {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--paper-dim);
+  transition: color 0.25s;
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+}
+.arrow-link::after { content: '→'; transition: transform 0.3s; color: var(--gel-coral); }
+.arrow-link:hover { color: var(--paper); }
+.arrow-link:hover::after { transform: translateX(4px); }
+.divider { padding: 0; }
+.divider .bars { display: block; }
+.divider .bars i { display: block; background: var(--glow-teal); }
+.divider .bars i:nth-child(1) { height: 2px; opacity: 0.34; margin-bottom: 6px; }
+.divider .bars i:nth-child(2) { height: 2px; opacity: 0.18; margin-bottom: 8px; width: 72%; }
+.divider .bars i:nth-child(3) { height: 1px; opacity: 0.1; width: 46%; }

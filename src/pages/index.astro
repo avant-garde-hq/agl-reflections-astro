@@ -359,88 +359,9 @@ const igTiles = [
 </script>
 
 <style>
-  /* Section-band layout primitives (source: main.css lines 220-226, 237,
-     270-276, 79-84) -- generic across every "band" section on this page.
-     Not ported into base.css since Task 14's file scope is this page only;
-     later page-assembly tasks may promote these to base.css if they need
-     them too. */
-  :global(section.band) {
-    padding: clamp(84px, 10vw, 140px) 0;
-  }
-  :global(section.band.tight) {
-    padding: clamp(56px, 7vw, 96px) 0;
-  }
-  .sec-head {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 32px;
-    margin-bottom: clamp(40px, 5vw, 64px);
-    flex-wrap: wrap;
-  }
-  .sec-head h2 {
-    font-size: clamp(38px, 5.4vw, 76px);
-    letter-spacing: -0.005em;
-  }
-  .sec-head .right,
-  :global(.right) {
-    max-width: 380px;
-    color: var(--paper-dim);
-    font-size: 15px;
-    padding-bottom: 8px;
-  }
-  :global(.ghost) {
-    color: transparent;
-    -webkit-text-stroke: 1px rgba(63, 167, 150, 0.75);
-  }
-  :global(.arrow-link) {
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--paper-dim);
-    transition: color 0.25s;
-    display: inline-flex;
-    gap: 8px;
-    align-items: center;
-  }
-  :global(.arrow-link)::after {
-    content: '→';
-    transition: transform 0.3s;
-    color: var(--gel-coral);
-  }
-  :global(.arrow-link:hover) {
-    color: var(--paper);
-  }
-  :global(.arrow-link:hover)::after {
-    transform: translateX(4px);
-  }
-  .divider {
-    padding: 0;
-  }
-  .divider .bars {
-    display: block;
-  }
-  .divider .bars i {
-    display: block;
-    background: var(--glow-teal);
-  }
-  .divider .bars i:nth-child(1) {
-    height: 2px;
-    opacity: 0.34;
-    margin-bottom: 6px;
-  }
-  .divider .bars i:nth-child(2) {
-    height: 2px;
-    opacity: 0.18;
-    margin-bottom: 8px;
-    width: 72%;
-  }
-  .divider .bars i:nth-child(3) {
-    height: 1px;
-    opacity: 0.1;
-    width: 46%;
-  }
+  /* Section-band layout primitives (.band/.sec-head/.ghost/.arrow-link/
+     .divider) now live in src/styles/base.css (global) since every page
+     needs them, not just this one. */
 
   /* Fleet grid wrapper (source: main.css line 237) -- FleetCard.astro
      (Task 8) owns each card's own grid-column span. */
