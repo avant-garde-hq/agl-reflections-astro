@@ -1,0 +1,146 @@
+---
+// APEX 2016 detail page -- smallest/most budget-friendly stage in the fleet.
+// Source: agl-reflections-website/stages/apex-2016.html (250 lines). Follows
+// the shared detail-page pattern established by apex-5040.astro (Task 19,
+// first dispatch): Layout/Header/PageHero/`.stage-cols` (prose + spec panel
+// + figure + use-list + pairing, alongside StageSide) / QuoteCta / Footer.
+//
+// Like every stage hero (not just 5040's), this page's source has its own
+// `.eng-bar` engineering-stat strip between the lede and the chip row
+// (source line 95) -- rendered via PageHero's `afterLede` slot, same as the
+// 5040 page. No "View Full Specs" / "View in 3D" CTAs here -- those are
+// 5040-only. The source's "Download spec sheet" apex.miami PDF link (line
+// 141) is dropped per the client's dead-link removal request; StageSide's
+// `pdfRemoved` note covers that.
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/house/Header.astro';
+import Footer from '../../components/house/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import SpecTable from '../../components/SpecTable.astro';
+import StageSide from '../../components/StageSide.astro';
+import QuoteCta from '../../components/QuoteCta.astro';
+import Kicker from '../../components/ui/Kicker.astro';
+import { Image } from 'astro:assets';
+
+import stage2016Hero from '../../assets/img/stage-2016-hero.webp';
+import stage2016B from '../../assets/img/stage-2016-b.webp';
+
+const specRows = [
+  { label: 'Stage deck', value: '20′ × 16′' },
+  { label: 'Stage height', value: '12′10″' },
+  { label: 'Flybay capacity', value: '800 lb each' },
+  { label: 'Total roof capacity', value: '3,400 lb' },
+  { label: 'Access', value: 'Front-opening with aluminum stairs' },
+  { label: 'Back wall', value: 'Removable modular panels — lower panels double as handrails' },
+  { label: 'Options', value: 'Banner package available' },
+  { label: 'Published rate', value: 'From $1,995 — as published; call to confirm your date' },
+];
+---
+
+<Layout
+  title="APEX 2016 Mobile Stage Rental | Reflections Productions"
+  description="The APEX 2016 is a compact 20-by-16 mobile stage with 12 ft 10 in of stage height and a 3,400 lb roof capacity — budget-friendly, maneuverable and built to full APEX quality."
+  path="/stages/apex-2016.html"
+  ogImage="https://reflectionsproductions.com/assets/img/stage-2016-hero.webp"
+>
+  <Header currentPath="/stages/index.html" />
+
+  <PageHero
+    tall
+    breadcrumb={[{ label: 'Home', href: '/' }, { label: 'Stage Fleet', href: '/stages/index.html' }, { label: 'APEX 2016' }]}
+    eyebrow="APEX"
+    title="2016"
+    lede="Small stage, no compromises: 20-by-16 deck, 12′10″ of height and a 3,400 lb roof capacity — <b>the perfect fit for smaller venues on real budgets.</b>"
+    imageSrc={stage2016Hero}
+    imageAlt="APEX 2016 stage dressed for the Formula E Fan Village with LED screen"
+    chips={[
+      { label: "20′ × 16′ DECK", variant: 'sandy' },
+      { label: 'Hydraulic deployment' },
+    ]}
+  >
+    <div class="eng-bar" slot="afterLede">
+      <span class="eng-chip crowd">RIGHT FOR: UP TO 2,500 CROWDS</span>
+      <span class="eng-chip">Front-opening design</span>
+      <span class="eng-chip">800 lb per flybay · 3,400 lb roof</span>
+      <span class="eng-chip">Aluminum stairs included</span>
+      <span class="eng-chip">From $1,995</span>
+    </div>
+  </PageHero>
+
+  <section class="band tight">
+    <div class="wrap">
+      <div class="stage-cols">
+        <div>
+          <div class="prose">
+            <Kicker text="Overview" />
+            <p>The APEX 2016 proves a compact stage doesn't have to feel like one. The fit and finish are excellent, the build is solid, and it flies 800 pounds on each flybay with a total roof capacity of 3,400 pounds — real production capability in a small footprint.</p>
+            <p>The stage opens on the front side and comes with aluminum stairs and a removable modular back panel — the lower panels can stay in place as handrails or come out entirely. Easy to operate, maneuverable in tight areas and budget-friendly, it maintains APEX quality at community-event scale. An optional banner package is available.</p>
+            <p>You've already seen this stage around town: most recently dressed as the <b>Formula E Fan Village stage at the 2025 Miami E-Prix</b>, wrapped in a custom branded arch with a full-width LED screen. <a class="arrow-link" href="/work/index.html">See it in Our Work</a></p>
+          </div>
+
+          <div id="specs" style="margin-top:44px">
+            <SpecTable caption="APEX 2016 — Specifications" rows={specRows} />
+            <p class="spec-note">Figures above are from the manufacturer spec sheet. Anything not listed: spec sheet on request — or call 786-504-2369 and we'll talk through your site.</p>
+          </div>
+
+          <figure class="figure" style="margin-top:44px">
+            <Image src={stage2016B} alt="APEX 2016 stage in the yard with front opening and stairs deployed" loading="lazy" />
+            <figcaption>2016 · front opening &amp; aluminum stairs</figcaption>
+          </figure>
+
+          <div style="margin-top:44px">
+            <Kicker text="Built For" />
+            <ul class="use-list">
+              <li>Community events</li>
+              <li>School functions</li>
+              <li>Fan villages &amp; activations</li>
+              <li>Small festivals</li>
+              <li>Ceremonies &amp; rallies</li>
+              <li>Tight urban sites</li>
+            </ul>
+          </div>
+
+          <div class="pairing" style="margin-top:40px">
+            <h3>Make it a full production</h3>
+            <p>Pair the 2016 with a <b>powered JBL system</b>, compact lighting and a backline package — a complete small-event production that still looks and sounds like a Reflections show.</p>
+            <a class="arrow-link" href="/production/index.html">Production services</a>
+          </div>
+        </div>
+
+        <StageSide
+          model="2016"
+          pdfRemoved
+          jumpLinks={[
+            { label: 'Full specifications', href: '#specs' },
+            { label: 'Compare the fleet', href: '/stages/index.html' },
+          ]}
+        />
+      </div>
+    </div>
+  </section>
+
+  <QuoteCta compact />
+
+  <Footer />
+</Layout>
+
+<style>
+  .eng-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 26px 0 4px;
+  }
+  .eng-chip {
+    border: 1px solid rgba(63, 167, 150, 0.45);
+    color: var(--paper);
+    font: 600 12px/1 var(--font-body);
+    letter-spacing: 0.08em;
+    padding: 9px 13px;
+    background: rgba(19, 94, 84, 0.14);
+  }
+  .eng-chip.crowd {
+    border-color: rgba(255, 107, 74, 0.55);
+    color: var(--gel-coral);
+  }
+</style>

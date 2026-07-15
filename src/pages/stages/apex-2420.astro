@@ -1,0 +1,139 @@
+---
+// APEX 2420 detail page -- the fleet's most towable pro stage (tows behind
+// a one-ton gooseneck truck). Source:
+// agl-reflections-website/stages/apex-2420.html (250 lines). Follows the
+// shared detail-page pattern from apex-5040.astro (Task 19, first
+// dispatch). Own `.eng-bar` engineering-stat strip (source line 95) via
+// PageHero's `afterLede` slot. No "View Full Specs" / "View in 3D" CTAs --
+// 5040-only. Source's "Download spec sheet" apex.miami PDF link (line 141)
+// dropped per the client's dead-link removal request; StageSide's
+// `pdfRemoved` note covers that.
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/house/Header.astro';
+import Footer from '../../components/house/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import SpecTable from '../../components/SpecTable.astro';
+import StageSide from '../../components/StageSide.astro';
+import QuoteCta from '../../components/QuoteCta.astro';
+import Kicker from '../../components/ui/Kicker.astro';
+import { Image } from 'astro:assets';
+
+import stage2420Hero from '../../assets/img/stage-2420-hero.webp';
+import stage2420B from '../../assets/img/stage-2420-b.webp';
+
+const specRows = [
+  { label: 'Stage deck', value: '24′ × 20′' },
+  { label: 'Stage height', value: '13′' },
+  { label: 'Towing', value: 'One-ton truck with gooseneck' },
+  { label: 'Flybay capacity', value: '2,000 lb each' },
+  { label: 'Cargo capacity (in trailer)', value: '4,000 lb' },
+  { label: 'Full dimensional data', value: 'Spec sheet on request' },
+];
+---
+
+<Layout
+  title="APEX 2420 Mobile Stage Rental | Reflections Productions"
+  description="The APEX 2420 is a 24-by-20 hydraulic mobile stage with 13 feet of stage height — tows behind a one-ton gooseneck and carries 2,000 lb flybays for smaller professional productions."
+  path="/stages/apex-2420.html"
+  ogImage="https://reflectionsproductions.com/assets/img/stage-2420-hero.webp"
+>
+  <Header currentPath="/stages/index.html" />
+
+  <PageHero
+    tall
+    breadcrumb={[{ label: 'Home', href: '/' }, { label: 'Stage Fleet', href: '/stages/index.html' }, { label: 'APEX 2420' }]}
+    eyebrow="APEX"
+    title="2420"
+    lede="The most towable pro stage in the fleet: a 24-by-20 deck with 13 feet of height that <b>arrives behind a one-ton truck</b> — flybays rated at 2,000 lb each."
+    imageSrc={stage2420Hero}
+    imageAlt="APEX 2420 stage lit blue at a New Times showcase event"
+    chips={[
+      { label: "24′ × 20′ DECK", variant: 'sandy' },
+      { label: 'Hydraulic deployment' },
+    ]}
+  >
+    <div class="eng-bar" slot="afterLede">
+      <span class="eng-chip crowd">RIGHT FOR: 1,000–5,000 CROWDS</span>
+      <span class="eng-chip">Towable by one-ton truck</span>
+      <span class="eng-chip">2,000 lb fly bays</span>
+      <span class="eng-chip">4,000 lb onboard cargo</span>
+      <span class="eng-chip">Engineer-certified APEX platform</span>
+    </div>
+  </PageHero>
+
+  <section class="band tight">
+    <div class="wrap">
+      <div class="stage-cols">
+        <div>
+          <div class="prose">
+            <Kicker text="Overview" />
+            <p>The APEX 2420 is the perfect stage for smaller-venue professional productions, corporate shows and non-profit events. It tows behind a one-ton truck with a gooseneck hitch, which keeps transport simple and site access flexible.</p>
+            <p>Don't let the footprint fool you: each flybay holds an impressive 2,000 pounds, and the enclosed trailer secures an additional 4,000 pounds of cargo on the way in — sound, lighting or backline riding with the stage.</p>
+          </div>
+
+          <div id="specs" style="margin-top:44px">
+            <SpecTable caption="APEX 2420 — Specifications" rows={specRows} />
+            <p class="spec-note">Figures above are from the manufacturer spec sheet. Anything not listed: spec sheet on request — or call 786-504-2369 and we'll talk through your site.</p>
+          </div>
+
+          <figure class="figure" style="margin-top:44px">
+            <Image src={stage2420B} alt="APEX stage at the New Times Music Showcase at night" loading="lazy" />
+            <figcaption>2420 · showcase build</figcaption>
+          </figure>
+
+          <div style="margin-top:44px">
+            <Kicker text="Built For" />
+            <ul class="use-list">
+              <li>Corporate productions</li>
+              <li>Non-profit events</li>
+              <li>Community concerts</li>
+              <li>School &amp; university shows</li>
+              <li>Private celebrations</li>
+              <li>Smaller venues</li>
+            </ul>
+          </div>
+
+          <div class="pairing" style="margin-top:40px">
+            <h3>Make it a full production</h3>
+            <p>Pair the 2420 with <b>JBL VRX sound systems</b>, Yamaha consoles, LED video and intelligent lighting — a complete small-venue rig from one vendor, ready at a moment's notice.</p>
+            <a class="arrow-link" href="/production/index.html">Production services</a>
+          </div>
+        </div>
+
+        <StageSide
+          model="2420"
+          pdfRemoved
+          jumpLinks={[
+            { label: 'Full specifications', href: '#specs' },
+            { label: 'Compare the fleet', href: '/stages/index.html' },
+          ]}
+        />
+      </div>
+    </div>
+  </section>
+
+  <QuoteCta compact />
+
+  <Footer />
+</Layout>
+
+<style>
+  .eng-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 26px 0 4px;
+  }
+  .eng-chip {
+    border: 1px solid rgba(63, 167, 150, 0.45);
+    color: var(--paper);
+    font: 600 12px/1 var(--font-body);
+    letter-spacing: 0.08em;
+    padding: 9px 13px;
+    background: rgba(19, 94, 84, 0.14);
+  }
+  .eng-chip.crowd {
+    border-color: rgba(255, 107, 74, 0.55);
+    color: var(--gel-coral);
+  }
+</style>

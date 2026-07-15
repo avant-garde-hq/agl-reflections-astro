@@ -1,0 +1,136 @@
+---
+// APEX 2424 detail page -- square 24-by-24 deck, balanced footprint for
+// full bands, DJs or speakers. Source:
+// agl-reflections-website/stages/apex-2424.html (250 lines). Follows the
+// shared detail-page pattern from apex-5040.astro (Task 19, first
+// dispatch). Own `.eng-bar` engineering-stat strip (source line 95) via
+// PageHero's `afterLede` slot. No "View Full Specs" / "View in 3D" CTAs --
+// 5040-only. Source's "Download spec sheet" apex.miami PDF link (line 141)
+// dropped per the client's dead-link removal request; StageSide's
+// `pdfRemoved` note covers that.
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/house/Header.astro';
+import Footer from '../../components/house/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import SpecTable from '../../components/SpecTable.astro';
+import StageSide from '../../components/StageSide.astro';
+import QuoteCta from '../../components/QuoteCta.astro';
+import Kicker from '../../components/ui/Kicker.astro';
+import { Image } from 'astro:assets';
+
+import stage2424Hero from '../../assets/img/stage-2424-hero.webp';
+import stage2424B from '../../assets/img/stage-2424-b.webp';
+
+const specRows = [
+  { label: 'Stage deck', value: '24′ × 24′' },
+  { label: 'Deployment', value: 'Self-contained hydraulic — under an hour' },
+  { label: 'Roof & rigging', value: 'Integrated roof system with rigging for lights, audio & LED' },
+  { label: 'Dimensional & load data', value: 'Spec sheet on request' },
+];
+---
+
+<Layout
+  title="APEX 2424 Mobile Stage Rental | Reflections Productions"
+  description="The APEX 2424 is a square 24-by-24 hydraulic mobile stage — a balanced deck for city events, headline DJs and mid-size productions, deployed in under an hour."
+  path="/stages/apex-2424.html"
+  ogImage="https://reflectionsproductions.com/assets/img/stage-2424-hero.webp"
+>
+  <Header currentPath="/stages/index.html" />
+
+  <PageHero
+    tall
+    breadcrumb={[{ label: 'Home', href: '/' }, { label: 'Stage Fleet', href: '/stages/index.html' }, { label: 'APEX 2424' }]}
+    eyebrow="APEX"
+    title="2424"
+    lede="A square 24-by-24 deck with a balanced footprint — room for a full band or a headline DJ rig, <b>up and show-ready in under an hour.</b>"
+    imageSrc={stage2424Hero}
+    imageAlt="APEX 2424 stage beside a GEN3 stage on the festival lawn at FloydFest"
+    chips={[
+      { label: "24′ × 24′ DECK", variant: 'sandy' },
+      { label: 'Hydraulic deployment' },
+    ]}
+  >
+    <div class="eng-bar" slot="afterLede">
+      <span class="eng-chip crowd">RIGHT FOR: 2,500–8,000 CROWDS</span>
+      <span class="eng-chip">Compact festival footprint</span>
+      <span class="eng-chip">Hydraulic deployment</span>
+      <span class="eng-chip">Engineer-certified APEX platform</span>
+    </div>
+  </PageHero>
+
+  <section class="band tight">
+    <div class="wrap">
+      <div class="stage-cols">
+        <div>
+          <div class="prose">
+            <Kicker text="Overview" />
+            <p>The APEX 2424 gives you a square performance deck — a layout that suits full bands, DJs and speakers equally well, with space for more elaborate stage designs than a compact unit allows. The self-contained hydraulic system deploys it in under an hour.</p>
+            <p>Heavy-duty construction, an integrated roof system and proper rigging points carry lighting, sound and LED displays, making the 2424 the right call for mid-size concerts, corporate events and community festivals that still need a professional, produced look.</p>
+          </div>
+
+          <div id="specs" style="margin-top:44px">
+            <SpecTable caption="APEX 2424 — Specifications" rows={specRows} />
+            <p class="spec-note">Figures above are from the manufacturer spec sheet. Anything not listed: spec sheet on request — or call 786-504-2369 and we'll talk through your site.</p>
+          </div>
+
+          <figure class="figure" style="margin-top:44px">
+            <Image src={stage2424B} alt="Night crowd in front of a compact APEX stage" loading="lazy" />
+            <figcaption>2424 · night show, packed lawn</figcaption>
+          </figure>
+
+          <div style="margin-top:44px">
+            <Kicker text="Built For" />
+            <ul class="use-list">
+              <li>City concerts</li>
+              <li>Headline DJ shows</li>
+              <li>Corporate events</li>
+              <li>Trade shows &amp; activations</li>
+              <li>Cultural festivals</li>
+              <li>Non-profit events</li>
+            </ul>
+          </div>
+
+          <div class="pairing" style="margin-top:40px">
+            <h3>Make it a full production</h3>
+            <p>Pair the 2424 with <b>JBL VRX sound systems</b>, Yamaha production consoles, the Absen LED wall, intelligent lighting — and our Miami backline inventory for any drums, amps or keys the show requires.</p>
+            <a class="arrow-link" href="/production/index.html">Production services</a>
+          </div>
+        </div>
+
+        <StageSide
+          model="2424"
+          pdfRemoved
+          jumpLinks={[
+            { label: 'Full specifications', href: '#specs' },
+            { label: 'Compare the fleet', href: '/stages/index.html' },
+          ]}
+        />
+      </div>
+    </div>
+  </section>
+
+  <QuoteCta compact />
+
+  <Footer />
+</Layout>
+
+<style>
+  .eng-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 26px 0 4px;
+  }
+  .eng-chip {
+    border: 1px solid rgba(63, 167, 150, 0.45);
+    color: var(--paper);
+    font: 600 12px/1 var(--font-body);
+    letter-spacing: 0.08em;
+    padding: 9px 13px;
+    background: rgba(19, 94, 84, 0.14);
+  }
+  .eng-chip.crowd {
+    border-color: rgba(255, 107, 74, 0.55);
+    color: var(--gel-coral);
+  }
+</style>
