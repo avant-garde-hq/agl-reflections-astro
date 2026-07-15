@@ -1,0 +1,199 @@
+---
+// APEX 4232 detail page -- a "coming 2026 season" teaser, structurally
+// different from every other stage page. Source:
+// agl-reflections-website/stages/apex-4232.html (235 lines, shorter than
+// the other 6 detail pages). Differences from the apex-5040.astro pattern,
+// all confirmed against the source rather than assumed:
+//   - `short` hero (source: `<header class="page-hero short">`), no hero
+//     image at all (source's `.ph-bg` is empty -- just the teal radial
+//     glow) -- so no `imageSrc`/`imageAlt` passed to PageHero here.
+//   - No spec table (nothing is published yet), no "Built For" list, no
+//     "Make it a full production" pairing block -- the source has none of
+//     these; this page is a figure + "What To Expect" prose with three
+//     h3 subsections instead.
+//   - The booking aside is NOT the shared StageSide component: its kicker
+//     ("Be First In Line", coral variant), primary CTA copy ("Ask About
+//     the 4232"), and its second CTA (a "Notify Me When Specs Drop" mailto
+//     link, not a PDF download) are all unique to this page (source lines
+//     126-137), and it only has one jump link ("See the current fleet").
+//     StageSide's props (model/pdfRemoved/jumpLinks) don't fit any of
+//     that, so this page hand-rolls its own aside markup + scoped styles
+//     (copied from StageSide.astro's `.stage-side`/`.side-links`/
+//     `.side-contact` rules, since those are scoped to that component and
+//     not promoted to base.css).
+//   - Same per-page `.eng-bar` engineering-stat strip pattern as every
+//     other stage hero (source line 95), via PageHero's `afterLede` slot.
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/house/Header.astro';
+import Footer from '../../components/house/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import QuoteCta from '../../components/QuoteCta.astro';
+import Kicker from '../../components/ui/Kicker.astro';
+import Button from '../../components/ui/Button.astro';
+import { Image } from 'astro:assets';
+import { SITE } from '../../config/site';
+
+import stage4232Teaser from '../../assets/img/stage-4232-teaser.webp';
+---
+
+<Layout
+  title="APEX 4232 Mobile Stage — Coming 2026 Season | Reflections Productions"
+  description="The APEX 4232 joins the Reflections Productions fleet for the 2026 season — a mid-to-large hydraulic mobile stage engineered to fill the gap between compact units and full festival stages. Reserve dates now."
+  path="/stages/apex-4232.html"
+  ogImage="https://reflectionsproductions.com/assets/img/stage-4232-teaser.webp"
+>
+  <Header currentPath="/stages/index.html" />
+
+  <PageHero
+    short
+    breadcrumb={[{ label: 'Home', href: '/' }, { label: 'Stage Fleet', href: '/stages/index.html' }, { label: 'APEX 4232' }]}
+    eyebrow="APEX · Next in line · Coming 2026 Season"
+    title="4232"
+    lede="Big things are on the horizon. The newest APEX is engineered to fill the gap between our compact units and the full-scale festival stages — <b>and Reflections will be among the first to run it in South Florida.</b>"
+    chips={[
+      { label: 'Coming 2026 Season', variant: 'coral' },
+      { label: 'Mid-to-large format' },
+      { label: 'Hydraulic deployment' },
+    ]}
+  >
+    <div class="eng-bar" slot="afterLede">
+      <span class="eng-chip crowd">RIGHT FOR: 2026 SEASON</span>
+      <span class="eng-chip">Newest APEX build</span>
+      <span class="eng-chip">Reserve dates now</span>
+      <span class="eng-chip">Specs announced soon</span>
+    </div>
+  </PageHero>
+
+  <section class="band tight">
+    <div class="wrap">
+      <div class="stage-cols">
+        <div>
+          <figure class="figure">
+            <Image src={stage4232Teaser} alt="Teaser rendering of the upcoming APEX 4232 mobile stage" loading="lazy" style="background:#DDE5E2" />
+            <figcaption>APEX 4232 · official teaser</figcaption>
+          </figure>
+
+          <div class="prose" style="margin-top:44px">
+            <Kicker text="What To Expect" />
+            <p>Designed for today's demanding productions, the 4232 balances footprint against performance — a versatile mid-to-large stage for concerts, festivals, city events and high-impact productions that need reliability without compromise.</p>
+            <h3>Next-level engineering</h3>
+            <p>Advanced aluminum and steel integration for strength, without giving up efficient transport and deployment.</p>
+            <h3>Fast, efficient setup</h3>
+            <p>Hydraulic deployment keeps setup and breakdown on schedule and trims labor time — the same reason the rest of the APEX fleet earns its keep.</p>
+            <h3>Production-ready design</h3>
+            <p>Engineered to support professional lighting, audio and video systems, with flexible rigging capability and an open design.</p>
+            <p><b>Official specs, deployment videos and availability are coming.</b> Until then, the 2026 calendar is already filling — early reservations get first pick of dates.</p>
+          </div>
+        </div>
+
+        <aside class="stage-side" aria-label="Reserve">
+          <Kicker text="Be First In Line" variant="coral" />
+          <Button href={SITE.cta.href} variant="coral">Ask About the 4232</Button>
+          <Button href={`mailto:${SITE.email}?subject=APEX%204232%20—%20notify%20me`} variant="ghost">Notify Me When Specs Drop</Button>
+
+          <div class="side-links">
+            <a href="/stages/index.html">See the current fleet</a>
+          </div>
+          <div class="side-contact">
+            <a class="p" href={SITE.phoneHref}>{SITE.phone}</a>
+            <a class="m" href={`mailto:${SITE.email}`}>{SITE.email}</a>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <QuoteCta compact />
+
+  <Footer />
+</Layout>
+
+<style>
+  .eng-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 26px 0 4px;
+  }
+  .eng-chip {
+    border: 1px solid rgba(63, 167, 150, 0.45);
+    color: var(--paper);
+    font: 600 12px/1 var(--font-body);
+    letter-spacing: 0.08em;
+    padding: 9px 13px;
+    background: rgba(19, 94, 84, 0.14);
+  }
+  .eng-chip.crowd {
+    border-color: rgba(255, 107, 74, 0.55);
+    color: var(--gel-coral);
+  }
+
+  /* This page's aside isn't the shared StageSide component (see the
+     top-of-file note for why), so its layout rules are copied here from
+     StageSide.astro's scoped styles rather than duplicated globally. */
+  .stage-side {
+    position: sticky;
+    top: calc(var(--nav-h) + 32px);
+  }
+  .stage-side :global(.kicker) {
+    margin-bottom: 16px;
+  }
+  .stage-side :global(.btn) {
+    display: block;
+    margin-bottom: 12px;
+  }
+  .side-links {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .side-links a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 2px;
+    border-top: 1px solid rgba(63, 167, 150, 0.12);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--paper-dim);
+    transition: color 0.25s;
+  }
+  .side-links a::after {
+    content: '↓';
+    color: var(--gel-coral);
+    transition: transform 0.3s;
+  }
+  .side-links a:hover {
+    color: var(--paper);
+  }
+  .side-links a:hover::after {
+    transform: translateY(3px);
+  }
+  .side-contact {
+    margin-top: 28px;
+    padding-top: 22px;
+    border-top: 1px solid rgba(63, 167, 150, 0.2);
+  }
+  .side-contact .p {
+    font-family: var(--font-display);
+    font-size: clamp(20px, 2vw, 26px);
+    display: block;
+    letter-spacing: 0.02em;
+  }
+  .side-contact .p:hover {
+    color: var(--gel-coral);
+  }
+  .side-contact .m {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--glow-teal);
+    word-break: break-all;
+  }
+  .side-contact .m:hover {
+    color: var(--paper);
+  }
+</style>
