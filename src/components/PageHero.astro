@@ -35,10 +35,10 @@ interface Props {
 }
 
 // Task 19: added an optional `afterLede` named slot, rendered between the
-// lede paragraph and the chips row, for the APEX 5040 flagship page's
-// `.eng-bar` engineering-stat strip (source: stages/apex-5040.html line 95)
-// -- the only stage hero with content in that position. Empty/unused on
-// every other page (default: nothing renders).
+// lede paragraph and the chips row, for each stage detail page's own
+// `.eng-bar` engineering-stat strip (source: stages/apex-*.html line 95 —
+// every one of the 8 stage pages has its own). Empty/unused on every
+// non-stage page (default: nothing renders).
 const { title, breadcrumb, eyebrow, lede, imageSrc, imageAlt = '', tall = false, short = false, chips = [] } = Astro.props;
 const titleLines = Array.isArray(title) ? title : [title];
 ---
