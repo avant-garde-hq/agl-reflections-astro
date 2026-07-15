@@ -364,11 +364,23 @@ const igTiles = [
      needs them, not just this one. */
 
   /* Fleet grid wrapper (source: main.css line 237) -- FleetCard.astro
-     (Task 8) owns each card's own grid-column span. */
+     (Task 8) owns each card's own grid-column span. Source collapses each
+     card to `grid-column: span 12` at 900px (main.css line 544); this
+     project gets the same full-width-card result more simply by collapsing
+     the grid itself to a single column instead (same fix already used by
+     the stages/index.astro fleet-grid -- Task 23 QA: this page's own
+     fleet-grid was missing this and overflowed horizontally on mobile
+     since the "feature" card's `span 7` was being measured against a
+     still-12-column grid). */
   .fleet-grid {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     gap: 22px;
+  }
+  @media (max-width: 900px) {
+    .fleet-grid {
+      grid-template-columns: 1fr;
+    }
   }
   .fleet-all {
     margin: 34px 0 0;

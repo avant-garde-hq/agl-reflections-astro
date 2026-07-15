@@ -10,7 +10,11 @@
 // heading live inside the grid's right column, so this component owns them
 // directly rather than the page.
 //
-// Phone/email/address reuse SITE (Task 3) rather than re-hardcoding them.
+// Phone/email reuse SITE (Task 3) rather than re-hardcoding them. The
+// apply-in-person address is hardcoded here (not SITE.address) because the
+// source's hiring sentence includes a "(Pine Island Rd)" cross-street detail
+// that appears only in this one spot on about.html and isn't part of the
+// shared SITE.address used elsewhere.
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import Kicker from './ui/Kicker.astro';
@@ -41,7 +45,7 @@ const { image, imageAlt, roles } = Astro.props;
       <Button href={`mailto:${SITE.email}?subject=Crew%20application%20—%20Reflections%20Productions`} variant="coral">Apply by Email</Button>
       <Button href={SITE.phoneHref} variant="ghost">{SITE.phone}</Button>
     </div>
-    <p class="hire-note">Or apply in person: {SITE.address}</p>
+    <p class="hire-note">Or apply in person: 23750 SW 132 Avenue (Pine Island Rd), Princeton, FL 33032</p>
   </div>
 </div>
 

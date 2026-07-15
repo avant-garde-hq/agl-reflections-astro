@@ -18,6 +18,23 @@
 // Field names/options and the form action are byte-identical to the source
 // (only the action gets a leading slash): quote.astro's prefill script
 // (Task 18) reads these exact querystring param names.
+//
+// Task 23 QA note on `.datefeature`'s top padding: the source's own rule
+// here is a literal `54px` (main.css lines 110-126), but on the real live
+// site `section.band`'s global rule (specificity `section.band` = 0,1,1)
+// actually beats this component's own `.datefeature` class alone (0,1,0),
+// so the source's *rendered* top padding is really
+// `clamp(84px, 10vw, 140px)` — same as every other `.band` section — by a
+// specificity accident, not by the literal value written here. In this
+// Astro build, scoped component `<style>` rules compile with an appended
+// `[data-astro-cid-*]` attribute selector, which bumps `.datefeature`'s
+// effective specificity above the global `section.band` rule in
+// `src/styles/base.css` regardless of whether `band` is also in this
+// section's class list. So the source's specificity accident can't
+// reproduce here, and the literal `54px` would always win, rendering a
+// visibly shorter top gap than every other `.band` section on the
+// homepage. Written directly as `clamp(84px, 10vw, 140px)` below to match
+// the source's real rendered behavior and the rest of the page's rhythm.
 import Kicker from './ui/Kicker.astro';
 ---
 
@@ -56,7 +73,7 @@ import Kicker from './ui/Kicker.astro';
   .datefeature {
     background: radial-gradient(ellipse 80% 120% at 50% 0%, rgba(19, 94, 84, .35), transparent 65%);
     text-align: center;
-    padding: 54px 0 clamp(84px, 10vw, 140px);
+    padding: clamp(84px, 10vw, 140px) 0;
   }
 
   /* Mirror headline (ported from MirrorText.astro; see comment above). */

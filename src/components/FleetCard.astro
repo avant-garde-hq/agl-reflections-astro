@@ -173,6 +173,17 @@ const gridClass = stage.featured
     white-space: nowrap;
     letter-spacing: 0.04em;
   }
+  /* Source: main.css line 570 (`.card-top{flex-direction:column;gap:4px}`
+     at max-width:620px) -- stacks the model name above the nowrap deck
+     spec once a card gets narrow enough that the two would otherwise
+     squeeze together and overflow the card (e.g. a full-width "feature"
+     card on a narrow phone). */
+  @media (max-width: 620px) {
+    .card-top {
+      flex-direction: column;
+      gap: 4px;
+    }
+  }
   .card .specs {
     list-style: none;
     margin-top: 6px;

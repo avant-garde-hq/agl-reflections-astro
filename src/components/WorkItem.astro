@@ -39,19 +39,26 @@ interface Props {
   // any full-mode item with no case-study page at all — both keep today's
   // behavior of rendering nothing here, unchanged.
   readMoreHref?: string;
+  // Optional per-item crop override (CSS `object-position`), e.g. the
+  // work/index.astro Hialeah item's "center 72%" (source
+  // work/index.html line 96) to keep the fireworks visible up top in its
+  // 16/9.4 crop. Left undefined (the default) for every other item, which
+  // keeps today's default `object-position` (unset, so `center center` via
+  // the .work-ph img `object-fit: cover` rule) unchanged.
+  heroImagePosition?: string;
 }
 
-const { case: item, flip = false, teaser = false, readMoreHref } = Astro.props;
+const { case: item, flip = false, teaser = false, readMoreHref, heroImagePosition } = Astro.props;
 ---
 
 <div class:list={['work-item', { flip }]}>
   <div class="work-ph">
     {teaser ? (
       <a href={`/work/${item.slug}.html`} aria-label={item.title}>
-        <Image src={item.heroImage} alt={item.heroImageAlt} loading="lazy" />
+        <Image src={item.heroImage} alt={item.heroImageAlt} loading="lazy" style={heroImagePosition ? `object-position:${heroImagePosition}` : undefined} />
       </a>
     ) : (
-      <Image src={item.heroImage} alt={item.heroImageAlt} loading="lazy" />
+      <Image src={item.heroImage} alt={item.heroImageAlt} loading="lazy" style={heroImagePosition ? `object-position:${heroImagePosition}` : undefined} />
     )}
   </div>
   <div class="work-txt">

@@ -67,3 +67,99 @@ const stageLinks = [
     </div>
   </div>
 </footer>
+
+<style>
+  /* Task 23 QA fix: same regression as Header.astro (fixed alongside this
+     file) -- this component never had a <style> block since Task 4, so
+     the footer rendered as an unstyled stack of links on every page.
+     Ported from agl-reflections-website/assets/css/main.css lines 496-508
+     and its 900px/620px responsive rules (lines 550/568), hex colors
+     swapped for the Task 2 tokens (--panel-2->--deck-2, --hair->--hairline,
+     --sand-faint->--paper-faint, --teal->--glow-teal, --sand-dim->
+     --paper-dim, --coral->--gel-coral). `.wrap` already lives globally in
+     base.css and isn't redefined here. */
+  footer {
+    border-top: 1px solid var(--hairline);
+    padding: 60px 0 36px;
+    background: var(--deck-2);
+  }
+  .foot-grid {
+    display: grid;
+    grid-template-columns: minmax(240px, 1.4fr) 1fr 1fr 1fr 1fr;
+    gap: 40px;
+  }
+  .foot-brand svg {
+    height: 48px;
+    width: 48px;
+    margin-bottom: 16px;
+  }
+  .foot-brand .bt b {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 18px;
+    display: block;
+  }
+  .foot-brand .bt span {
+    font-size: 9.5px;
+    letter-spacing: 0.42em;
+    color: var(--glow-teal);
+    font-weight: 600;
+    display: block;
+    margin-top: 4px;
+  }
+  .foot-brand p {
+    font-size: 13px;
+    color: var(--paper-faint);
+    margin-top: 16px;
+    max-width: 240px;
+  }
+  .foot-col h4 {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--glow-teal);
+    margin-bottom: 18px;
+  }
+  .foot-col ul {
+    list-style: none;
+  }
+  .foot-col li {
+    margin-bottom: 11px;
+  }
+  .foot-col a,
+  .foot-col span {
+    font-size: 14px;
+    color: var(--paper-dim);
+    transition: color 0.25s;
+  }
+  .foot-col a:hover {
+    color: var(--gel-coral);
+  }
+  .foot-bottom {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(63, 167, 150, 0.1);
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 12.5px;
+    color: var(--paper-faint);
+  }
+  .foot-bottom .tag {
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  @media (max-width: 900px) {
+    .foot-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 620px) {
+    .foot-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
