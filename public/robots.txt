@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://reflectionsproductions.com/sitemap.xml
+Sitemap: https://reflectionsproductions.com/sitemap-index.xml
