@@ -31,9 +31,17 @@ interface Props {
   case: WorkCase;
   flip?: boolean;
   teaser?: boolean;
+  // Full-mode only. When set, renders a "Read the full story" arrow-link
+  // paragraph below the deploy list (source work/index.html lines 107/123/
+  // 155/171 — only the 4 items with a dedicated case-study page carry this).
+  // Left undefined (the default) on the case-study pages themselves (Task 20)
+  // since the page you're already on isn't a link target for itself, and on
+  // any full-mode item with no case-study page at all — both keep today's
+  // behavior of rendering nothing here, unchanged.
+  readMoreHref?: string;
 }
 
-const { case: item, flip = false, teaser = false } = Astro.props;
+const { case: item, flip = false, teaser = false, readMoreHref } = Astro.props;
 ---
 
 <div class:list={['work-item', { flip }]}>
@@ -60,6 +68,9 @@ const { case: item, flip = false, teaser = false } = Astro.props;
         <ul class="deploy">
           {item.deployList.map((entry) => <li set:html={entry} />)}
         </ul>
+        {readMoreHref && (
+          <p style="margin:14px 0 18px"><a class="arrow-link" href={readMoreHref}>Read the full story</a></p>
+        )}
       </>
     )}
   </div>
