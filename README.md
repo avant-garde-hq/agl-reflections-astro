@@ -1,43 +1,41 @@
-# Astro Starter Kit: Minimal
+# Reflections Productions — Astro site
 
-```sh
-npm create astro@latest -- --template minimal
-```
+Astro rebuild of the Reflections Productions marketing site (mobile stage
+rentals + concert production, South Florida). Static output, deployed to
+Cloudflare Pages.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Run locally
 
-## 🚀 Project Structure
+    npm install
+    npm run dev
 
-Inside of your Astro project, you'll see the following folders and files:
+## Build
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+    npm run build
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+Output goes to `dist/`.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+## Deploy
 
-Any static assets, like images, can be placed in the `public/` directory.
+    npm run build
+    npx wrangler pages deploy dist --project-name=agl-reflections-astro
 
-## 🧞 Commands
+(Wrangler must already be authenticated — `wrangler whoami` to check. Do not
+run `wrangler login` on a shared machine without confirming which account
+should be used.)
 
-All commands are run from the root of the project, from a terminal:
+## Quote form
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+The form on `/quote.html` is fully built and styled but has no backend wired
+up yet — submissions currently go nowhere. Wire it to a real backend before
+launch:
+- **Formspree** (no code): create a free endpoint at formspree.io and point
+  the form's `action` at it.
+- **Cloudflare Pages Function**: add `functions/quote.ts` to receive the POST
+  and send email via an API (Resend, Postmark, etc.) once an API key exists.
 
-## 👀 Want to learn more?
+## Content source
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Ported from `avant-garde-hq/agl-reflections-website` (the previous static
+HTML site). That repo is not touched by this project and should be archived
+once this site is live.
