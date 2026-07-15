@@ -11,7 +11,7 @@
   --paper-faint: rgba(244, 239, 230, .55);
   --max: 1280px;
   --nav-h: 76px;
-  --font-display: 'Archivo Black', Arial, sans-serif;
+  --font-display: 'Big Shoulders Display', 'Arial Narrow', sans-serif;
   --font-body: 'Archivo', system-ui, sans-serif;
   --font-mono: ui-monospace, 'SF Mono', 'Roboto Mono', monospace;
 }

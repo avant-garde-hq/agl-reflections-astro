@@ -23,6 +23,11 @@ import Kicker from '../../components/ui/Kicker.astro';
 import Button from '../../components/ui/Button.astro';
 import { Image } from 'astro:assets';
 
+// Real photo of the 5040 GEN3 -- predominantly dark stage wall reads
+// better under the white hero headline than the brighter daytime
+// stage-5040-b.webp, and gives this page its own shot rather than
+// reusing the main 5040 page's hero image verbatim.
+import specsHero from '../../assets/img/work-cs/msc-07.jpg';
 import modes from '../../assets/img/specs-5040/modes.jpg';
 import basicFront from '../../assets/img/specs-5040/basic-front.jpg';
 import basicLoads from '../../assets/img/specs-5040/basic-loads.jpg';
@@ -73,7 +78,6 @@ const drawings = [
   <Header currentPath="/stages/index.html" />
 
   <PageHero
-    short
     breadcrumb={[
       { label: 'Home', href: '/' },
       { label: 'Stage Fleet', href: '/stages/index.html' },
@@ -83,6 +87,8 @@ const drawings = [
     eyebrow="Complete Specification · Rebuilt for the Web"
     title={['5040 GEN3', 'Full Specs']}
     lede="Everything in the manufacturer's 70-page submittal package — the formats, the load diagrams, the wind plan — <b>readable on any screen, no PDF required.</b>"
+    imageSrc={specsHero}
+    imageAlt="APEX 5040 GEN3 stage at dusk with teal LED wall graphics and full line array"
   >
     <div class="dl-row" slot="afterLede">
       <Button href="/stages/apex-5040-3d.html" variant="coral"><Fragment set:html="&#9635; Spin It in 3D" /></Button>

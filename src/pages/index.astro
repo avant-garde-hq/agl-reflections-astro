@@ -30,7 +30,6 @@ import DateCheckForm from '../components/DateCheckForm.astro';
 import PathCards from '../components/PathCards.astro';
 import FleetCard from '../components/FleetCard.astro';
 import WorkItem from '../components/WorkItem.astro';
-import TestimonialGrid from '../components/TestimonialGrid.astro';
 import StepsRow from '../components/StepsRow.astro';
 import InstagramGrid from '../components/InstagramGrid.astro';
 import QuoteCta from '../components/QuoteCta.astro';
@@ -238,28 +237,13 @@ const igTiles = [
           <Kicker text="Word Backstage" />
           <h2>What Clients<br /><span class="ghost">Say</span></h2>
         </div>
-        <p class="right">Fifty years of shows leaves a trail of happy promoters. Real quotes are being collected now — these slots show where they’ll live.</p>
+        <p class="right">Fifty years of shows leaves a trail of happy promoters — their stories are on their way to this page.</p>
       </div>
-      <TestimonialGrid
-        items={[
-          {
-            quote: '“The stage was up before lunch and the fire marshal didn’t have a single question left. That’s what fifty years of doing this looks like.”',
-            attribution: 'Events Coordinator · Municipal 4th of July Celebration',
-          },
-          {
-            quote: '“One call covered the stage, sound, lights and crew. Our New Year’s broadcast hit its midnight cue to the second — in front of thousands.”',
-            attribution: 'Show Producer · Downtown Miami NYE Celebration',
-          },
-          {
-            quote: '“They rolled a 50-foot stage a thousand miles, stood it up in hours, and our headliners played it that same night. Unreal operation.”',
-            attribution: 'Operations Director · Multi-Day Music Festival',
-          },
-        ]}
-      />
-      <p style="margin-top: 22px; font-size: 13.5px; color: var(--paper-faint)">
-        Have a review on Google or Yelp?{' '}
-        <a href="https://www.yelp.com/biz/reflections-productions-princeton" target="_blank" rel="noopener" style="color: var(--glow-teal)">We'd love to feature it.</a>
-      </p>
+      <div class="testi-soon">
+        <span class="ts-kicker">Client Stories · Coming Soon</span>
+        <p>We're collecting quotes from the promoters, city officials and festival directors we've built shows for. Until then, hear it straight from Google and Yelp.</p>
+        <a class="arrow-link" href="https://www.yelp.com/biz/reflections-productions-princeton" target="_blank" rel="noopener">Read reviews on Yelp</a>
+      </div>
     </div>
   </section>
 
@@ -611,6 +595,32 @@ const igTiles = [
     .about-grid {
       grid-template-columns: 1fr;
     }
+  }
+
+  /* Testimonials coming-soon panel -- replaces the 3 fabricated pitch
+     quotes (TestimonialGrid) with an honest, non-broken-looking state.
+     Dashed border + tinted fill matches the site's other "not live yet"
+     treatments (FleetCard's .card.soon, quote.astro's .season-note). */
+  .testi-soon {
+    border: 1px dashed rgba(63, 167, 150, 0.4);
+    background: rgba(19, 94, 84, 0.07);
+    padding: clamp(32px, 4vw, 46px);
+    max-width: 640px;
+  }
+  .ts-kicker {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--glow-teal);
+    margin-bottom: 14px;
+  }
+  .testi-soon p {
+    font-size: 15px;
+    color: var(--paper-dim);
+    max-width: 56ch;
+    margin-bottom: 18px;
   }
 
   /* Rates teaser (source: index.html embedded <style> lines 71, 78) */

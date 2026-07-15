@@ -10,39 +10,6 @@ const { href, variant = 'coral', class: cls = '' } = Astro.props;
 
 <a class={`btn btn-${variant} ${cls}`} href={href}><slot /></a>
 
-<style is:global>
-  .btn {
-    display: inline-block;
-    font-family: var(--font-body);
-    font-weight: 700;
-    font-size: 13px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    padding: 15px 28px;
-    transition: transform 0.25s, background 0.25s, color 0.25s, box-shadow 0.25s;
-    cursor: pointer;
-    border: none;
-    text-align: center;
-  }
-
-  .btn-coral {
-    background: var(--gel-coral);
-    color: var(--ink);
-  }
-
-  .btn-coral:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(255, 107, 74, 0.28);
-  }
-
-  .btn-ghost {
-    border: 1px solid rgba(244, 239, 230, 0.32);
-    color: var(--paper);
-    padding: 14px 27px;
-  }
-
-  .btn-ghost:hover {
-    border-color: var(--glow-teal);
-    color: var(--glow-teal);
-  }
-</style>
+{/* .btn/.btn-coral/.btn-ghost live globally in src/styles/base.css so every
+    page gets them, including pages (e.g. quote.astro) that hand-write
+    class="btn btn-coral" markup without importing this component. */}

@@ -6,11 +6,15 @@
   src: url('/assets/fonts/archivo-var-latin.woff2') format('woff2');
 }
 @font-face {
-  font-family: 'Archivo Black';
+  /* Declared as weight 400 (its actual design weight is black/900) so the
+     existing `font-weight: 400` rules below and across every component
+     keep matching this face without every call site needing an update --
+     same convention the old Archivo Black @font-face used. */
+  font-family: 'Big Shoulders Display';
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url('/assets/fonts/archivo-black-latin.woff2') format('woff2');
+  src: url('/assets/fonts/big-shoulders-display-black-latin.woff2') format('woff2');
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -40,15 +44,63 @@ h1, h2, h3, .display {
   font-weight: 700; letter-spacing: .1em; text-transform: uppercase; font-size: 13px;
 }
 .skip-link:focus { left: 0; }
+/* Global keyboard-focus safety net -- covers every plain link, button and
+   form control site-wide (nav links, footer links, arrow-links,
+   breadcrumbs, social icons, gallery/Instagram tiles, etc.) that doesn't
+   already define its own focus treatment. More specific component rules
+   (e.g. .btn, the custom checkbox ring, FleetCard's card-cover) still win
+   where they exist -- this only fills the gaps. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--glow-teal);
+  outline-offset: 2px;
+}
 
 @view-transition { navigation: auto; }
+
+/* ---------- .btn button family ----------
+   Promoted here from ui/Button.astro's is:global style block: that block
+   only shipped on pages whose component tree actually rendered <Button>,
+   so any page hand-writing class="btn btn-coral" markup without importing
+   the component (quote.astro's nav CTA and QuoteForm's submit button,
+   DateCheckForm's submit button) got zero button styling -- a plain link
+   or an unstyled native <button> (browser-default gray). Global here
+   guarantees every .btn renders correctly on every page. */
+.btn {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 15px 28px;
+  transition: transform 0.25s, background 0.25s, color 0.25s, box-shadow 0.25s;
+  cursor: pointer;
+  border: none;
+  text-align: center;
+}
+.btn-coral { background: var(--gel-coral); color: var(--ink); }
+.btn-coral:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(255, 107, 74, 0.28); }
+.btn-ghost { border: 1px solid rgba(244, 239, 230, 0.32); color: var(--paper); padding: 14px 27px; }
+.btn-ghost:hover { border-color: var(--glow-teal); color: var(--glow-teal); }
+.btn:focus-visible { outline: 2px solid var(--glow-teal); outline-offset: 2px; }
 
 /* ---------- section-band layout primitives ----------
    Generic scaffolding used by every "band" section across every page
    (source: main.css lines 220-226, 270-276, 79-84). Promoted here from
    index.astro (Task 14) so pages 15-21 don't each need their own copy. */
-section.band { padding: clamp(84px, 10vw, 140px) 0; }
-section.band.tight { padding: clamp(56px, 7vw, 96px) 0; }
+/* Tuned down from clamp(84,10vw,140)/clamp(56,7vw,96): two adjacent
+   full .band sections used to stack 280px of empty padding between them
+   (140 bottom + 140 top) with no content in between, worst on the
+   homepage where 3 full .band sections run back to back. Also brought
+   .band closer to .tight so the two read as one consistent rhythm
+   instead of an alternating tall/short pattern down the page. */
+section.band { padding: clamp(64px, 7.4vw, 104px) 0; }
+section.band.tight { padding: clamp(48px, 5.6vw, 80px) 0; }
 .sec-head {
   display: flex;
   align-items: flex-end;

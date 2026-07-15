@@ -169,6 +169,12 @@
     border-color: var(--glow-teal);
     background: var(--deck-2);
   }
+  .field input:focus-visible,
+  .field select:focus-visible,
+  .field textarea:focus-visible {
+    outline: 2px solid var(--glow-teal);
+    outline-offset: 2px;
+  }
   .field input::placeholder,
   .field textarea::placeholder {
     color: var(--paper-faint);

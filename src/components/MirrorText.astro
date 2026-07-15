@@ -34,16 +34,10 @@ const { lines } = Astro.props;
     display: block;
     transform: scaleY(-1);
     color: var(--glow-teal);
-    opacity: .6;
+    opacity: .5;
     pointer-events: none;
     user-select: none;
-    -webkit-mask-image:
-      repeating-linear-gradient(to bottom, #000 0 .050em, transparent .050em .094em),
-      linear-gradient(to bottom, transparent 4%, rgba(0, 0, 0, .9) 96%);
-    -webkit-mask-composite: source-in;
-    mask-image:
-      repeating-linear-gradient(to bottom, #000 0 .050em, transparent .050em .094em),
-      linear-gradient(to bottom, transparent 4%, rgba(0, 0, 0, .9) 96%);
-    mask-composite: intersect;
+    -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, .85) 0%, transparent 70%);
+    mask-image: linear-gradient(to top, rgba(0, 0, 0, .85) 0%, transparent 70%);
   }
 </style>

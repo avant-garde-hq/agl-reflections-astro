@@ -29,7 +29,12 @@ import Kicker from '../../components/ui/Kicker.astro';
 import Button from '../../components/ui/Button.astro';
 import { Image } from 'astro:assets';
 
-import stage5040Hero from '../../assets/img/stage-5040-hero.webp';
+// Hero swapped from stage-5040-hero.webp (1024x576 native -- visibly
+// upscaled/pixelated once stretched full-bleed at desktop widths) to this
+// higher-resolution (1200x675) real night shot of the same 5040 GEN3 stage,
+// taken at the Mobile Stage Conference '23 evening session (see
+// data/work.ts's mscCase / work/mobile-stage-conference-2023.astro).
+import stage5040Hero from '../../assets/img/work-cs/msc-08.jpg';
 import stage5040B from '../../assets/img/stage-5040-b.webp';
 
 const specRows = [

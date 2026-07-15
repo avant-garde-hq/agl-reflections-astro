@@ -16,11 +16,21 @@
 import type { ImageMetadata } from 'astro';
 
 import fleet5040 from '../assets/img/fleet-5040.webp';
-import fleet4240 from '../assets/img/fleet-4240.webp';
+// fleet-4240.webp and fleet-2424.webp were both flat daytime, empty-stage
+// shots. Swapped for real night-show photos of the same two stages already
+// in the repo -- gal-4240night.webp is explicitly the "GEN3 After Dark"
+// gallery photo (see work/index.astro's roadGallery), and stage-2424-b.webp
+// is a packed-crowd FloydFest night shot (vs. stage-2424-hero.webp's
+// daytime pre-show version used on this stage's own detail page hero).
+import fleet4240 from '../assets/img/gal-4240night.webp';
 import fleet3224 from '../assets/img/fleet-3224.webp';
 import fleet4232 from '../assets/img/fleet-4232.webp';
-import fleet2424 from '../assets/img/fleet-2424.webp';
+import fleet2424 from '../assets/img/stage-2424-b.webp';
 import fleet2420 from '../assets/img/fleet-2420.webp';
+// fleet-2016.webp (Formula E Fan Village, daytime) and fleet-vip-3724.webp
+// (product shot, no event) have no better real photo anywhere in this
+// repo -- every other 2016/VIP-deck asset is the same daytime shoot. Left
+// as-is; flagged in the fix summary as needing real night photography.
 import fleet2016 from '../assets/img/fleet-2016.webp';
 import fleetVip3724 from '../assets/img/fleet-vip-3724.webp';
 
@@ -66,7 +76,7 @@ export const STAGES: Stage[] = [
     series: 'APEX',
     deck: '42′ × 40′ AREA',
     image: fleet4240,
-    imageAlt: 'APEX 4240 stage at an oceanfront concert series',
+    imageAlt: 'APEX 4240 GEN3 at night with LED walls and a full festival crowd',
     specs: [
       '42′ × 40′ performance area, hydraulic lift',
       'High rigging capacity for full production rigs',
@@ -116,7 +126,7 @@ export const STAGES: Stage[] = [
     series: 'APEX',
     deck: '24′ × 24′ DECK',
     image: fleet2424,
-    imageAlt: 'APEX 2424 stage beside a GEN3 stage on the festival lawn at FloydFest',
+    imageAlt: 'APEX 2424 stage lit up at night in front of a packed FloydFest crowd',
     specs: [
       'Stage deck: 24′ × 24′',
       'Deployment: Self-contained hydraulic — under an hour',

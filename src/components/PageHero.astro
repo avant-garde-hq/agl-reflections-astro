@@ -103,9 +103,12 @@ const titleLines = Array.isArray(title) ? title : [title];
     content: "";
     position: absolute;
     inset: 0;
+    /* Lightened from the original .66/.38/.78/var(--ink) stack, which read
+       as a near-opaque black curtain over every stage-detail hero photo --
+       enough is kept at the bottom for the lede/chip text to stay legible. */
     background:
-      linear-gradient(to bottom, rgba(12, 20, 20, .66) 0%, rgba(12, 20, 20, .38) 40%, rgba(12, 20, 20, .78) 74%, var(--ink) 98%),
-      linear-gradient(105deg, rgba(12, 20, 20, .6) 0%, rgba(12, 20, 20, .1) 62%);
+      linear-gradient(to bottom, rgba(12, 20, 20, .42) 0%, rgba(12, 20, 20, .2) 40%, rgba(12, 20, 20, .54) 74%, rgba(12, 20, 20, .72) 98%),
+      linear-gradient(105deg, rgba(12, 20, 20, .42) 0%, rgba(12, 20, 20, .08) 62%);
   }
   .page-hero.short .ph-bg::after {
     background: radial-gradient(ellipse 70% 70% at 50% 0%, rgba(19, 94, 84, .30), transparent 72%);
