@@ -1,0 +1,338 @@
+---
+// APEX 5040 "full specs" deep-dive page -- source:
+// agl-reflections-website/stages/apex-5040-specs.html (285 lines). Only the
+// 5040 gets this page (Task 19 brief). Four sections after the hero: three
+// operational formats, the master spec table (two SpecTable panels side by
+// side), eight manufacturer drawings, and the High Wind Action Plan (HWAP).
+//
+// Per Task 13's PDF-removal decision, the source's two PDF download buttons
+// (hero `.dl-row`: "Download GEN3 package (PDF, 89 MB)" / "Download Classic
+// PDF (16 MB)") are dropped -- only the "Spin It in 3D" button survives.
+//
+// The closing CTA (source lines 201-206) is its own bespoke copy -- "Put It
+// On Your Site" / "Get a 5040 Quote" + "Back to the 5040" -- not the shared
+// QuoteCta component's "Let's Put On A Show" copy, so it's hand-written
+// here (via MirrorText + Button) rather than importing QuoteCta.
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/house/Header.astro';
+import Footer from '../../components/house/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import SpecTable from '../../components/SpecTable.astro';
+import MirrorText from '../../components/MirrorText.astro';
+import Kicker from '../../components/ui/Kicker.astro';
+import Button from '../../components/ui/Button.astro';
+import { Image } from 'astro:assets';
+
+import modes from '../../assets/img/specs-5040/modes.jpg';
+import basicFront from '../../assets/img/specs-5040/basic-front.jpg';
+import basicLoads from '../../assets/img/specs-5040/basic-loads.jpg';
+import extendedLoads from '../../assets/img/specs-5040/extended-loads.jpg';
+import beastLoads from '../../assets/img/specs-5040/beast-loads.jpg';
+import sidewalls from '../../assets/img/specs-5040/sidewalls.jpg';
+import trailerDwg from '../../assets/img/specs-5040/trailer.jpg';
+import stairs from '../../assets/img/specs-5040/stairs.jpg';
+
+const trailerRows = [
+  { label: 'Trailer length', value: '53′' },
+  { label: 'Overall width', value: '102″' },
+  { label: 'Travel height', value: '13′3″' },
+  { label: 'Trailer weight', value: '55,165 lbs (empty: 57,000 lbs GEN3 closed)' },
+  { label: 'Axles', value: 'California-legal split axles — no special-use permits' },
+  { label: 'Hauling mode', value: 'Tractor trailer' },
+  { label: 'Cargo capacity', value: '~4,000 lbs of equipment inside' },
+];
+const deckRows = [
+  { label: 'Stage area', value: '50′ W × 40′ D × 30′ T' },
+  { label: 'Floor size', value: '50′ × 38′6″ · five non-slip sections' },
+  { label: 'Deck height', value: '4′–6′ adjustable on hydraulic outriggers' },
+  { label: 'Floor rating', value: '150 lbs/sq ft · marine plywood / aluminum' },
+  { label: 'Outriggers', value: 'Six-point hydraulic leveling · 25,000 lbs each' },
+  { label: 'Roof capacity (GEN3)', value: '102,000 lbs structure · columns/towers 148,000 lbs' },
+  { label: 'Hydraulics', value: '3.0 GPM · 4,000 psi · 40 gal · 20 hp Honda' },
+  { label: 'Install time', value: '1–2 hours to deck · no site prep' },
+];
+
+const drawings = [
+  { src: modes, alt: 'APEX 5040 GEN3 in Basic, Standard and BEAST configurations', caption: 'Operational formats — Basic / Standard / BEAST' },
+  { src: basicFront, alt: 'Basic mode front elevation with measurements', caption: 'Basic mode — front measurements' },
+  { src: basicLoads, alt: 'Basic mode top loads and measurements diagram', caption: 'Basic mode — rated top loads' },
+  { src: extendedLoads, alt: 'Extended mode top loads and measurements', caption: 'Extended mode — rated top loads' },
+  { src: beastLoads, alt: 'BEAST mode load capacity diagram', caption: 'BEAST mode — full load map' },
+  { src: sidewalls, alt: 'Optional side wall package diagram', caption: 'Side walls — optional package' },
+  { src: trailerDwg, alt: 'GEN3 closed trailer transport profile with weights', caption: 'Closed trailer — transport profile & weights' },
+  { src: stairs, alt: 'Stair unit measurements', caption: 'Stairs — measurements' },
+];
+---
+
+<Layout
+  title="APEX 5040 GEN3 — Full Spec Sheet | Reflections Productions"
+  description="The complete APEX 5040 GEN3 specification, rebuilt for the web: three operational formats, load diagrams, transport specs, High Wind Action Plan and engineering certifications."
+  path="/stages/apex-5040-specs.html"
+  ogImage="https://reflectionsproductions.com/assets/img/stage-5040-hero.webp"
+>
+  <Header currentPath="/stages/index.html" />
+
+  <PageHero
+    short
+    breadcrumb={[
+      { label: 'Home', href: '/' },
+      { label: 'Stage Fleet', href: '/stages/index.html' },
+      { label: 'APEX 5040', href: '/stages/apex-5040.html' },
+      { label: 'Full Specs' },
+    ]}
+    eyebrow="Complete Specification · Rebuilt for the Web"
+    title={['5040 GEN3', 'Full Specs']}
+    lede="Everything in the manufacturer's 70-page submittal package — the formats, the load diagrams, the wind plan — <b>readable on any screen, no PDF required.</b>"
+  >
+    <div class="dl-row" slot="afterLede">
+      <Button href="/stages/apex-5040-3d.html" variant="coral"><Fragment set:html="&#9635; Spin It in 3D" /></Button>
+    </div>
+  </PageHero>
+
+  <section class="band tight">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="left rv">
+          <Kicker text="01 · Three Ways to Run It" />
+          <h2>Basic. Standard.<br /><span class="ghost">BEAST.</span></h2>
+        </div>
+        <p class="right">The GEN3 mast-column design is the strongest hydraulic stage the APEX line has built — and it deploys in three operational formats depending on how much show you're flying.</p>
+      </div>
+      <div class="fmt-grid">
+        <div class="fmt">
+          <span class="f-sub">Format 01</span>
+          <h3>Basic 5040</h3>
+          <ul>
+            <li>Two 8′ fly bays</li>
+            <li>Travels as one self-contained trailer at legal weight</li>
+            <li>Crew of 6 · set up and strike in 3 hours</li>
+          </ul>
+        </div>
+        <div class="fmt">
+          <span class="f-sub">Format 02</span>
+          <h3>Standard 5040</h3>
+          <ul>
+            <li>Two 12′ fly bays</li>
+            <li>Same single-trailer transport</li>
+            <li>Crew of 6 · set up and strike in 3 hours</li>
+          </ul>
+        </div>
+        <div class="fmt beast">
+          <span class="f-sub">Format 03</span>
+          <h3>&ldquo;BEAST&rdquo; 5040</h3>
+          <ul>
+            <li>Two 25′ fly bays · 10,000 lbs each · no ground support</li>
+            <li>Flies a 90′×6′ video banner, two 18′×24′ IMAG walls + 10,000 lb upstage wall</li>
+            <li>Extended sound bays at 4,000 lbs each</li>
+            <li>Full up/downstage spanner-beam system — fly points almost anywhere under the roof</li>
+            <li>Additional transport · crew of 11</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band tight">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="left rv">
+          <Kicker text="02 · The Numbers" />
+          <h2>Master<br /><span class="ghost">Spec Table</span></h2>
+        </div>
+        <p class="right">Combined from the GEN3 submittal and the manufacturer's specification sheet. GEN3 roof structure capacity: <b>102,000 lbs</b> (Classic: 44,000 lbs).</p>
+      </div>
+      <div class="mspec-grid">
+        <SpecTable caption="Trailer & Transport" rows={trailerRows} />
+        <SpecTable caption="Deck & Structure" rows={deckRows} />
+      </div>
+    </div>
+  </section>
+
+  <section class="band tight">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="left rv">
+          <Kicker text="03 · The Drawings" />
+          <h2>Straight From<br /><span class="ghost">Engineering</span></h2>
+        </div>
+        <p class="right">Dimensioned drawings from the manufacturer's package — configurations, rated fly points, transport profile and access.</p>
+      </div>
+      <div class="dwg-grid">
+        {drawings.map((d) => (
+          <figure class="dwg">
+            <Image src={d.src} alt={d.alt} loading="lazy" />
+            <figcaption>{d.caption}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="band tight">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="left rv">
+          <Kicker text="04 · High Wind Action Plan" />
+          <h2>Engineered for<br /><span class="ghost">Florida Weather</span></h2>
+        </div>
+        <p class="right">The GEN3 ships with a formal engineer-reviewed High Wind Action Plan (HWAP) under the <b>2018 International Building Code</b> — the document a Florida fire marshal or building official asks about first.</p>
+      </div>
+      <ul class="hwap">
+        <li>Defines separate rated wind design speeds for an <b>open</b> roof system (no walls or flown equipment) and a <b>fully enclosed</b> roof system (side/back walls or roof-hung equipment installed).</li>
+        <li>Establishes wind-monitoring and escalation procedures during venue operation, so the stage crew has a defined, safe response as wind loads increase.</li>
+        <li>Prescribes wall-panel removal as the method for reducing projected wind area on the main roof — global stability is preserved through the event.</li>
+        <li>Structural analysis by Entertainment Structures Group; site-specific permit review by a structural engineer as required by the venue's jurisdiction.</li>
+      </ul>
+      <p class="hwap-note">The complete HWAP, structural calculations, drawing approvals and flame-resistance certificates are in the downloadable package — and ride with the stage to every show.</p>
+    </div>
+  </section>
+
+  <section class="quote compact specs-close">
+    <div class="wrap">
+      <span class="kicker">The flagship, fully documented</span>
+      <h2><MirrorText lines={['Put It On', 'Your Site']} /></h2>
+      <div class="close-actions">
+        <Button href="/quote.html" variant="coral">Get a 5040 Quote</Button>
+        <Button href="/stages/apex-5040.html" variant="ghost">Back to the 5040</Button>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+
+<style>
+  .dl-row {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+
+  .fmt-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .fmt {
+    border: 1px solid rgba(63, 167, 150, 0.3);
+    padding: 26px 24px;
+    background: rgba(19, 94, 84, 0.07);
+  }
+  .fmt.beast {
+    border-color: rgba(255, 107, 74, 0.5);
+  }
+  .fmt h3 {
+    font-family: var(--font-display);
+    font-size: 20px;
+    margin: 0 0 4px;
+    color: var(--paper);
+  }
+  .fmt .f-sub {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gel-coral);
+  }
+  .fmt ul {
+    margin: 14px 0 0;
+    padding: 0 0 0 18px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: rgba(244, 239, 230, 0.78);
+  }
+
+  .mspec-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  .mspec-grid :global(table.spec) {
+    table-layout: fixed;
+    width: 100%;
+  }
+  .mspec-grid :global(table.spec td) {
+    word-wrap: break-word;
+  }
+
+  .dwg-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .dwg {
+    background: var(--paper);
+    border: 1px solid rgba(63, 167, 150, 0.3);
+  }
+  .dwg :global(img) {
+    width: 100%;
+    display: block;
+  }
+  .dwg figcaption {
+    padding: 12px 16px;
+    font: 600 12px/1.4 var(--font-body);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink);
+    border-top: 2px solid var(--glow-teal);
+  }
+
+  .hwap {
+    border-left: 3px solid var(--gel-coral);
+    padding: 6px 0 6px 26px;
+    list-style: none;
+  }
+  .hwap li {
+    margin-bottom: 10px;
+    line-height: 1.65;
+    font-size: 14.5px;
+    color: var(--paper-dim);
+  }
+  .hwap-note {
+    margin-top: 22px;
+    font-size: 13.5px;
+    color: var(--paper-faint);
+  }
+
+  .specs-close {
+    position: relative;
+    text-align: center;
+    overflow: hidden;
+  }
+  .specs-close::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 55% at 50% 8%, rgba(19, 94, 84, 0.34), transparent 70%);
+  }
+  .specs-close .wrap {
+    position: relative;
+  }
+  .specs-close .kicker {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: var(--glow-teal);
+    margin-bottom: 26px;
+    display: block;
+  }
+  .specs-close h2 {
+    font-size: clamp(38px, 5.6vw, 84px);
+  }
+  .close-actions {
+    margin-top: 22px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 900px) {
+    .fmt-grid,
+    .mspec-grid,
+    .dwg-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

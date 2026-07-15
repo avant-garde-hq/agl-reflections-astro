@@ -1,0 +1,179 @@
+---
+// APEX 5040 detail page -- the flagship, and the ONLY one of the 8 stage
+// pages with a dedicated "Full Specs" page and a 3D viewer (source:
+// agl-reflections-website/stages/apex-5040.html, 250 lines). Establishes
+// the shared detail-page pattern the second dispatch reuses for the other
+// 7 stages: Layout/Header/PageHero/`.stage-cols` (main prose + spec panel +
+// figure + use-list + pairing, alongside StageSide) / QuoteCta / Footer.
+//
+// Two things beyond the brief's plain description of this page:
+//   1. The hero has an `.eng-bar` engineering-stat strip between the lede
+//      and the chip row (source line 95) that no other stage hero has --
+//      rendered via PageHero's new `afterLede` slot (see PageHero.astro).
+//   2. "View Full Specs" / "View in 3D" (source line 141) are 5040-only
+//      CTAs. StageSide.astro's props deliberately don't cover them (Task
+//      13's note), so they're rendered here as a small button block placed
+//      next to <StageSide> rather than forced into the component. The
+//      source's two "Download spec sheet (GEN3/Classic)" apex.miami PDF
+//      links on the same line are dropped per the client's explicit
+//      dead-link removal request (Task 13) -- StageSide's `pdfRemoved` note
+//      covers that for readers who expected a download.
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/house/Header.astro';
+import Footer from '../../components/house/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import SpecTable from '../../components/SpecTable.astro';
+import StageSide from '../../components/StageSide.astro';
+import QuoteCta from '../../components/QuoteCta.astro';
+import Kicker from '../../components/ui/Kicker.astro';
+import Button from '../../components/ui/Button.astro';
+import { Image } from 'astro:assets';
+
+import stage5040Hero from '../../assets/img/stage-5040-hero.webp';
+import stage5040B from '../../assets/img/stage-5040-b.webp';
+
+const specRows = [
+  { label: 'Deployed stage (L × W)', value: '50′ × 38′' },
+  { label: 'Deployed roof (L × W)', value: '53′ × 38′' },
+  { label: 'Stage floor to center truss', value: '35′4″ max · 25′4″ intermediate' },
+  { label: 'Maximum deck height', value: '80″' },
+  { label: 'Travel height', value: '13′3″' },
+  { label: 'Overall width (travel)', value: '102″' },
+  { label: 'Total trailer weight', value: '55,165 lb' },
+  { label: 'Kingpin to front trailer axle', value: '29′11″' },
+  { label: 'Front to rear trailer axle', value: '10′1″' },
+  { label: 'Hydraulic pump engine', value: '20 HP' },
+  { label: 'Hydraulic pump capacity', value: '3.0 GPM' },
+  { label: 'Pump max pressure', value: '4,000 psi continuous · 4,400 psi intermittent' },
+  { label: 'Hydraulic reservoir', value: '40 gal · Hydra 1000 R&O A/AW, ISO #32' },
+  { label: 'Outrigger extension / spread', value: '27″ max · 20′ spread' },
+  { label: 'Floor leveling speed jacks', value: '40' },
+];
+---
+
+<Layout
+  title="APEX 5040 Mobile Stage Rental | Reflections Productions"
+  description="The APEX 5040 is the flagship of the Reflections Productions fleet — a 50-by-40 hydraulic mobile stage built for headliners and 20,000-plus crowds in South Florida and beyond."
+  path="/stages/apex-5040.html"
+  ogImage="https://reflectionsproductions.com/assets/img/stage-5040-hero.webp"
+>
+  <Header currentPath="/stages/index.html" />
+
+  <PageHero
+    tall
+    breadcrumb={[{ label: 'Home', href: '/' }, { label: 'Stage Fleet', href: '/stages/index.html' }, { label: 'APEX 5040' }]}
+    eyebrow="APEX · Classic & GEN3"
+    title="5040"
+    lede="The largest stage in the fleet — and the one the headliners ask for. Four hydraulic systems take the 5040 from highway trailer to headline stage, <b>with a setup time conventional staging can't touch.</b>"
+    imageSrc={stage5040Hero}
+    imageAlt="APEX 5040 GEN3 stage at night with full LED wall and lighting rig"
+    chips={[
+      { label: "50′ × 40′ DECK", variant: 'sandy' },
+      { label: 'Flagship' },
+      { label: 'Hydraulic deployment' },
+    ]}
+  >
+    <div class="eng-bar" slot="afterLede">
+      <span class="eng-chip crowd">RIGHT FOR: 20,000+ CROWDS</span>
+      <span class="eng-chip">102,000 lb GEN3 roof structure</span>
+      <span class="eng-chip">Engineer-reviewed High Wind Action Plan</span>
+      <span class="eng-chip">2018 IBC structural analysis</span>
+      <span class="eng-chip">6-point hydraulic leveling</span>
+    </div>
+  </PageHero>
+
+  <section class="band tight">
+    <div class="wrap">
+      <div class="stage-cols">
+        <div>
+          <div class="prose">
+            <Kicker text="Overview" />
+            <p>The APEX 5040 is the flagship of our fleet, fitted with the technology that makes it one of the fastest, strongest and safest mobile stages in the industry. Four distinct hydraulic systems handle the entire deployment — outriggers for stability, towers for the roof, roof tilt for the primary and secondary roof, and a floor system that folds the deck from vertical to horizontal.</p>
+            <p>Pair it with our 48-box JBL VTX V25-II line array, the Absen X5 LED wall and our intelligent lighting inventory, and you have a serious concert rig for an audience of 20,000 plus — a world-class touring setup we can have ready at a moment's notice.</p>
+          </div>
+
+          <div id="specs" style="margin-top:44px">
+            <SpecTable caption="APEX 5040 — Specifications" rows={specRows} />
+            <p class="spec-note">Figures above are from the manufacturer spec sheet. Anything not listed: spec sheet on request — or call 786-504-2369 and we'll talk through your site.</p>
+          </div>
+
+          <figure class="figure" style="margin-top:44px">
+            <Image src={stage5040B} alt="APEX 5040 GEN3 built out with line arrays, video wall and branded header" loading="lazy" />
+            <figcaption>5040 GEN3 · full concert build</figcaption>
+          </figure>
+
+          <div style="margin-top:44px">
+            <Kicker text="Built For" />
+            <ul class="use-list">
+              <li>Headline concerts &amp; festivals</li>
+              <li>Crowds of 20,000+</li>
+              <li>Touring productions</li>
+              <li>City signature events</li>
+              <li>Multi-day festivals</li>
+              <li>Broadcast-scale shows</li>
+            </ul>
+          </div>
+
+          <div class="pairing" style="margin-top:40px">
+            <h3>Make it a full production</h3>
+            <p>Team the 5040 with our <b>48-box JBL VTX V25-II line array</b>, the <b>Absen X5 LED wall</b> and our intelligent lighting inventory — plus generators, MOJO barricade, cable ramps, Bil Jax scaffolding and a full crew of audio, lighting, video, staging and rigging engineers.</p>
+            <a class="arrow-link" href="/production/index.html">Production services</a>
+          </div>
+        </div>
+
+        <div class="stage-side-col">
+          <div class="stage-5040-links">
+            <Button href="/stages/apex-5040-specs.html" variant="coral">View Full Specs — Built for the Web</Button>
+            <Button href="/stages/apex-5040-3d.html" variant="ghost"><Fragment set:html="&#9635; View in 3D — Interactive" /></Button>
+          </div>
+          <StageSide
+            model="5040"
+            pdfRemoved
+            jumpLinks={[
+              { label: 'Full specifications', href: '#specs' },
+              { label: 'Compare the fleet', href: '/stages/index.html' },
+            ]}
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <QuoteCta compact />
+
+  <Footer />
+</Layout>
+
+<style>
+  .eng-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 26px 0 4px;
+  }
+  .eng-chip {
+    border: 1px solid rgba(63, 167, 150, 0.45);
+    color: var(--paper);
+    font: 600 12px/1 var(--font-body);
+    letter-spacing: 0.08em;
+    padding: 9px 13px;
+    background: rgba(19, 94, 84, 0.14);
+  }
+  .eng-chip.crowd {
+    border-color: rgba(255, 107, 74, 0.55);
+    color: var(--gel-coral);
+  }
+  .stage-side-col {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .stage-5040-links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .stage-5040-links :global(.btn) {
+    display: block;
+  }
+</style>

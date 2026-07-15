@@ -1,0 +1,102 @@
+---
+// Stage Fleet compare page. Composes Layout/Header/PageHero/Footer around
+// two sections ported from agl-reflections-website/stages/index.html (303
+// lines):
+//   1. "Find Your Stage" band (source lines 93-110): sec-head + the
+//      Model/Deck Size/Height/Best For CompareTable (Task 8) + a spec-note
+//      paragraph.
+//   2. The fleet-grid of all 8 stage cards (source lines 112-208), reusing
+//      FleetCard.astro (Task 8/14) -- the homepage only teases the first 4
+//      STAGES (Task 14's `fleetStages = STAGES.slice(0, 4)`), but this page
+//      shows all 8 in the source's own display order, which differs from
+//      the STAGES array order (4232's "Coming 2026" card is last here, not
+//      4th) -- `fleetOrder` below re-sorts for that.
+//
+// The brief's summary only names "Layout, Header, PageHero, CompareTable,
+// QuoteCta, Footer" for this page, but the real source page also has the
+// full 8-card fleet-grid (with per-card specs, chips and the 5040's "NEW ·
+// 3D" second badge) -- that's real content beyond the brief's description,
+// so it's included here rather than dropped.
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/house/Header.astro';
+import Footer from '../../components/house/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import CompareTable from '../../components/CompareTable.astro';
+import FleetCard from '../../components/FleetCard.astro';
+import QuoteCta from '../../components/QuoteCta.astro';
+import Kicker from '../../components/ui/Kicker.astro';
+
+import galApexCrowd from '../../assets/img/gal-apex-crowd.webp';
+import { STAGES } from '../../data/stages';
+
+const fleetOrder = [
+  'apex-5040',
+  'apex-4240',
+  'apex-3224',
+  'apex-2424',
+  'apex-2420',
+  'apex-2016',
+  'vip-deck-3724',
+  'apex-4232',
+];
+const orderedStages = fleetOrder.map((slug) => STAGES.find((s) => s.slug === slug)!);
+---
+
+<Layout
+  title="APEX Mobile Stage Fleet — Hydraulic Stage Rentals | Reflections Productions"
+  description="Eight APEX hydraulic mobile stages from a 20-by-16 community deck to the 50-by-40 flagship, plus the Captain's VIP Deck. Compare decks, heights and best uses — South Florida stage rentals since 1975."
+  path="/stages/index.html"
+  ogImage="https://reflectionsproductions.com/assets/img/fleet-5040.webp"
+>
+  <Header currentPath="/stages/index.html" />
+
+  <PageHero
+    breadcrumb={[{ label: 'Home', href: '/' }, { label: 'Stage Fleet' }]}
+    eyebrow="Stage Fleet · Eight Hydraulic Stages"
+    title={['The APEX', 'Fleet']}
+    lede="Hydraulic mobile stages that roll in on a trailer and stand up show-ready in hours. <b>Pick the deck that fits the crowd</b> — we'll bring everything that goes on it."
+    imageSrc={galApexCrowd}
+    imageAlt="APEX mobile stage with LED wall in front of a festival crowd"
+  />
+
+  <section class="band tight">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="left rv">
+          <Kicker text="Side By Side" />
+          <h2>Find Your<br /><span class="ghost">Stage</span></h2>
+        </div>
+        <p class="right">Every APEX deploys hydraulically, travels road-legal, and levels on real-world ground. The difference is scale — deck size, height and how much show it can fly.</p>
+      </div>
+      <CompareTable />
+      <p class="spec-note" style="padding-left:0">Full manufacturer spec sheets are linked on each stage page. Anything unlisted: spec sheet on request.</p>
+    </div>
+  </section>
+
+  <section class="band" style="padding-top:0">
+    <div class="wrap">
+      <div class="fleet-grid">
+        {orderedStages.map((stage) => (
+          <FleetCard stage={stage} extraChip={stage.slug === 'apex-5040' ? 'NEW · 3D' : undefined} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <QuoteCta compact />
+
+  <Footer />
+</Layout>
+
+<style>
+  .fleet-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 22px;
+  }
+  @media (max-width: 900px) {
+    .fleet-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

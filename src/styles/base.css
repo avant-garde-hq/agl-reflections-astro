@@ -125,3 +125,47 @@ section.band.tight { padding: clamp(56px, 7vw, 96px) 0; }
 }
 .chip.coral { color: var(--gel-coral); border-color: rgba(255, 107, 74, 0.5); }
 .chip.sandy { color: var(--paper); border-color: rgba(244, 239, 230, 0.3); }
+
+/* ---------- stage detail layout ----------
+   Shared scaffolding for every stage-fleet detail page (Task 19: apex-5040
+   first, 7 more stages to follow in a second dispatch) -- promoted here up
+   front so those later pages don't each re-scope an identical copy.
+   Source: agl-reflections-website/assets/css/main.css lines 310, 313,
+   326-336 (`.spec-note`/`.stage-cols`/`.figure`/`.use-list`/`.pairing`),
+   colors remapped to this project's tokens (--panel->--deck,
+   --panel-2->--deck-2, --hair->--hairline, --sand-faint->--paper-faint,
+   --sand-dim->--paper-dim, --sand->--paper, --coral->--gel-coral).
+   (`.stage-side`/`.side-links`/`.side-contact` already live scoped inside
+   StageSide.astro, so they aren't repeated here.) */
+.spec-note { font-size: 13px; color: var(--paper-faint); padding: 14px 16px; }
+/* .prose already exists as a page-scoped copy in about.astro (Task 15,
+   source lines 357-368, `p`/`p b` only) -- promoted globally here with the
+   source's full ruleset (main.css lines 228-234, incl. `h3`/`ul`) since the
+   stage detail pages' overview copy needs the full pattern. The about.astro
+   copy is a harmless duplicate now that this exists; not worth touching a
+   prior task's file just to remove it. */
+.prose { max-width: 68ch; }
+.prose p { color: var(--paper-dim); font-size: clamp(15px, 1.25vw, 17px); margin-bottom: 20px; }
+.prose p b { color: var(--paper); font-weight: 600; }
+.prose h3 { font-size: 20px; margin: 34px 0 14px; letter-spacing: 0.02em; }
+.prose ul { list-style: none; margin: 0 0 20px; }
+.prose ul li { font-size: 15px; color: var(--paper-dim); padding: 8px 0; border-top: 1px solid rgba(63, 167, 150, 0.10); display: flex; gap: 12px; }
+.prose ul li::before { content: ''; width: 14px; height: 2px; background: var(--glow-teal); margin-top: 10px; flex-shrink: 0; }
+.stage-cols { display: grid; grid-template-columns: 7fr 5fr; gap: clamp(36px, 5vw, 72px); align-items: start; }
+.figure { position: relative; overflow: hidden; background: var(--deck); }
+.figure img { width: 100%; height: auto; }
+.figure figcaption { font-size: 12.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--paper-faint); padding: 12px 2px; border-bottom: 1px solid rgba(63, 167, 150, 0.14); }
+.use-list { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 2px 28px; }
+.use-list li { font-size: 14.5px; color: var(--paper-dim); padding: 11px 0; border-top: 1px solid rgba(63, 167, 150, 0.10); display: flex; gap: 12px; }
+.use-list li::before { content: ''; width: 14px; height: 2px; background: var(--gel-coral); margin-top: 9px; flex-shrink: 0; }
+.pairing { margin-top: 8px; background: var(--deck-2); border: 1px solid var(--hairline); padding: 26px 26px 28px; }
+.pairing h3 { font-size: 17px; margin-bottom: 12px; letter-spacing: 0.03em; }
+.pairing p { font-size: 14.5px; color: var(--paper-dim); }
+.pairing p b { color: var(--paper); }
+.pairing .arrow-link { margin-top: 16px; }
+@media (max-width: 1080px) {
+  .stage-cols { grid-template-columns: 1fr; }
+}
+@media (max-width: 620px) {
+  .use-list { grid-template-columns: 1fr; }
+}

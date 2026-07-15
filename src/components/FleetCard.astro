@@ -15,9 +15,14 @@ import type { Stage } from '../data/stages';
 
 interface Props {
   stage: Stage;
+  // Task 19: optional second badge, left-aligned over the first. Only the
+  // stages/index.html fleet-grid's 5040 card has one ("NEW · 3D", source
+  // line 116) -- the homepage teaser's 5040 card (Task 8/14) does not, so
+  // this stays opt-in rather than folded into `stage.chip`.
+  extraChip?: string;
 }
 
-const { stage } = Astro.props;
+const { stage, extraChip } = Astro.props;
 const gridClass = stage.featured
   ? 'card feature'
   : stage.coFeatured
@@ -31,6 +36,7 @@ const gridClass = stage.featured
   <div class="ph">
     <Image src={stage.image} alt={stage.imageAlt} loading="lazy" />
     {stage.chip && <span class:list={['chip', { coral: stage.soon }]}>{stage.chip}</span>}
+    {extraChip && <span class="chip coral extra-chip">{extraChip}</span>}
   </div>
   <div class="card-body">
     <div class="card-top">
@@ -118,6 +124,16 @@ const gridClass = stage.featured
     left: 16px;
     bottom: 14px;
     z-index: 3;
+  }
+  .ph .chip.extra-chip {
+    /* Source (stages/index.html line 116) stacks this at almost the exact
+       same left/bottom corner as the primary chip via an inline style,
+       which would overlap the two badges -- placed in the opposite
+       (top-right) corner here instead so both stay legible. */
+    left: auto;
+    bottom: auto;
+    top: 14px;
+    right: 14px;
   }
 
   .card-body {
