@@ -1,0 +1,124 @@
+---
+// Case study: Hialeah 4th of July. Composes Layout/Header/PageHero/
+// full-mode WorkItem/Gallery/QuoteCta/Footer around the "hialeah-4th-of-july"
+// WORK record (Task 10). Ported from
+// agl-reflections-website/work/hialeah-4th-of-july.html (239 lines).
+//
+// Real content beyond the brief's "WorkItem + Gallery" summary:
+//  - a two-up "Watch It Back" YouTube section (source data-ids 8wOATd1zxYs
+//    and q-pyXRsBSOU, click-to-embed players) -- represented as real linked
+//    thumbnails (global .figure pattern) to the real YouTube URLs, same
+//    reasoning as big-orange-nye.astro (no lazy-embed component exists in
+//    this plan's component set).
+//  - the source's own prev/next case-study nav row ("All case studies"
+//    (index) -> this page -> "Big Orange NYE"), transcribed as-is.
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/house/Header.astro';
+import Footer from '../../components/house/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import WorkItem from '../../components/WorkItem.astro';
+import Gallery from '../../components/Gallery.astro';
+import QuoteCta from '../../components/QuoteCta.astro';
+import Kicker from '../../components/ui/Kicker.astro';
+import { WORK } from '../../data/work';
+
+const item = WORK.find((w) => w.slug === 'hialeah-4th-of-july')!;
+---
+
+<Layout
+  title="Case Study: Hialeah 4th of July — Full Event Production | Reflections Productions"
+  description="How Reflections Productions stages the City of Hialeah's Independence Day celebration at Milander Park — APEX GEN3 stage, concert audio, intelligent lighting and crew beneath one of Florida's biggest fireworks shows."
+  path="/work/hialeah-4th-of-july.html"
+  ogImage="https://reflectionsproductions.com/assets/img/work-hialeah.webp"
+>
+  <Header currentPath="/work/index.html" />
+
+  <PageHero
+    breadcrumb={[{ label: 'Home', href: '/' }, { label: 'Our Work', href: '/work/index.html' }, { label: item.eventMeta }]}
+    eyebrow={`Case Study · ${item.eventMeta}`}
+    title={['Hialeah', '4th of July']}
+    lede={item.subtitle}
+    imageSrc={item.heroImage}
+    imageAlt={item.heroImageAlt}
+  />
+
+  <section class="band tight">
+    <div class="wrap">
+      <WorkItem case={item} />
+    </div>
+  </section>
+
+  <section class="band tight">
+    <div class="wrap">
+      <div class="sec-head"><div class="left rv"><Kicker text="Watch It Back" /></div></div>
+      <div class="cs-vids">
+        <a class="figure video-figure" href="https://www.youtube.com/watch?v=8wOATd1zxYs" target="_blank" rel="noopener">
+          <img src="https://i.ytimg.com/vi/8wOATd1zxYs/hqdefault.jpg" alt="Hialeah 4th of July 2021 — full show" loading="lazy" />
+          <figcaption>&#9654;&#xFE0E; Hialeah 4th of July 2021 — Full Show</figcaption>
+        </a>
+        <a class="figure video-figure" href="https://www.youtube.com/watch?v=q-pyXRsBSOU" target="_blank" rel="noopener">
+          <img src="https://i.ytimg.com/vi/q-pyXRsBSOU/hqdefault.jpg" alt="Hialeah 4th of July 2023 — single cam" loading="lazy" />
+          <figcaption>&#9654;&#xFE0E; Hialeah 4th of July 2023 — Single Cam</figcaption>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="band tight">
+    <div class="wrap">
+      <div class="sec-head"><div class="left rv"><Kicker text="From the Night" /></div></div>
+      <Gallery items={item.gallery} />
+      <div class="cs-next">
+        <a href="/work/index.html">&larr; All case studies</a>
+        <a href="/work/big-orange-nye.html">Big Orange NYE &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <QuoteCta compact />
+
+  <Footer />
+</Layout>
+
+<style>
+  /* Two-up video thumbnail-link grid (source: main.css `.cs-vids` inline
+     override), matching the global .figure pattern but wrapped in <a>s to
+     the real YouTube URLs. */
+  .cs-vids {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .video-figure {
+    display: block;
+  }
+  .video-figure img {
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    filter: saturate(0.96);
+  }
+  .video-figure figcaption {
+    text-align: center;
+  }
+  @media (max-width: 900px) {
+    .cs-vids {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Prev/next case-study nav (source: main.css `.cs-next`, remapped
+     --teal -> --glow-teal). */
+  .cs-next {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    border-top: 1px solid rgba(63, 167, 150, 0.3);
+    padding-top: 26px;
+    margin-top: 16px;
+  }
+  .cs-next a {
+    color: var(--glow-teal);
+    font-weight: 600;
+    text-decoration: none;
+  }
+</style>

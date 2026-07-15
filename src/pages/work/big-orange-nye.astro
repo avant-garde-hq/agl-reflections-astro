@@ -1,0 +1,109 @@
+---
+// Case study: Big Orange NYE Miami. Composes Layout/Header/PageHero/
+// full-mode WorkItem/Gallery/QuoteCta/Footer around the "big-orange-nye"
+// WORK record (Task 10). Ported from
+// agl-reflections-website/work/big-orange-nye.html (235 lines).
+//
+// Real content beyond the brief's "WorkItem + Gallery" summary:
+//  - a "The Countdown" YouTube video (source data-id jN26w5PM9mY, a
+//    click-to-embed player) -- no YtEmbed/lazy-iframe component exists
+//    anywhere in this plan's component set, so it's represented here as a
+//    real linked thumbnail (global .figure pattern) pointing straight at
+//    the real YouTube URL, rather than inventing new interactive JS
+//    infrastructure outside this task's scope.
+//  - the source's own prev/next case-study nav row (its literal chain:
+//    "Hialeah 4th of July" -> this page -> "FloydFest"), transcribed as-is.
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/house/Header.astro';
+import Footer from '../../components/house/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import WorkItem from '../../components/WorkItem.astro';
+import Gallery from '../../components/Gallery.astro';
+import QuoteCta from '../../components/QuoteCta.astro';
+import Kicker from '../../components/ui/Kicker.astro';
+import { WORK } from '../../data/work';
+
+const item = WORK.find((w) => w.slug === 'big-orange-nye')!;
+---
+
+<Layout
+  title="Case Study: Big Orange NYE Miami — New Year's Eve Production | Reflections Productions"
+  description="Miami's Big Orange New Year's Eve at Bayfront Park — the 35-foot LED Orange rises 400 feet up the InterContinental at midnight, with Reflections Productions staging and LED video below."
+  path="/work/big-orange-nye.html"
+  ogImage="https://reflectionsproductions.com/assets/img/work-hialeah.webp"
+>
+  <Header currentPath="/work/index.html" />
+
+  <PageHero
+    breadcrumb={[{ label: 'Home', href: '/' }, { label: 'Our Work', href: '/work/index.html' }, { label: item.eventMeta }]}
+    eyebrow={`Case Study · ${item.eventMeta}`}
+    title={['Big Orange', 'NYE Miami']}
+    lede={item.subtitle}
+    imageSrc={item.heroImage}
+    imageAlt={item.heroImageAlt}
+  />
+
+  <section class="band tight">
+    <div class="wrap">
+      <WorkItem case={item} />
+    </div>
+  </section>
+
+  <section class="band tight">
+    <div class="wrap">
+      <div class="sec-head"><div class="left rv"><Kicker text="The Countdown" /></div></div>
+      <a class="figure video-figure" href="https://www.youtube.com/watch?v=jN26w5PM9mY" target="_blank" rel="noopener">
+        <img src="https://i.ytimg.com/vi/jN26w5PM9mY/hqdefault.jpg" alt="Big Orange Countdown 2026 — midnight in Miami" loading="lazy" />
+        <figcaption>&#9654;&#xFE0E; Watch: Big Orange Countdown 2026 — Midnight In Miami</figcaption>
+      </a>
+    </div>
+  </section>
+
+  <section class="band tight">
+    <div class="wrap">
+      <div class="sec-head"><div class="left rv"><Kicker text="From the Night" /></div></div>
+      <Gallery items={item.gallery} />
+      <div class="cs-next">
+        <a href="/work/hialeah-4th-of-july.html">&larr; Hialeah 4th of July</a>
+        <a href="/work/floydfest.html">FloydFest &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <QuoteCta compact />
+
+  <Footer />
+</Layout>
+
+<style>
+  /* Video thumbnail-link, matching the global .figure pattern
+     (src/styles/base.css) but wrapped in an <a> to the real YouTube URL. */
+  .video-figure {
+    display: block;
+    max-width: 640px;
+  }
+  .video-figure img {
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    filter: saturate(0.96);
+  }
+  .video-figure figcaption {
+    text-align: center;
+  }
+
+  /* Prev/next case-study nav (source: main.css `.cs-next`, remapped
+     --teal -> --glow-teal). */
+  .cs-next {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    border-top: 1px solid rgba(63, 167, 150, 0.3);
+    padding-top: 26px;
+    margin-top: 16px;
+  }
+  .cs-next a {
+    color: var(--glow-teal);
+    font-weight: 600;
+    text-decoration: none;
+  }
+</style>

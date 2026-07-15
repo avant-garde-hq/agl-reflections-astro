@@ -1,0 +1,80 @@
+---
+// Case study: FloydFest. Composes Layout/Header/PageHero/full-mode
+// WorkItem/Gallery/QuoteCta/Footer around the "floydfest" WORK record
+// (Task 10). Ported from agl-reflections-website/work/floydfest.html (229
+// lines). This is the source's "photo-led" case study -- it has no video
+// section (unlike Big Orange NYE/Hialeah), which matches WORK's floydfest
+// body copy already noting "the full write-up is coming."
+//
+// Real content beyond the brief's "WorkItem + Gallery" summary: the
+// source's own prev/next case-study nav row ("Big Orange NYE" -> this page
+// -> "Mobile Stage Conference"), transcribed as-is.
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/house/Header.astro';
+import Footer from '../../components/house/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import WorkItem from '../../components/WorkItem.astro';
+import Gallery from '../../components/Gallery.astro';
+import QuoteCta from '../../components/QuoteCta.astro';
+import Kicker from '../../components/ui/Kicker.astro';
+import { WORK } from '../../data/work';
+
+const item = WORK.find((w) => w.slug === 'floydfest')!;
+---
+
+<Layout
+  title="Case Study: FloydFest — Dual-Stage Festival Deployment | Reflections Productions"
+  description="Reflections Productions deployed a dual-stage APEX setup — a GEN3 flagship beside the APEX 2424 — for the FloydFest music festival in the Blue Ridge Mountains."
+  path="/work/floydfest.html"
+  ogImage="https://reflectionsproductions.com/assets/img/work-hialeah.webp"
+>
+  <Header currentPath="/work/index.html" />
+
+  <PageHero
+    breadcrumb={[{ label: 'Home', href: '/' }, { label: 'Our Work', href: '/work/index.html' }, { label: item.eventMeta }]}
+    eyebrow={`Case Study · ${item.eventMeta}`}
+    title={['FloydFest', 'Virginia']}
+    lede={item.subtitle}
+    imageSrc={item.heroImage}
+    imageAlt={item.heroImageAlt}
+  />
+
+  <section class="band tight">
+    <div class="wrap">
+      <WorkItem case={item} />
+    </div>
+  </section>
+
+  <section class="band tight">
+    <div class="wrap">
+      <div class="sec-head"><div class="left rv"><Kicker text="From the Night" /></div></div>
+      <Gallery items={item.gallery} />
+      <div class="cs-next">
+        <a href="/work/big-orange-nye.html">&larr; Big Orange NYE</a>
+        <a href="/work/mobile-stage-conference-2023.html">Mobile Stage Conference &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <QuoteCta compact />
+
+  <Footer />
+</Layout>
+
+<style>
+  /* Prev/next case-study nav (source: main.css `.cs-next`, remapped
+     --teal -> --glow-teal). */
+  .cs-next {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    border-top: 1px solid rgba(63, 167, 150, 0.3);
+    padding-top: 26px;
+    margin-top: 16px;
+  }
+  .cs-next a {
+    color: var(--glow-teal);
+    font-weight: 600;
+    text-decoration: none;
+  }
+</style>

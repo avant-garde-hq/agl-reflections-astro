@@ -1,0 +1,114 @@
+---
+// Work / case-studies index. Composes Layout/Header/PageHero around the 4
+// real WORK case teasers (WorkItem, Task 10) plus the source's own "From the
+// Road" photo gallery and QuoteCta/Footer. Ported from
+// agl-reflections-website/work/index.html (301 lines).
+//
+// The source page's work-item grid actually has 6 teasers, not 4: alongside
+// the 4 that link to a dedicated case-study page (Hialeah, Big Orange NYE,
+// FloydFest, Mobile Stage Conference '23 -- exactly WORK's 4 records), it
+// also teases a "Formula E Fan Village" and a "Network Broadcast Sets" item
+// that have no "Read the full story" link and no case-study page of their
+// own anywhere in this 24-task plan. WORK (Task 10, already reviewed) only
+// models the 4 with real case-study pages, so those two are left out here
+// too rather than inventing new WorkCase records for them -- flagged in the
+// Task 20 report, not treated as a bug to fix.
+//
+// The per-item `flip` value below is transcribed straight from the source's
+// own `work-item flip` markup (hialeah = no flip, big-orange = flip,
+// floydfest = flip, mobile-stage-conference = no flip) -- not a mechanical
+// index%2 alternation, since skipping the 2 un-linked source rows would
+// otherwise throw that alternating pattern off.
+//
+// The "From the Road" gallery (source lines 195-206) is real content beyond
+// the case links that the brief's summary didn't call out -- 13 real photos
+// with real per-tile captions (data-cap) and 3 "wide" tiles, all already
+// available as local image assets.
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/house/Header.astro';
+import Footer from '../../components/house/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import WorkItem from '../../components/WorkItem.astro';
+import Gallery from '../../components/Gallery.astro';
+import QuoteCta from '../../components/QuoteCta.astro';
+import Kicker from '../../components/ui/Kicker.astro';
+import { WORK } from '../../data/work';
+
+import workCrowd from '../../assets/img/work-crowd.webp';
+import galCapitol from '../../assets/img/gal-capitol.webp';
+import galApexCrowd from '../../assets/img/gal-apex-crowd.webp';
+import galLukebryan from '../../assets/img/gal-lukebryan.webp';
+import galLasers from '../../assets/img/gal-lasers.webp';
+import gal4240night from '../../assets/img/gal-4240night.webp';
+import stage4240Hero from '../../assets/img/stage-4240-hero.webp';
+import svcVideo from '../../assets/img/svc-video.webp';
+import galBuild from '../../assets/img/gal-build.webp';
+import galTruck from '../../assets/img/gal-truck.webp';
+import stage4240B from '../../assets/img/stage-4240-b.webp';
+import fleetVip3724 from '../../assets/img/fleet-vip-3724.webp';
+import galStudio from '../../assets/img/gal-studio.webp';
+
+const [hialeahCase, bigOrangeCase, floydfestCase, mscCase] = WORK;
+
+const roadGallery = [
+  { image: galCapitol, alt: 'Civic stage build at the state capitol', caption: 'Civic Main Stage' },
+  { image: galApexCrowd, alt: 'APEX stage and LED wall in front of a packed crowd', caption: 'Festival Front Row', wide: true },
+  { image: galLukebryan, alt: 'Country headliner stage built with dual screens', caption: 'Country Headliner' },
+  { image: workCrowd, alt: 'Crowd under a halo of light at a night concert', caption: 'The Front Row', wide: true },
+  { image: galLasers, alt: 'Lasers cutting through haze during a production', caption: 'Laser & FX Show' },
+  { image: gal4240night, alt: 'APEX 4240 GEN3 at night with LED walls and a full festival crowd', caption: 'GEN3 After Dark' },
+  { image: stage4240Hero, alt: 'APEX 4240 stage built at a fairground beside a ferris wheel', caption: 'Fair Midway' },
+  { image: svcVideo, alt: 'LED video columns glowing orange at the Hialeah build', caption: 'Hialeah in Orange' },
+  { image: galBuild, alt: 'APEX GEN3 stages mid-build at a waterfront site', caption: 'GEN3 Load-In' },
+  { image: galTruck, alt: 'Reflections production truck arriving at a stadium event', caption: 'On the Road' },
+  { image: stage4240B, alt: 'APEX 4240 mobile stage deployed directly on the beach', caption: 'Beach Build', wide: true },
+  { image: fleetVip3724, alt: "Captain's VIP Deck 3724 raised at an event site", caption: "Captain's VIP Deck" },
+  { image: galStudio, alt: 'The Reflections recording and production studio', caption: 'Back at the Shop' },
+];
+---
+
+<Layout
+  title="Our Work — Hialeah 4th of July, Big Orange NYE, Formula E & More | Reflections Productions"
+  description="Case studies from Reflections Productions: the Hialeah 4th of July, Miami's Big Orange NYE at Bayfront Park, the Formula E Fan Village at the Miami E-Prix, FloydFest, the Mobile Stage Conference and network broadcast sets — stages, audio, lighting and video."
+  path="/work/index.html"
+  ogImage="https://reflectionsproductions.com/assets/img/work-hialeah.webp"
+>
+  <Header currentPath="/work/index.html" />
+
+  <PageHero
+    breadcrumb={[{ label: 'Home', href: '/' }, { label: 'Our Work' }]}
+    eyebrow="Our Work · Fifty Seasons of Shows"
+    title={['Nights the City', 'Remembers']}
+    lede="From Independence Day fireworks to the New Year's countdown, Reflections stages carry South Florida's signature celebrations. <b>Here's what that looks like.</b>"
+    imageSrc={workCrowd}
+    imageAlt="Concert crowd under a ring of light at a Reflections production"
+  />
+
+  <section class="band tight">
+    <div class="wrap">
+      <WorkItem case={hialeahCase} teaser />
+      <WorkItem case={bigOrangeCase} teaser flip />
+      <WorkItem case={floydfestCase} teaser flip />
+      <WorkItem case={mscCase} teaser />
+    </div>
+  </section>
+
+  <div class="divider wrap" aria-hidden="true"><span class="bars"><i></i><i></i><i></i></span></div>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="left rv">
+          <Kicker text="Gallery" />
+          <h2>From the<br /><span class="ghost">Road</span></h2>
+        </div>
+        <p class="right">Fifty years produces a lot of nights. A few more of them — builds, front rows and the miles in between.</p>
+      </div>
+      <Gallery items={roadGallery} />
+    </div>
+  </section>
+
+  <QuoteCta compact />
+
+  <Footer />
+</Layout>
