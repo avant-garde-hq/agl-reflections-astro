@@ -1,0 +1,162 @@
+---
+// Quote page. Composes Layout/Header/PageHero (short)/form-wrap/Footer per
+// agl-reflections-website/quote.html (286 lines): breadcrumb hero -> a
+// two-column .form-wrap holding the ported <QuoteForm> (Task 12) plus a
+// sticky "quote-side" contact aside -> footer. The URL-param prefill script
+// (source lines 272-283) is ported verbatim into public/scripts/quote-
+// prefill.js and referenced below; it reads the ?date=/?location=/
+// ?attendance= query params the homepage's DateCheckForm (Task 7/14) sets
+// on its GET submit to /quote.html, and pre-fills the matching quote-form
+// fields.
+//
+// NOTE on the prefill script's own quirk (kept verbatim, not "fixed" here):
+// its date selector targets '.quote-form [name="date"]', but QuoteForm's
+// date field is actually named "event_date" (matching the source form). So
+// ?date= silently fails to prefill in the source too — a pre-existing
+// upstream bug, not something introduced by this port. ?location= and
+// ?attendance= do match their form fields and prefill correctly.
+//
+// .form-wrap/.quote-side/.big-phone/.big-mail/.q-addr/.season-note CSS
+// ported from agl-reflections-website/assets/css/main.css lines 427-464 and
+// its max-width:1080px responsive override (lines ~537-538), hex colors
+// swapped for Task 2's tokens (--sand -> --paper, --sand-dim -> --paper-dim,
+// --sand-faint -> --paper-faint, --teal -> --glow-teal, --coral ->
+// --gel-coral, --panel/--panel-2 -> --deck/--deck-2, --black -> --ink).
+// form.quote-form/.field/etc. rules already live in QuoteForm.astro (Task
+// 12) and are not redefined here. `.band`/`.tight` come from base.css.
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/house/Header.astro';
+import Footer from '../components/house/Footer.astro';
+import PageHero from '../components/PageHero.astro';
+import QuoteForm from '../components/QuoteForm.astro';
+import Kicker from '../components/ui/Kicker.astro';
+---
+
+<Layout
+  title="Get a Quote — Mobile Stage &amp; Production Rentals | Reflections Productions"
+  description="Request a quote for APEX mobile stage rentals, concert audio, lighting, LED video and event crew in South Florida. Call 786-504-2369 or send the date, location and crowd size."
+  path="/quote.html"
+>
+  <Header currentPath="/quote.html" />
+
+  <PageHero
+    breadcrumb={[{ label: 'Home', href: '/' }, { label: 'Get a Quote' }]}
+    eyebrow="Get a Quote · Usually Same-Day Response"
+    title={["Let's Put On", 'A Show']}
+    lede="Tell us the date, the crowd and the vision. We'll bring the stage — <b>and everything on it.</b>"
+    short
+  />
+
+  <section class="band tight">
+    <div class="wrap">
+      <div class="form-wrap">
+        <QuoteForm />
+
+        <aside class="quote-side rv" data-d="1" aria-label="Contact directly">
+          <Kicker text="Faster By Phone" />
+          <h2>Talk to a<br />Producer</h2>
+          <p>Fifty years of shows means we've probably done your site before. Call and we'll rough out the rig on the spot.</p>
+          <a class="big-phone" href="tel:+17865042369">786-504-2369</a>
+          <a class="big-mail" href="mailto:operations@reflectionsproductions.com">operations@reflectionsproductions.com</a>
+          <span class="q-addr">23750 SW 132 Avenue &middot; Princeton, FL 33032</span>
+          <div class="season-note">
+            <b>Dates go fast</b>
+            <span>July 4th and New Year's Eve book out earliest — if your event lands near a holiday, get the date on our calendar now.</span>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+
+  <script src="/scripts/quote-prefill.js" is:inline></script>
+</Layout>
+
+<style>
+  /* .form-wrap/.quote-side family — ported from main.css lines 427-464 +
+     the max-width:1080px responsive override (lines ~537-538). */
+  .form-wrap {
+    display: grid;
+    grid-template-columns: 7fr 5fr;
+    gap: clamp(40px, 5vw, 80px);
+    align-items: start;
+  }
+  .quote-side {
+    position: sticky;
+    top: calc(var(--nav-h) + 32px);
+  }
+  .quote-side :global(.kicker) {
+    margin-bottom: 14px;
+  }
+  .quote-side h2 {
+    font-size: clamp(26px, 2.6vw, 38px);
+    margin-bottom: 18px;
+  }
+  .quote-side p {
+    font-size: 15px;
+    color: var(--paper-dim);
+    margin-bottom: 20px;
+    max-width: 40ch;
+  }
+  .big-phone {
+    display: block;
+    font-family: 'Archivo Black', sans-serif;
+    font-size: clamp(30px, 3.4vw, 46px);
+    letter-spacing: 0.02em;
+    color: var(--paper);
+    transition: color 0.3s;
+    line-height: 1.05;
+  }
+  .big-phone:hover {
+    color: var(--gel-coral);
+  }
+  .big-mail {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: clamp(14px, 1.3vw, 17px);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--glow-teal);
+    transition: color 0.3s;
+    word-break: break-all;
+  }
+  .big-mail:hover {
+    color: var(--paper);
+  }
+  .q-addr {
+    display: block;
+    font-size: 13px;
+    color: var(--paper-faint);
+    margin-top: 14px;
+    letter-spacing: 0.04em;
+  }
+  .season-note {
+    margin-top: 30px;
+    border: 1px dashed rgba(255, 107, 74, 0.5);
+    padding: 18px 20px;
+    background: rgba(255, 107, 74, 0.05);
+  }
+  .season-note b {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gel-coral);
+    margin-bottom: 6px;
+  }
+  .season-note span {
+    font-size: 14px;
+    color: var(--paper-dim);
+  }
+
+  @media (max-width: 1080px) {
+    .form-wrap {
+      grid-template-columns: 1fr;
+    }
+    .quote-side {
+      position: static;
+    }
+  }
+</style>
