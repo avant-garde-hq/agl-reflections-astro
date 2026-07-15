@@ -1,0 +1,143 @@
+---
+// APEX 3224 detail page -- the fleet's mid-size workhorse: a reversible-
+// front deck on a 34-foot gooseneck trailer, and also the stage the major
+// sports networks use for "live on the scene" broadcast sets. Source:
+// agl-reflections-website/stages/apex-3224.html (250 lines). Follows the
+// shared detail-page pattern from apex-5040.astro (Task 19, first
+// dispatch). Own `.eng-bar` engineering-stat strip (source line 95) via
+// PageHero's `afterLede` slot. No "View Full Specs" / "View in 3D" CTAs --
+// 5040-only. Source's "Download spec sheet" apex.miami PDF link (line 141)
+// dropped per the client's dead-link removal request; StageSide's
+// `pdfRemoved` note covers that.
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/house/Header.astro';
+import Footer from '../../components/house/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import SpecTable from '../../components/SpecTable.astro';
+import StageSide from '../../components/StageSide.astro';
+import QuoteCta from '../../components/QuoteCta.astro';
+import Kicker from '../../components/ui/Kicker.astro';
+import { Image } from 'astro:assets';
+
+import stage3224Hero from '../../assets/img/stage-3224-hero.webp';
+import stage3224B from '../../assets/img/stage-3224-b.webp';
+
+const specRows = [
+  { label: 'Stage deck', value: '32′ × 24′' },
+  { label: 'Trailer length', value: '34′' },
+  { label: 'Hitch', value: 'Gooseneck — ball or kingpin' },
+  { label: 'Trim height', value: '~16′' },
+  { label: 'Front orientation', value: 'Reversible — either side can be the front' },
+  { label: 'Deployment', value: 'Hydraulic — under an hour' },
+  { label: 'Rigging & load data', value: 'Spec sheet on request' },
+];
+---
+
+<Layout
+  title="APEX 3224 Mobile Stage Rental | Reflections Productions"
+  description="The APEX 3224 is the mid-size workhorse of the Reflections fleet — a 32-by-24 hydraulic mobile stage with a reversible front, deployed in under an hour for festivals and city concerts."
+  path="/stages/apex-3224.html"
+  ogImage="https://reflectionsproductions.com/assets/img/stage-3224-hero.webp"
+>
+  <Header currentPath="/stages/index.html" />
+
+  <PageHero
+    tall
+    breadcrumb={[{ label: 'Home', href: '/' }, { label: 'Stage Fleet', href: '/stages/index.html' }, { label: 'APEX 3224' }]}
+    eyebrow="APEX"
+    title="3224"
+    lede="The mid-level workhorse: a 32-by-24 deck on a 34-foot gooseneck trailer, hydraulically deployed in under an hour — <b>and either side can be the front.</b>"
+    imageSrc={stage3224Hero}
+    imageAlt="APEX 3224 stage lit in purple at an evening event with rows of seating"
+    chips={[
+      { label: "32′ × 24′ DECK", variant: 'sandy' },
+      { label: 'Hydraulic deployment' },
+    ]}
+  >
+    <div class="eng-bar" slot="afterLede">
+      <span class="eng-chip crowd">RIGHT FOR: 5,000–12,000 CROWDS</span>
+      <span class="eng-chip">Reversible front — face it either way</span>
+      <span class="eng-chip">~16′ trim height</span>
+      <span class="eng-chip">Gooseneck: ball or kingpin</span>
+      <span class="eng-chip">Engineer-certified APEX platform</span>
+    </div>
+  </PageHero>
+
+  <section class="band tight">
+    <div class="wrap">
+      <div class="stage-cols">
+        <div>
+          <div class="prose">
+            <Kicker text="Overview" />
+            <p>The APEX 3224 is the go-to stage for mid-size festivals, city concerts and corporate productions. The 34-foot trailer rides on a gooseneck tongue that connects to standard ball or kingpin hitches, and the hydraulic lift puts the stage up in under an hour.</p>
+            <p>A reversible front is the 3224's trick: both sides of the stage can serve as the face, which gives site planners real flexibility for orientation, sightlines and water drainage. The reinforced roof and rigging capacity carry lighting, audio and LED displays for a fully produced look.</p>
+            <p>It's also the fleet's broadcast specialist: the 3224 is <b>the same stage the major sports networks use for their "live on the scene" sets</b> — ESPN College GameDay-style builds covering auto racing, horse racing and college football. It can be placed and broadcast-ready within 30 minutes, with the roof set at variable heights for cameras and lighting grids.</p>
+          </div>
+
+          <div id="specs" style="margin-top:44px">
+            <SpecTable caption="APEX 3224 — Specifications" rows={specRows} />
+            <p class="spec-note">Figures above are from the manufacturer spec sheet. Anything not listed: spec sheet on request — or call 786-504-2369 and we'll talk through your site.</p>
+          </div>
+
+          <figure class="figure" style="margin-top:44px">
+            <Image src={stage3224B} alt="Dual APEX 3224 setup with VIP deck section at an outdoor event" loading="lazy" />
+            <figcaption>Dual 3224 build with VIP section</figcaption>
+          </figure>
+
+          <div style="margin-top:44px">
+            <Kicker text="Built For" />
+            <ul class="use-list">
+              <li>Mid-size festivals</li>
+              <li>City &amp; municipal concerts</li>
+              <li>Headline DJ shows</li>
+              <li>Corporate events</li>
+              <li>Theatrical performances</li>
+              <li>Broadcast &amp; live TV sets</li>
+              <li>Community celebrations</li>
+            </ul>
+          </div>
+
+          <div class="pairing" style="margin-top:40px">
+            <h3>Make it a full production</h3>
+            <p>Pair the 3224 with our <b>JBL VTX A12 or VTX V25-II line arrays</b>, powered JBL VRX systems, <b>Yamaha production consoles</b>, the Absen LED wall and a full intelligent lighting package — ready at a moment's notice.</p>
+            <a class="arrow-link" href="/production/index.html">Production services</a>
+          </div>
+        </div>
+
+        <StageSide
+          model="3224"
+          pdfRemoved
+          jumpLinks={[
+            { label: 'Full specifications', href: '#specs' },
+            { label: 'Compare the fleet', href: '/stages/index.html' },
+          ]}
+        />
+      </div>
+    </div>
+  </section>
+
+  <QuoteCta compact />
+
+  <Footer />
+</Layout>
+
+<style>
+  .eng-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 26px 0 4px;
+  }
+  .eng-chip {
+    border: 1px solid rgba(63, 167, 150, 0.45);
+    color: var(--paper);
+    font: 600 12px/1 var(--font-body);
+    letter-spacing: 0.08em;
+    padding: 9px 13px;
+    background: rgba(19, 94, 84, 0.14);
+  }
+  .eng-chip.crowd {
+    border-color: rgba(255, 107, 74, 0.55);
+    color: var(--gel-coral);
+  }
+</style>

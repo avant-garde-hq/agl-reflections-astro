@@ -1,0 +1,140 @@
+---
+// APEX 4240 detail page -- second-largest stage in the fleet, available in
+// Legacy and GEN3 builds. Source:
+// agl-reflections-website/stages/apex-4240.html (251 lines). Follows the
+// shared detail-page pattern from apex-5040.astro (Task 19, first
+// dispatch). Own `.eng-bar` engineering-stat strip (source line 95) via
+// PageHero's `afterLede` slot. No "View Full Specs" / "View in 3D" CTAs --
+// 5040-only. The source has TWO "Download spec sheet" apex.miami PDF links
+// (GEN3 + Legacy, lines 141-142) -- both dropped per the client's dead-link
+// removal request; StageSide's single `pdfRemoved` note covers both.
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/house/Header.astro';
+import Footer from '../../components/house/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import SpecTable from '../../components/SpecTable.astro';
+import StageSide from '../../components/StageSide.astro';
+import QuoteCta from '../../components/QuoteCta.astro';
+import Kicker from '../../components/ui/Kicker.astro';
+import { Image } from 'astro:assets';
+
+import stage4240Hero from '../../assets/img/stage-4240-hero.webp';
+import stage4240B from '../../assets/img/stage-4240-b.webp';
+
+const specRows = [
+  { label: 'Performance area', value: '42′ × 40′' },
+  { label: 'Deployment', value: 'Hydraulic lift system' },
+  { label: 'Typical setup time', value: '2–3 hours with a small crew' },
+  { label: 'Rigging capacity', value: 'High — full lighting, audio & LED production rigs' },
+  { label: 'Builds available', value: 'Legacy & GEN3' },
+  { label: 'Full dimensional & weight data', value: 'Spec sheet on request' },
+];
+---
+
+<Layout
+  title="APEX 4240 Mobile Stage Rental | Reflections Productions"
+  description="The APEX 4240 is a 42-by-40 hydraulic mobile stage for major concerts and festivals — high rigging capacity, fully deployed in two to three hours, available in Legacy and GEN3 builds."
+  path="/stages/apex-4240.html"
+  ogImage="https://reflectionsproductions.com/assets/img/stage-4240-hero.webp"
+>
+  <Header currentPath="/stages/index.html" />
+
+  <PageHero
+    tall
+    breadcrumb={[{ label: 'Home', href: '/' }, { label: 'Stage Fleet', href: '/stages/index.html' }, { label: 'APEX 4240' }]}
+    eyebrow="APEX · Legacy & GEN3"
+    title="4240"
+    lede="The second-largest stage in the fleet: a 42-by-40 performance area with the rigging capacity for full production rigs — <b>assembled by a small crew in two to three hours.</b>"
+    imageSrc={stage4240Hero}
+    imageAlt="APEX 4240 stage built at a fairground with a ferris wheel behind it"
+    chips={[
+      { label: "42′ × 40′ DECK", variant: 'sandy' },
+      { label: 'Legacy & GEN3' },
+      { label: 'Hydraulic deployment' },
+    ]}
+  >
+    <div class="eng-bar" slot="afterLede">
+      <span class="eng-chip crowd">RIGHT FOR: 10,000–20,000 CROWDS</span>
+      <span class="eng-chip">High rigging capacity</span>
+      <span class="eng-chip">Engineer-certified APEX platform</span>
+      <span class="eng-chip">6-point hydraulic leveling</span>
+      <span class="eng-chip">Festival-grade fly bays</span>
+    </div>
+  </PageHero>
+
+  <section class="band tight">
+    <div class="wrap">
+      <div class="stage-cols">
+        <div>
+          <div class="prose">
+            <Kicker text="Overview" />
+            <p>The APEX 4240 is built for major concerts, festivals and large-scale events. Its hydraulic deployment system and reinforced roof structure carry full lighting, sound and LED video packages, and a couple of stagehands can have the stage completely assembled in two to three hours.</p>
+            <p>It travels as a standard trailer, deploys on uneven ground with hydraulic leveling, and is available in both Legacy and GEN3 builds. When the show calls for a full touring-grade rig without stepping up to the 5040, this is the stage.</p>
+          </div>
+
+          <div id="specs" style="margin-top:44px">
+            <SpecTable caption="APEX 4240 — Specifications" rows={specRows} />
+            <p class="spec-note">Figures above are from the manufacturer spec sheet. Anything not listed: spec sheet on request — or call 786-504-2369 and we'll talk through your site.</p>
+          </div>
+
+          <figure class="figure" style="margin-top:44px">
+            <Image src={stage4240B} alt="APEX 4240 mobile stage deployed directly on the beach" loading="lazy" />
+            <figcaption>4240 · oceanfront deployment</figcaption>
+          </figure>
+
+          <div style="margin-top:44px">
+            <Kicker text="Built For" />
+            <ul class="use-list">
+              <li>Major concerts</li>
+              <li>Multi-day festivals</li>
+              <li>Fairs &amp; expos</li>
+              <li>City celebrations</li>
+              <li>Corporate spectaculars</li>
+              <li>Touring support</li>
+            </ul>
+          </div>
+
+          <div class="pairing" style="margin-top:40px">
+            <h3>Make it a full production</h3>
+            <p>Team the 4240 with our <b>JBL VTX V25-II line array</b>, <b>Yamaha production consoles</b>, the <b>Absen LED wall</b> and our intelligent lighting inventory — backed by generators, MOJO barricade, cable ramps, scaffolding, truss and FOH trailers.</p>
+            <a class="arrow-link" href="/production/index.html">Production services</a>
+          </div>
+        </div>
+
+        <StageSide
+          model="4240"
+          pdfRemoved
+          jumpLinks={[
+            { label: 'Full specifications', href: '#specs' },
+            { label: 'Compare the fleet', href: '/stages/index.html' },
+          ]}
+        />
+      </div>
+    </div>
+  </section>
+
+  <QuoteCta compact />
+
+  <Footer />
+</Layout>
+
+<style>
+  .eng-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 26px 0 4px;
+  }
+  .eng-chip {
+    border: 1px solid rgba(63, 167, 150, 0.45);
+    color: var(--paper);
+    font: 600 12px/1 var(--font-body);
+    letter-spacing: 0.08em;
+    padding: 9px 13px;
+    background: rgba(19, 94, 84, 0.14);
+  }
+  .eng-chip.crowd {
+    border-color: rgba(255, 107, 74, 0.55);
+    color: var(--gel-coral);
+  }
+</style>

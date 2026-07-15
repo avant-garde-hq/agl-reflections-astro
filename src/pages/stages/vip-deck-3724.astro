@@ -1,0 +1,149 @@
+---
+// Captain's VIP Deck 3724 detail page -- NOT an APEX stage; a patented
+// two-level mobile viewing/hospitality platform. Source:
+// agl-reflections-website/stages/vip-deck-3724.html (250 lines). Follows
+// the shared detail-page pattern from apex-5040.astro (Task 19, first
+// dispatch). Own `.eng-bar` engineering-stat strip (source line 95) via
+// PageHero's `afterLede` slot. No "View Full Specs" / "View in 3D" CTAs --
+// 5040-only. Source's "Download spec sheet" apex.miami PDF link (line 141)
+// dropped per the client's dead-link removal request; StageSide's
+// `pdfRemoved` note covers that.
+//
+// Naming: this is "Captain's VIP Deck 3724" throughout, never "APEX VIP
+// Deck" -- the source's own eyebrow/breadcrumb/title distinguish it from
+// the APEX line by name. The figure below reuses stage-3224-b.webp per the
+// source (line 122) -- there's no dedicated VIP-deck "b" image asset.
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/house/Header.astro';
+import Footer from '../../components/house/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import SpecTable from '../../components/SpecTable.astro';
+import StageSide from '../../components/StageSide.astro';
+import QuoteCta from '../../components/QuoteCta.astro';
+import Kicker from '../../components/ui/Kicker.astro';
+import { Image } from 'astro:assets';
+
+import stageVipHero from '../../assets/img/stage-vip-hero.webp';
+import stage3224B from '../../assets/img/stage-3224-b.webp';
+
+const specRows = [
+  { label: 'Deployed footprint', value: '45′ × 24′ (~888 sq ft)' },
+  { label: 'Transport dimensions', value: '35′ L × 102″ W × 10′6″ H' },
+  { label: 'Trailer GVWR', value: '14,000 lb' },
+  { label: 'Total operating weight', value: '10,500 lb' },
+  { label: 'Tongue weight', value: '2,000 lb' },
+  { label: 'Deployment', value: 'Push-button hydraulic with adjustable leveling jacks' },
+  { label: 'Compliance', value: 'DOT highway approved · IBC, FBC & NFPA compliant' },
+  { label: 'Guardrails', value: '42″ min height · 200 lb concentrated load rated' },
+  { label: 'Structure', value: '6061-T6 / 6063-T6 aluminum · A572 structural steel' },
+  { label: 'Patent', value: 'U.S. Patent #US12084881 B1' },
+  { label: 'Maximum capacity', value: 'Specified per load configuration' },
+];
+---
+
+<Layout
+  title="Captain's VIP Deck 3724 Rental | Reflections Productions"
+  description="The Captain's VIP Deck 3724 is a patented two-level mobile event deck — 888 square feet of premium viewing space with push-button hydraulic deployment, DOT road-legal in transport."
+  path="/stages/vip-deck-3724.html"
+  ogImage="https://reflectionsproductions.com/assets/img/stage-vip-hero.webp"
+>
+  <Header currentPath="/stages/index.html" />
+
+  <PageHero
+    tall
+    breadcrumb={[{ label: 'Home', href: '/' }, { label: 'Stage Fleet', href: '/stages/index.html' }, { label: "Captain's VIP Deck 3724" }]}
+    eyebrow="Captain's VIP Deck"
+    title="3724"
+    lede="Not a stage — the best seat in the house. A patented two-level mobile platform that unfolds to <b>~888 square feet of premium viewing deck</b> at the push of a button."
+    imageSrc={stageVipHero}
+    imageAlt="Captain's VIP Deck 3724 two-level mobile viewing deck with guardrails and stairs"
+    chips={[
+      { label: "45′ × 24′ DECK", variant: 'sandy' },
+      { label: 'VIP Hospitality' },
+      { label: 'Hydraulic deployment' },
+    ]}
+  >
+    <div class="eng-bar" slot="afterLede">
+      <span class="eng-chip crowd">RIGHT FOR: VIP HOSPITALITY · 888 SQ FT</span>
+      <span class="eng-chip">Deploys to 45′ × 24′</span>
+      <span class="eng-chip">Two-level sightline platform</span>
+      <span class="eng-chip">Folds to 35′ for transport</span>
+    </div>
+  </PageHero>
+
+  <section class="band tight">
+    <div class="wrap">
+      <div class="stage-cols">
+        <div>
+          <div class="prose">
+            <Kicker text="Overview" />
+            <p>The Captain's VIP Deck 3724 is a high-performance mobile platform engineered for rapid deployment at concerts, festivals and large public gatherings. Fully deployed it expands to 45 by 24 feet — roughly 888 square feet of usable space for VIP viewing, hospitality, DJ platforms or production positions.</p>
+            <p>For transport it folds to 35 feet long, 102 inches wide and 10 feet 6 inches tall — fully DOT road-legal with no oversize permits. The multi-bay deck expands symmetrically around a reinforced structural spine, with an upper viewing level, integrated stairs, landing platforms and full-perimeter guardrails. It supports ADA-compliant access points, and the structure is IBC, FBC and NFPA life-safety compliant. U.S. Patent #US12084881 B1.</p>
+          </div>
+
+          <div id="specs" style="margin-top:44px">
+            <SpecTable caption="Captain's VIP Deck 3724 — Specifications" rows={specRows} />
+            <p class="spec-note">Figures above are from the manufacturer spec sheet. Anything not listed: spec sheet on request — or call 786-504-2369 and we'll talk through your site.</p>
+          </div>
+
+          <figure class="figure" style="margin-top:44px">
+            <Image src={stage3224B} alt="VIP deck section serving a dual-stage outdoor event" loading="lazy" />
+            <figcaption>VIP deck in service at a dual-stage event</figcaption>
+          </figure>
+
+          <div style="margin-top:44px">
+            <Kicker text="Built For" />
+            <ul class="use-list">
+              <li>VIP viewing areas</li>
+              <li>Sponsor hospitality</li>
+              <li>Camera &amp; production platforms</li>
+              <li>DJ platforms</li>
+              <li>ADA viewing positions</li>
+              <li>Festival build-outs</li>
+            </ul>
+          </div>
+
+          <div class="pairing" style="margin-top:40px">
+            <h3>Make it a full production</h3>
+            <p>Deploy the VIP Deck alongside any APEX stage — add <b>guardrail-lined stairs, ADA access and barrier lines</b> and your sponsors watch the show from the best structure on the field.</p>
+            <a class="arrow-link" href="/production/index.html">Production services</a>
+          </div>
+        </div>
+
+        <StageSide
+          model="VIP Deck 3724"
+          pdfRemoved
+          jumpLinks={[
+            { label: 'Full specifications', href: '#specs' },
+            { label: 'Compare the fleet', href: '/stages/index.html' },
+          ]}
+        />
+      </div>
+    </div>
+  </section>
+
+  <QuoteCta compact />
+
+  <Footer />
+</Layout>
+
+<style>
+  .eng-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 26px 0 4px;
+  }
+  .eng-chip {
+    border: 1px solid rgba(63, 167, 150, 0.45);
+    color: var(--paper);
+    font: 600 12px/1 var(--font-body);
+    letter-spacing: 0.08em;
+    padding: 9px 13px;
+    background: rgba(19, 94, 84, 0.14);
+  }
+  .eng-chip.crowd {
+    border-color: rgba(255, 107, 74, 0.55);
+    color: var(--gel-coral);
+  }
+</style>
