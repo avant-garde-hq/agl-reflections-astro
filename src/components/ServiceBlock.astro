@@ -16,8 +16,7 @@
 // size override — consistent with Hero.astro/PageHero.astro, which made
 // the same simplification for their own `.wl` usage.
 //
-// The `.chip` pill style isn't ported globally yet (see FleetCard.astro),
-// so it's scoped here too.
+// `.chip` now lives globally in src/styles/base.css.
 //
 // Note: `tagline` is accepted to match the prop signature named in the
 // plan, but the source's six `.svc-block` sections have no third text
@@ -68,18 +67,6 @@ const { id, title, tagline, body, image, imageAlt, chip, flip = false, gear = []
 </article>
 
 <style>
-  .chip {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--glow-teal);
-    border: 1px solid rgba(63, 167, 150, 0.5);
-    background: rgba(12, 20, 20, 0.55);
-    padding: 6px 10px;
-  }
-
   .svc-block {
     display: grid;
     grid-template-columns: repeat(12, 1fr);

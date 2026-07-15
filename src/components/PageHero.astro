@@ -17,6 +17,11 @@ interface Crumb {
   href?: string;
 }
 
+interface Chip {
+  label: string;
+  variant?: 'coral' | 'sandy';
+}
+
 interface Props {
   title: string | string[];
   breadcrumb: Crumb[];
@@ -26,9 +31,10 @@ interface Props {
   imageAlt?: string;
   tall?: boolean;
   short?: boolean;
+  chips?: Chip[];
 }
 
-const { title, breadcrumb, eyebrow, lede, imageSrc, imageAlt = '', tall = false, short = false } = Astro.props;
+const { title, breadcrumb, eyebrow, lede, imageSrc, imageAlt = '', tall = false, short = false, chips = [] } = Astro.props;
 const titleLines = Array.isArray(title) ? title : [title];
 ---
 
@@ -50,6 +56,13 @@ const titleLines = Array.isArray(title) ? title : [title];
     </div>
     <h1><MirrorText lines={titleLines} /></h1>
     <p class="lede" set:html={lede} />
+    {chips.length > 0 && (
+      <div class="meta-row">
+        {chips.map((c) => (
+          <span class:list={['chip', c.variant]}>{c.label}</span>
+        ))}
+      </div>
+    )}
   </div>
 </header>
 
@@ -160,5 +173,11 @@ const titleLines = Array.isArray(title) ? title : [title];
   .page-hero .lede :global(b) {
     color: var(--paper);
     font-weight: 600;
+  }
+  .page-hero .meta-row {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 26px;
   }
 </style>

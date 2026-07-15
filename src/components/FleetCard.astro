@@ -9,9 +9,7 @@
 // --sand-faint->--paper-faint, --coral->--gel-coral). Numeric deck/spec
 // figures get the monospace treatment via `.mono-spec` (var(--font-mono)).
 //
-// The base `.chip` pill style (main.css lines 204-206) hasn't been ported
-// globally anywhere yet in this project, so it's scoped here too — this
-// component is the first to render a `.chip` element.
+// `.chip`/`.chip.coral` now live globally in src/styles/base.css.
 import { Image } from 'astro:assets';
 import type { Stage } from '../data/stages';
 
@@ -32,7 +30,7 @@ const gridClass = stage.featured
 <article class={gridClass}>
   <div class="ph">
     <Image src={stage.image} alt={stage.imageAlt} loading="lazy" />
-    {stage.chip && <span class="chip">{stage.chip}</span>}
+    {stage.chip && <span class:list={['chip', { coral: stage.soon }]}>{stage.chip}</span>}
   </div>
   <div class="card-body">
     <div class="card-top">
@@ -44,28 +42,12 @@ const gridClass = stage.featured
     </ul>
     <div class="card-foot"><span class="spec-link">View the {stage.model}</span></div>
   </div>
-  <a class="card-cover" href={`/stages/${stage.slug}.html`} aria-label={`APEX ${stage.model} details`}></a>
+  <a class="card-cover" href={`/stages/${stage.slug}.html`} aria-label={`${stage.series === "Captain's VIP Deck" ? 'VIP Deck' : 'APEX'} ${stage.model} details`}></a>
 </article>
 
 <style>
   .mono-spec {
     font-family: var(--font-mono);
-  }
-
-  .chip {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--glow-teal);
-    border: 1px solid rgba(63, 167, 150, 0.5);
-    background: rgba(12, 20, 20, 0.55);
-    padding: 6px 10px;
-  }
-  .chip.coral {
-    color: var(--gel-coral);
-    border-color: rgba(255, 107, 74, 0.5);
   }
 
   .card {
