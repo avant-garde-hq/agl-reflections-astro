@@ -1,0 +1,122 @@
+---
+// 404 page. Full site chrome (Header/Footer) -- the source 404.html is NOT a
+// bare/minimal page: it ships the same <nav>/<footer> as every other page
+// (agl-reflections-website/404.html lines 41-78, 97-170), just with a single
+// `.err` section in between instead of the usual multi-section body.
+//
+// `.err` (oversized mirrored "404", kicker, sub-copy, CTA button, link row
+// back to the main sections) uses MirrorText (Task 6) for the headline and
+// Button (ui/Button.astro) for the primary CTA. `.err`/`.e-sub`/`.err-links`
+// aren't in base.css (generic section CSS there doesn't cover this
+// page-unique pattern), so they're scoped here from main.css lines 485-493,
+// colors remapped to this project's tokens (--sand-dim -> --paper-dim,
+// --teal -> --glow-teal, --black -> --ink). The centered `.kicker` variant
+// (source's inline `style="justify-content:center"`) and the h1-scoped
+// `.mirror .waterrule`/`.mirror .refl` overrides (source lines 488-489: a
+// symmetric-fade waterrule gradient and a .6em reflection scale, both unique
+// to this oversized headline) are scoped here too, following the pattern
+// established by other pages that reuse Kicker/MirrorText but need
+// local-only tweaks (e.g. about.astro's `.sand-band :global(.kicker)`).
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/house/Header.astro';
+import Footer from '../components/house/Footer.astro';
+import MirrorText from '../components/MirrorText.astro';
+import Button from '../components/ui/Button.astro';
+import Kicker from '../components/ui/Kicker.astro';
+---
+
+<Layout
+  title="Page Not Found | Reflections Productions"
+  description="That page missed its cue. Head back to the Reflections Productions stage fleet, production services or quote form."
+  path="/404.html"
+>
+  <Header currentPath="/404.html" />
+
+  <section class="err">
+    <div class="wrap" id="main">
+      <Kicker text="Missed Cue" />
+      <h1><MirrorText lines={['404']} /></h1>
+      <p class="e-sub">This page missed its cue — it's not on the runsheet. The rest of the show is right where you left it.</p>
+      <Button href="/">Back to the Show</Button>
+      <div class="err-links">
+        <a href="/stages/index.html">Stage Fleet</a>
+        <a href="/production/index.html">Production</a>
+        <a href="/work/index.html">Our Work</a>
+        <a href="/about.html">About</a>
+        <a href="/quote.html">Get a Quote</a>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+
+<style>
+  .err {
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .err::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 60% at 50% 20%, rgba(19, 94, 84, 0.3), transparent 70%);
+  }
+  .err .wrap {
+    position: relative;
+    width: 100%;
+  }
+  .err :global(.kicker) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--glow-teal);
+    margin-bottom: 18px;
+  }
+  .err h1 {
+    font-size: clamp(90px, 18vw, 240px);
+  }
+  .err :global(.mirror .waterrule) {
+    background: linear-gradient(to right, transparent, rgba(63, 167, 150, 0.7), transparent);
+  }
+  .err :global(.mirror .refl) {
+    font-size: 0.6em;
+  }
+  .e-sub {
+    color: var(--paper-dim);
+    max-width: 440px;
+    margin: 26px auto 36px;
+    font-size: 16px;
+  }
+  .err-links {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 34px;
+  }
+  .err-links a {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border: 1px solid rgba(63, 167, 150, 0.35);
+    color: var(--paper-dim);
+    padding: 11px 18px;
+    transition: color 0.25s, border-color 0.25s, background 0.25s;
+  }
+  .err-links a:hover {
+    color: var(--ink);
+    background: var(--glow-teal);
+    border-color: var(--glow-teal);
+  }
+</style>
